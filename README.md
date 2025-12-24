@@ -1,4 +1,4 @@
-# specsmd
+# specs.md
 
 **AI-native software development with multi-agent orchestration.**
 
