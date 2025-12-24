@@ -11,7 +11,7 @@ class AntigravityInstaller extends ToolInstaller {
     }
 
     get commandsDir() {
-        return path.join('.agent', 'agents');
+        return path.join('.agent', 'workflows');
     }
 
     get detectPath() {
