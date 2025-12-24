@@ -82,7 +82,8 @@
           {
             "group": "Resources",
             "pages": [
-              "faq"
+              "faq",
+              "feedback"
             ]
           }
         ]
