@@ -53,11 +53,13 @@ Break the Intent into independently deployable Units of Work based on project ty
 **CRITICAL**: Before decomposing, understand what types of units to create.
 
 1. **Read project type** from `memory-bank/project.yaml`:
+
    ```yaml
    project_type: full-stack-web  # or backend-api, frontend-app, cli-tool, library
    ```
 
 2. **Read unit structure** from `catalog.yaml` under `project_types.{project_type}.unit_structure`:
+
    ```yaml
    unit_structure:
      backend:
@@ -217,6 +219,7 @@ Present proposed decomposition with their assigned requirements:
    Note: Story naming uses the story title (e.g., `001-user-signup.md`). No prefix field needed.
 
    **For frontend units**, also include:
+
    ```yaml
    unit_type: frontend
    default_bolt_type: simple-construction-bolt

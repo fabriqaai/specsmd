@@ -62,7 +62,6 @@ Current types:
 - `ddd-construction-bolt` - Domain-Driven Design approach
 
 
-
 ---
 
 ## If Bolt Not Found

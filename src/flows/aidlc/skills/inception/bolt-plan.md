@@ -60,6 +60,7 @@ Review all stories to understand:
 **Read bolt type from unit-brief.md or use default based on unit type.**
 
 1. **Check unit-brief.md frontmatter** for `default_bolt_type`:
+
    ```yaml
    ---
    unit: expense-tracker-ui
@@ -77,6 +78,7 @@ Review all stories to understand:
    `.specsmd/aidlc/templates/construction/bolt-types/{bolt-type}.md`
 
 **Available bolt types**:
+
 - `ddd-construction-bolt` - For domain-heavy backend work (5 stages)
 - `simple-construction-bolt` - For UI, integrations, utilities (3 stages)
 - `spike-bolt` - For research and exploration
