@@ -30,13 +30,12 @@ A **Bolt** is a time-boxed execution session in AI-DLC, designed for rapid imple
 
 ## Bolt Types
 
-specs.md currently supports three bolt types:
+specs.md currently supports two bolt types:
 
 | Type | Best For | Stages |
 |------|----------|--------|
 | **DDD Construction** | Complex business logic, domain modeling | Model → Design → ADR → Code → Test |
 | **Simple Construction** | UI, integrations, utilities | Spec → Implement → Test |
-| **Spike** | Research, exploration, unknowns | Explore → Document |
 
 ### Choosing a Bolt Type
 
@@ -54,13 +53,7 @@ specs.md currently supports three bolt types:
     - Writing utilities and helper modules
     - Building CLI commands or scripts
   </Accordion>
-  <Accordion title="Use Spike Bolt when...">
-    - Facing unknowns that need research
-    - Evaluating technology options
-    - Prototyping solutions
-    - Investigating bugs with unclear causes
-  </Accordion>
-</AccordionGroup>
+  </AccordionGroup>
 
 ## DDD Construction Bolt
 
@@ -124,25 +117,6 @@ A lightweight bolt for UI, integrations, and utilities:
     - Run test suite
     - Verify acceptance criteria
     - Document results
-  </Step>
-</Steps>
-
-## Spike Bolt
-
-For research and exploration when facing unknowns:
-
-<Steps>
-  <Step title="Explore">
-    Investigate options:
-    - Research approaches
-    - Prototype solutions
-    - Test assumptions
-  </Step>
-  <Step title="Document">
-    Record findings:
-    - What was learned
-    - Recommendations
-    - Next steps
   </Step>
 </Steps>
 
@@ -224,7 +198,7 @@ memory-bank/bolts/{bolt-id}/
     A bolt should complete in hours to a few days. If it's taking longer, the scope is too big - split it into multiple bolts.
   </Accordion>
   <Accordion title="Choose the Right Bolt Type">
-    Use DDD for complex domain logic, Simple for UI/utilities, Spike for research. Don't over-engineer simple tasks.
+    Use DDD for complex domain logic, Simple for UI/utilities. Don't over-engineer simple tasks.
   </Accordion>
   <Accordion title="Don't Skip Stages">
     Each stage builds on the previous. Skipping creates technical debt and increases risk.

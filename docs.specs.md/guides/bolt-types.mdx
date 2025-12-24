@@ -5,7 +5,7 @@ description: A practical guide to selecting the right bolt type for your work
 
 ## Overview
 
-The AI-DLC flow in specs.md provides three bolt types, each optimized for different types of work. Choosing the right bolt type ensures you have the appropriate level of rigor and structure for your task.
+The AI-DLC flow in specs.md provides two bolt types, each optimized for different types of work. Choosing the right bolt type ensures you have the appropriate level of rigor and structure for your task.
 
 ```mermaid
 flowchart LR
@@ -21,25 +21,13 @@ flowchart LR
         S3[3 stages - Lightweight]
     end
 
-    subgraph Spike[Spike]
-        SP1[Research, exploration]
-        SP2[Unknowns, prototypes]
-        SP3[2 stages - Flexible]
-    end
-
     style DDD fill:#8B5CF6,stroke:#7C3AED,color:#fff
     style Simple fill:#34D399,stroke:#10B981,color:#fff
-    style Spike fill:#FBBF24,stroke:#F59E0B,color:#fff
 ```
 
 ## Quick Decision Guide
 
 <Steps>
-  <Step title="Is this research or exploration?">
-    **Yes** → Use **Spike Bolt**
-
-    **No** → Continue to next question
-  </Step>
   <Step title="Does it involve complex business logic or domain rules?">
     **Yes** → Use **DDD Construction Bolt**
 
@@ -137,57 +125,16 @@ flowchart LR
 
 ---
 
-## Spike Bolt
-
-<Card title="When to Use" icon="flask">
-  Research and exploration when facing unknowns.
-</Card>
-
-### Best For
-
-- Technology evaluation
-- Proof of concept development
-- Investigating unfamiliar APIs or libraries
-- Performance benchmarking
-- Bug investigation with unclear causes
-- Architectural prototyping
-
-### Stages
-
-| Stage | Purpose | Output |
-|-------|---------|--------|
-| **1. Explore** | Research and prototype | Exploration notes, prototypes |
-| **2. Document** | Record findings | Spike report with recommendations |
-
-### Example Use Cases
-
-<AccordionGroup>
-  <Accordion title="Library Evaluation">
-    Comparing three charting libraries for a data visualization feature. Need to understand APIs, performance, and bundle sizes.
-  </Accordion>
-  <Accordion title="Performance Investigation">
-    API is slow but cause is unclear. Need to profile, identify bottlenecks, and propose solutions.
-  </Accordion>
-  <Accordion title="New Technology Assessment">
-    Evaluating whether to adopt GraphQL for an existing REST-based system.
-  </Accordion>
-  <Accordion title="Architecture Prototyping">
-    Testing if a microservices approach would solve current scaling issues.
-  </Accordion>
-</AccordionGroup>
-
----
-
 ## Comparison Table
 
-| Aspect | DDD Construction | Simple Construction | Spike |
-|--------|------------------|---------------------|-------|
-| **Stages** | 5 | 3 | 2 |
-| **Duration** | Hours to days | Hours | Hours |
-| **Documentation** | Extensive | Light | Research-focused |
-| **Design Rigor** | High | Low | None |
-| **Output** | Production code + artifacts | Production code | Findings + recommendations |
-| **Human Reviews** | 5 gate reviews | 3 gate reviews | 2 gate reviews |
+| Aspect | DDD Construction | Simple Construction |
+|--------|------------------|---------------------|
+| **Stages** | 5 | 3 |
+| **Duration** | Hours to days | Hours |
+| **Documentation** | Extensive | Light |
+| **Design Rigor** | High | Low |
+| **Output** | Production code + artifacts | Production code |
+| **Human Reviews** | 5 gate reviews | 3 gate reviews |
 
 ## Common Mistakes
 
@@ -210,29 +157,6 @@ flowchart LR
 **Problem**: Skipping domain modeling leads to implicit business rules scattered in code. Bugs emerge as edge cases are missed.
 
 **Solution**: Use DDD Construction when business logic is non-trivial.
-
-### Skipping Spikes
-
-**Symptom**: Starting implementation without understanding the technology.
-
-**Problem**: Discovering fundamental issues late in development. Rework and wasted effort.
-
-**Solution**: Use Spike bolts to reduce uncertainty before committing to an approach.
-
-## Bolt Progression
-
-Often, work progresses through bolt types:
-
-```
-Spike → Simple or DDD Construction
-```
-
-1. **Spike**: Investigate unknowns, evaluate options
-2. **Construction**: Implement based on spike findings
-
-<Info>
-  It's common to run a Spike bolt first, then follow with a Construction bolt. The spike reduces risk by answering questions before committing to implementation.
-</Info>
 
 ## Next Steps
 
