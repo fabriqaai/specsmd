@@ -52,6 +52,7 @@ export function getNodeIcon(node: TreeNode): vscode.ThemeIcon {
         case 'bolt':
             return getStatusIcon(node.data.status);
         case 'bolt-stage':
+        case 'bolt-story':
             return getStatusIcon(node.status);
         default: {
             // Use default icon from NODE_ICONS

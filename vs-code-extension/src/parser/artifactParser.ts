@@ -17,8 +17,10 @@ import {
     Standard,
     MemoryBankModel,
     ArtifactStatus,
-    BOLT_TYPE_STAGES
+    BOLT_TYPE_STAGES,
+    stageMatches
 } from './types';
+import { getBoltTypeStages, clearBoltTypeCache } from './boltTypeParser';
 
 /**
  * Reads file content safely, returning null on error.
@@ -234,8 +236,10 @@ export async function parseIntent(intentPath: string): Promise<Intent | null> {
 
 /**
  * Parses a single bolt folder.
+ * @param boltPath - Path to the bolt folder
+ * @param workspacePath - Path to the workspace root (for loading bolt type definitions)
  */
-export async function parseBolt(boltPath: string): Promise<Bolt | null> {
+export async function parseBolt(boltPath: string, workspacePath?: string): Promise<Bolt | null> {
     const boltId = path.basename(boltPath);
     const boltFilePath = path.join(boltPath, 'bolt.md');
 
@@ -250,7 +254,6 @@ export async function parseBolt(boltPath: string): Promise<Bolt | null> {
     }
 
     const boltType = (frontmatter.type as string) || 'simple-construction-bolt';
-    const stageNames = BOLT_TYPE_STAGES[boltType] || BOLT_TYPE_STAGES['simple-construction-bolt'];
     const currentStage = (frontmatter.current_stage as string) || null;
     const stagesCompleted = Array.isArray(frontmatter.stages_completed)
         ? (frontmatter.stages_completed as Array<{ name: string } | string>).map(s =>
@@ -258,12 +261,26 @@ export async function parseBolt(boltPath: string): Promise<Bolt | null> {
         )
         : [];
 
-    // Build stages array with status
+    // Get stage names dynamically from bolt type definition, with fallback
+    let stageNames: string[];
+    if (workspacePath) {
+        stageNames = await getBoltTypeStages(workspacePath, boltType);
+    } else {
+        // Fallback to hardcoded defaults
+        stageNames = BOLT_TYPE_STAGES[boltType] || BOLT_TYPE_STAGES['simple-construction-bolt'];
+    }
+
+    // Build stages array with status using flexible matching
     const stages: Stage[] = stageNames.map((name, index) => {
         let stageStatus: ArtifactStatus;
-        if (stagesCompleted.includes(name)) {
+
+        // Use flexible matching to handle stage name variations
+        const isCompleted = stagesCompleted.some(completed => stageMatches(name, completed));
+        const isCurrentStage = currentStage ? stageMatches(name, currentStage) : false;
+
+        if (isCompleted) {
             stageStatus = ArtifactStatus.Complete;
-        } else if (currentStage === name) {
+        } else if (isCurrentStage) {
             stageStatus = ArtifactStatus.InProgress;
         } else {
             stageStatus = ArtifactStatus.Draft;
@@ -332,13 +349,16 @@ export async function scanMemoryBank(workspacePath: string): Promise<MemoryBankM
     // Sort intents by number
     intents.sort((a, b) => a.number.localeCompare(b.number));
 
-    // Parse bolts
+    // Parse bolts (pass workspacePath for dynamic bolt type loading)
     const boltsPath = schema.getBoltsPath();
     const boltFolders = await listDirectories(boltsPath);
     const bolts: Bolt[] = [];
 
+    // Clear bolt type cache on each scan to pick up any definition changes
+    clearBoltTypeCache();
+
     for (const boltFolder of boltFolders) {
-        const bolt = await parseBolt(path.join(boltsPath, boltFolder));
+        const bolt = await parseBolt(path.join(boltsPath, boltFolder), workspacePath);
         if (bolt) {
             bolts.push(bolt);
         }

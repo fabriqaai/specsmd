@@ -294,11 +294,44 @@ status: planned
             const result = await parseBolt(boltPath);
 
             assert.ok(result);
-            assert.strictEqual(result.stages.length, 4);
+            // DDD bolt has 5 stages: model, design, adr, implement, test
+            assert.strictEqual(result.stages.length, 5);
             assert.strictEqual(result.stages[0].name, 'model');
             assert.strictEqual(result.stages[1].name, 'design');
-            assert.strictEqual(result.stages[2].name, 'implement');
-            assert.strictEqual(result.stages[3].name, 'test');
+            assert.strictEqual(result.stages[2].name, 'adr');
+            assert.strictEqual(result.stages[3].name, 'implement');
+            assert.strictEqual(result.stages[4].name, 'test');
+        });
+
+        test('should match stage names with flexible aliases', async () => {
+            const boltPath = path.join(tempDir, 'bolt-test-1');
+            fs.mkdirSync(boltPath, { recursive: true });
+
+            // Use alternate stage names that the construction agent might write
+            createFile(path.join(boltPath, 'bolt.md'), `---
+type: ddd-construction-bolt
+status: in-progress
+current_stage: implementation
+stages_completed:
+  - name: domain-model
+  - name: technical-design
+---
+
+# Bolt`);
+
+            const result = await parseBolt(boltPath);
+
+            assert.ok(result);
+            // model should be Complete (domain-model matches model)
+            assert.strictEqual(result.stages[0].status, ArtifactStatus.Complete);
+            // design should be Complete (technical-design matches design)
+            assert.strictEqual(result.stages[1].status, ArtifactStatus.Complete);
+            // adr should be Draft (not in stages_completed)
+            assert.strictEqual(result.stages[2].status, ArtifactStatus.Draft);
+            // implement should be InProgress (implementation matches implement)
+            assert.strictEqual(result.stages[3].status, ArtifactStatus.InProgress);
+            // test should be Draft
+            assert.strictEqual(result.stages[4].status, ArtifactStatus.Draft);
         });
     });
 

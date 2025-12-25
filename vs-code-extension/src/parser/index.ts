@@ -31,8 +31,19 @@ export {
     Standard,
     MemoryBankModel,
     FrontmatterData,
-    BOLT_TYPE_STAGES
+    BOLT_TYPE_STAGES,
+    STAGE_ALIASES,
+    stageMatches
 } from './types';
+
+// Bolt Type Parser
+export {
+    getBoltTypeStages,
+    loadBoltTypeDefinition,
+    clearBoltTypeCache,
+    BoltTypeStage,
+    BoltTypeDefinition
+} from './boltTypeParser';
 
 // Schema
 export { MemoryBankSchema } from './memoryBankSchema';

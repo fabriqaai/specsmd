@@ -210,20 +210,53 @@ export function createBoltStageNodes(bolt: Bolt): BoltStageNode[] {
 }
 
 /**
+ * Finds a story's status from the model by matching file path.
+ * Uses bolt's unit/intent to construct expected story path.
+ */
+function findStoryStatus(storyId: string, bolt: Bolt, model: MemoryBankModel): ArtifactStatus {
+    // Find the unit this bolt belongs to
+    for (const intent of model.intents) {
+        // Match by intent folder name (e.g., "001-admin-panel")
+        const intentMatch = intent.path.endsWith(bolt.intent) ||
+                           `${intent.number}-${intent.name}` === bolt.intent;
+
+        if (intentMatch) {
+            for (const unit of intent.units) {
+                if (unit.name === bolt.unit) {
+                    // Found the unit - now find the story by path ending
+                    for (const story of unit.stories) {
+                        // Match by story filename (e.g., "001-create-role.md")
+                        if (story.path.endsWith(`${storyId}.md`)) {
+                            return story.status;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return ArtifactStatus.Unknown;
+}
+
+/**
  * Creates story nodes for a bolt.
  */
-export function createBoltStoryNodes(bolt: Bolt): BoltStoryNode[] {
+export function createBoltStoryNodes(bolt: Bolt, model: MemoryBankModel): BoltStoryNode[] {
     if (!bolt.stories) {
         return [];
     }
 
-    return bolt.stories.map(storyId => ({
-        kind: 'bolt-story' as const,
-        label: storyId,
-        id: `bolt-${bolt.id}-story-${storyId}`,
-        boltId: bolt.id,
-        storyId: storyId
-    }));
+    return bolt.stories.map(storyId => {
+        const status = findStoryStatus(storyId, bolt, model);
+        return {
+            kind: 'bolt-story' as const,
+            label: formatLabelWithStatus(storyId, status),
+            id: `bolt-${bolt.id}-story-${storyId}`,
+            boltId: bolt.id,
+            storyId: storyId,
+            status: status
+        };
+    });
 }
 
 /**
@@ -246,7 +279,7 @@ export function getChildNodes(node: TreeNode, model: MemoryBankModel): TreeNode[
         case 'bolt-stages-group':
             return createBoltStageNodes(node.data);
         case 'bolt-stories-group':
-            return createBoltStoryNodes(node.data);
+            return createBoltStoryNodes(node.data, model);
         case 'story':
         case 'bolt-stage':
         case 'bolt-story':

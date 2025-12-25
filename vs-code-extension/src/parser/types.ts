@@ -136,5 +136,45 @@ export type FrontmatterData = Record<string, unknown>;
  */
 export const BOLT_TYPE_STAGES: Record<string, string[]> = {
     'simple-construction-bolt': ['plan', 'implement', 'test'],
-    'ddd-construction-bolt': ['model', 'design', 'implement', 'test']
+    'ddd-construction-bolt': ['model', 'design', 'adr', 'implement', 'test'],
+    'spike-bolt': ['explore', 'document']
 };
+
+/**
+ * Stage name aliases for flexible matching.
+ * Maps canonical stage names to variations that may appear in bolt frontmatter.
+ */
+export const STAGE_ALIASES: Record<string, string[]> = {
+    'model': ['model', 'domain-model', 'domain_model'],
+    'design': ['design', 'technical-design', 'technical_design'],
+    'adr': ['adr', 'adr-analysis', 'adr_analysis'],
+    'implement': ['implement', 'implementation'],
+    'test': ['test', 'testing'],
+    'plan': ['plan', 'planning'],
+    'explore': ['explore', 'exploration'],
+    'document': ['document', 'documentation']
+};
+
+/**
+ * Check if a completed stage matches an expected stage name.
+ * Uses alias matching for flexibility.
+ */
+export function stageMatches(expectedStage: string, completedStage: string): boolean {
+    const normalizedCompleted = completedStage.toLowerCase();
+    const normalizedExpected = expectedStage.toLowerCase();
+
+    // Direct match
+    if (normalizedCompleted === normalizedExpected) {
+        return true;
+    }
+
+    // Check aliases
+    const aliases = STAGE_ALIASES[normalizedExpected];
+    if (aliases && aliases.includes(normalizedCompleted)) {
+        return true;
+    }
+
+    // Fallback: substring matching (e.g., "model" in "domain-model")
+    return normalizedCompleted.includes(normalizedExpected) ||
+           normalizedExpected.includes(normalizedCompleted);
+}

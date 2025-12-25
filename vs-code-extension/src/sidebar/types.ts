@@ -117,6 +117,7 @@ export interface BoltStoryNode extends BaseTreeNode {
     kind: 'bolt-story';
     boltId: string;
     storyId: string;
+    status: ArtifactStatus;
 }
 
 /**
@@ -193,7 +194,7 @@ export function getCollapsibleState(node: TreeNode): CollapsibleStateValue {
         case 'root-intents':
         case 'root-bolts':
         case 'root-standards':
-            return CollapsibleState.Collapsed;
+            return CollapsibleState.Expanded;
         case 'intent':
             return node.data.units.length > 0
                 ? CollapsibleState.Collapsed

@@ -71,22 +71,22 @@ suite('Sidebar Types Test Suite', () => {
 
     suite('getCollapsibleState', () => {
 
-        test('should return Collapsed for root-intents', () => {
+        test('should return Expanded for root-intents', () => {
             const node: TreeNode = {
                 kind: 'root-intents',
                 label: 'Intents',
                 id: 'root-intents'
             };
-            assert.strictEqual(getCollapsibleState(node), CollapsibleState.Collapsed);
+            assert.strictEqual(getCollapsibleState(node), CollapsibleState.Expanded);
         });
 
-        test('should return Collapsed for root-bolts', () => {
+        test('should return Expanded for root-bolts', () => {
             const node: TreeNode = {
                 kind: 'root-bolts',
                 label: 'Bolts',
                 id: 'root-bolts'
             };
-            assert.strictEqual(getCollapsibleState(node), CollapsibleState.Collapsed);
+            assert.strictEqual(getCollapsibleState(node), CollapsibleState.Expanded);
         });
 
         test('should return Collapsed for intent with units', () => {
