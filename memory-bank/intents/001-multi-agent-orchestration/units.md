@@ -9,9 +9,11 @@ This intent is decomposed into four units, each representing a specialized agent
 ## Unit 1: Master Agent
 
 ### Description
+
 Central orchestrator that analyzes project state, routes to specialist agents, and facilitates project initialization.
 
 ### Responsibilities
+
 - Analyze project state from Memory Bank
 - Determine current AI-DLC phase
 - Route users to appropriate specialist agent
@@ -19,6 +21,7 @@ Central orchestrator that analyzes project state, routes to specialist agents, a
 - Facilitate project initialization (standards setup)
 
 ### Skills
+
 | Skill | File | Description |
 |-------|------|-------------|
 | `analyze-context` | `skills/master/analyze-context.md` | Deduce project state from artifacts |
@@ -28,6 +31,7 @@ Central orchestrator that analyzes project state, routes to specialist agents, a
 | `project-init` | `skills/master/project-init.md` | Initialize project standards |
 
 ### Dependencies
+
 - Memory Bank (read schema, read artifacts)
 - Standards System (for project-init)
 
@@ -36,9 +40,11 @@ Central orchestrator that analyzes project state, routes to specialist agents, a
 ## Unit 2: Inception Agent
 
 ### Description
+
 Requirements architect that transforms high-level intents into actionable plans.
 
 ### Responsibilities
+
 - Create and manage intents
 - Gather functional and non-functional requirements
 - Define system context and boundaries
@@ -48,6 +54,7 @@ Requirements architect that transforms high-level intents into actionable plans.
 - Validate with human at each step
 
 ### Skills
+
 | Skill | File | Description |
 |-------|------|-------------|
 | `intent-create` | `skills/inception/intent-create.md` | Create new intent |
@@ -61,6 +68,7 @@ Requirements architect that transforms high-level intents into actionable plans.
 | `navigator` | `skills/inception/navigator.md` | Show interactive menu |
 
 ### Dependencies
+
 - Memory Bank (read/write intents, units, stories)
 - Templates (inception templates)
 
@@ -69,9 +77,11 @@ Requirements architect that transforms high-level intents into actionable plans.
 ## Unit 3: Construction Agent
 
 ### Description
+
 Software engineer that executes bolts through their defined stages.
 
 ### Responsibilities
+
 - Execute bolts through defined stages
 - Load and follow bolt type definitions
 - Execute DDD stages (model, design, code, test)
@@ -80,6 +90,7 @@ Software engineer that executes bolts through their defined stages.
 - Generate implementation artifacts
 
 ### Skills
+
 | Skill | File | Description |
 |-------|------|-------------|
 | `bolt-plan` | `skills/construction/bolt-plan.md` | Plan bolts for unit |
@@ -89,6 +100,7 @@ Software engineer that executes bolts through their defined stages.
 | `navigator` | `skills/construction/navigator.md` | Show construction menu |
 
 ### Dependencies
+
 - Memory Bank (read/write bolts, units)
 - Bolt Types (read stage definitions)
 - Standards (load tech-stack, coding-standards)
@@ -99,9 +111,11 @@ Software engineer that executes bolts through their defined stages.
 ## Unit 4: Operations Agent
 
 ### Description
+
 DevOps engineer that manages deployment and monitoring.
 
 ### Responsibilities
+
 - Verify construction completion
 - Build deployment artifacts
 - Deploy to environments
@@ -109,6 +123,7 @@ DevOps engineer that manages deployment and monitoring.
 - Setup monitoring and observability
 
 ### Skills
+
 | Skill | File | Description |
 |-------|------|-------------|
 | `build` | `skills/operations/build.md` | Build deployment artifacts |
@@ -117,6 +132,7 @@ DevOps engineer that manages deployment and monitoring.
 | `monitor` | `skills/operations/monitor.md` | Setup monitoring |
 
 ### Dependencies
+
 - Memory Bank (read/write operations context)
 - Standards (deployment configuration)
 
@@ -124,7 +140,7 @@ DevOps engineer that manages deployment and monitoring.
 
 ## Unit Dependency Graph
 
-```
+```text
 ┌─────────────────┐
 │  Master Agent   │
 │  (Orchestrator) │

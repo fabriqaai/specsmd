@@ -9,11 +9,13 @@ The Cursor Installer handles installation of specsmd agents into Cursor's `.curs
 ## Scope
 
 ### In Scope
+
 - Cursor detection
 - Command file installation to `.cursor/commands/`
 - Standard Markdown format (`.md` files)
 
 ### Out of Scope
+
 - Base installation logic (handled by ToolInstaller)
 - Other tool installations
 
@@ -22,13 +24,15 @@ The Cursor Installer handles installation of specsmd agents into Cursor's `.curs
 ## Technical Context
 
 ### File Structure
-```
+
+```text
 src/lib/installers/
 └── CursorInstaller.js
 ```
 
 ### Target Installation Path
-```
+
+```text
 project-root/
 └── .cursor/
     └── commands/
@@ -58,22 +62,26 @@ Extends `ToolInstaller` and overrides `installCommands()` to install commands as
 ### File Format
 
 **Source file** (`master-agent.md`):
+
 ```markdown
 # Master Agent
 ...content...
 ```
 
 **Installed file** (`specsmd-master-agent.md`):
+
 ```markdown
 # Master Agent
 ...content...
 ```
 
 ### Key Transformations
+
 1. **Prefix**: Adds `specsmd-` prefix to filename
 2. **Extension**: Keeps `.md` extension
 
 ### Detection Logic
+
 Cursor is detected if `.cursor/` directory exists in the project root.
 
 ---
@@ -91,17 +99,20 @@ Per Cursor documentation:
 ## Acceptance Criteria
 
 ### AC-1: Detection
+
 - GIVEN a project with `.cursor/` directory
 - WHEN detectTools() runs
 - THEN Cursor is listed as detected
 
 ### AC-2: Installation
+
 - GIVEN user selects Cursor
 - WHEN installation completes
 - THEN `.cursor/commands/specsmd-*.md` files exist
 - AND files contain agent definitions
 
 ### AC-3: Non-Detection
+
 - GIVEN a project without `.cursor/` directory
 - WHEN detectTools() runs
 - THEN Cursor is NOT listed as detected

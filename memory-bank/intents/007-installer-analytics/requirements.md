@@ -35,6 +35,7 @@ Reference implementations: Angular CLI, Next.js CLI, Homebrew.
 ## Problem Statement
 
 Currently, specsmd has no visibility into:
+
 - How many users attempt installation
 - Which IDEs/tools are most popular
 - Which flows users install
@@ -167,30 +168,35 @@ interface InstallationError extends BaseEvent {
 ## Acceptance Criteria
 
 ### AC-1: Consent Flow
+
 - GIVEN a first-time user running the installer
 - WHEN installation starts
 - THEN user is prompted for analytics consent
 - AND their choice is persisted locally
 
 ### AC-2: Opt-Out Respected
+
 - GIVEN a user who declined analytics
 - WHEN they run the installer again
 - THEN no analytics events are sent
 - AND no consent prompt is shown
 
 ### AC-3: Environment Override
+
 - GIVEN `SPECSMD_TELEMETRY_DISABLED=1` is set
 - WHEN installer runs
 - THEN no analytics events are sent
 - AND no consent prompt is shown
 
 ### AC-4: Graceful Failure
+
 - GIVEN analytics endpoint is unavailable
 - WHEN installer attempts to send events
 - THEN installation proceeds successfully
 - AND no error is shown to user
 
 ### AC-5: CI Detection
+
 - GIVEN installer is running in CI environment (e.g., CI=true)
 - WHEN installation starts
 - THEN analytics is automatically disabled

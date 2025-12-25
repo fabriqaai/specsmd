@@ -19,6 +19,7 @@
 | **Vibe-to-Spec Conversion** | New code without specs | Continue with AI-native principles | Preserve discovered domain knowledge |
 
 **Both cases share:**
+
 - Existing code without formal specifications
 - Embedded domain knowledge that must be preserved
 - Desire to adopt spec-driven development going forward
@@ -27,7 +28,7 @@
 
 ### The Unified Model: "Code Archaeology → Living Specification"
 
-```
+```text
 ANY Existing Codebase (Legacy OR Vibe-Coded)
                 ↓
     [1. UNDERSTAND] - Code Archaeology
@@ -39,7 +40,7 @@ ANY Existing Codebase (Legacy OR Vibe-Coded)
     [4. EVOLVE] - Incremental AI-DLC Adoption
                 ↓
 Production-Ready, Spec-Driven System
-```
+```text
 
 ---
 
@@ -51,6 +52,7 @@ Production-Ready, Spec-Driven System
 > "The bottleneck in software development is not writing code but understanding it; program understanding consumes approximately 70% of developers' time."
 
 This is true for BOTH:
+
 - **Legacy systems**: Developers must understand decades-old code
 - **Vibe-coded prototypes**: Even the original author struggles to understand AI-generated code
 
@@ -65,6 +67,7 @@ From Wikipedia and industry practice:
 > "Software archaeology is the study of poorly documented or undocumented legacy software implementations. By the 2020s, AI-driven tools adapting large language models enabled automated pattern recognition, documentation generation, and behavioral analysis of undocumented systems."
 
 **This applies equally to:**
+
 - 30-year-old COBOL systems
 - 3-week-old vibe-coded prototypes
 
@@ -80,7 +83,7 @@ Both are "undocumented software requiring archaeology."
 
 **Sub-phases**:
 
-```
+```text
 1.1 STRUCTURAL ANALYSIS
     - Dependency graph extraction (RefExpo approach)
     - Component identification
@@ -95,7 +98,7 @@ Both are "undocumented software requiring archaeology."
     - Domain entity identification
     - Business logic flow extraction
     - Technical debt assessment
-```
+```text
 
 **Academic Foundation**:
 
@@ -107,6 +110,7 @@ Both are "undocumented software requiring archaeology."
 | Dependency analysis | RefExpo (arXiv:2407.02620) | Unveiling software project structures |
 
 **Output Artifacts**:
+
 - `understanding-report.md` - Comprehensive codebase analysis
 - `architecture-diagram.md` - Recovered architecture
 - `domain-map.md` - Identified domain concepts
@@ -118,7 +122,7 @@ Both are "undocumented software requiring archaeology."
 
 **Sub-phases**:
 
-```
+```text
 2.1 INTENT EXTRACTION
     - User story recovery from code
     - Requirements inference
@@ -133,7 +137,7 @@ Both are "undocumented software requiring archaeology."
     - Golden test generation
     - Invariant mining
     - Precondition/postcondition synthesis
-```
+```text
 
 **Academic Foundation**:
 
@@ -146,6 +150,7 @@ Both are "undocumented software requiring archaeology."
 | Intent vs implementation | Seeking Specs (arXiv:2504.21061) | LLMs distinguish intended vs implemented |
 
 **Output Artifacts**:
+
 - `extracted-intent.md` - High-level intent statement
 - `extracted-requirements.md` - Functional & non-functional requirements
 - `extracted-contracts/` - API and data contracts
@@ -157,7 +162,7 @@ Both are "undocumented software requiring archaeology."
 
 **Sub-phases**:
 
-```
+```text
 3.1 SPECIFICATION SYNTHESIS
     - Generate AI-DLC intent from extracted knowledge
     - Create requirements documents
@@ -172,20 +177,21 @@ Both are "undocumented software requiring archaeology."
     - Create user stories with acceptance criteria
     - Link to golden tests
     - Establish traceability
-```
+```text
 
 **Key Innovation**: Bidirectional Traceability
 
-```
+```text
 Code ←→ Extracted Specs ←→ AI-DLC Specs ←→ Future Code
 
 Every spec element traces back to:
 - Original code location
 - Golden test that validates it
 - Extraction confidence score
-```
+```text
 
 **Output Artifacts**:
+
 - `memory-bank/intents/{intent}/` - AI-DLC intent structure
 - `memory-bank/intents/{intent}/units/` - Unit decomposition
 - `memory-bank/intents/{intent}/stories/` - User stories
@@ -197,7 +203,7 @@ Every spec element traces back to:
 
 **Sub-phases**:
 
-```
+```text
 4.1 ADOPTION PLANNING
     - Identify first unit for AI-DLC adoption
     - Define adoption path (rewrite vs refactor vs wrap)
@@ -212,7 +218,7 @@ Every spec element traces back to:
     - New features through AI-DLC Construction
     - Existing code through incremental crystallization
     - Unified specification management
-```
+```text
 
 **Adoption Paths**:
 
@@ -239,7 +245,7 @@ Every spec element traces back to:
 
 ### The Spectrum of Existing Code
 
-```
+```text
 Pure Legacy                                              Pure Vibe
 (30-year COBOL) ←------------------------→ (Last week's prototype)
         ↑                                          ↑
@@ -257,7 +263,7 @@ Pure Legacy                                              Pure Vibe
                    Knowledge embedded in code
                    Want to continue working
                    Want spec-driven future
-```
+```text
 
 ---
 
@@ -352,7 +358,7 @@ Pure Legacy                                              Pure Vibe
 
 ### Unified Onboarding Flow
 
-```
+```text
 User arrives with existing codebase
               ↓
      "Import Project" wizard
@@ -386,11 +392,11 @@ User arrives with existing codebase
               ↓
     User continues with AI-DLC
     (New features via Construction phase)
-```
+```text
 
 ### Agent Architecture
 
-```
+```text
 specs.md Unified Model
 ├── Understanding Agents
 │   ├── Structure Analyzer Agent
@@ -417,11 +423,11 @@ specs.md Unified Model
     ├── Inception Agent
     ├── Construction Agent
     └── Operations Agent
-```
+```text
 
 ### Memory Bank Extension
 
-```
+```text
 memory-bank/
 ├── imported/                        # NEW: Imported projects
 │   └── {project-name}/
@@ -444,23 +450,26 @@ memory-bank/
 ├── bolts/                           # AI-DLC bolts
 ├── standards/                       # Project standards
 └── operations/                      # Deployment context
-```
+```text
 
 ### User Choice Points
 
 **1. After UNDERSTAND phase:**
+
 - "This codebase has significant technical debt. What's your priority?"
   - [ ] Modernize architecture first
   - [ ] Extract specs and work with current architecture
   - [ ] Hybrid: extract critical paths, defer rest
 
 **2. After EXTRACT phase:**
+
 - "How do you want to handle the existing code?"
   - [ ] Keep it: Build specs around existing code (wrap)
   - [ ] Refactor it: Use specs to guide restructuring
   - [ ] Replace it: Use specs to rebuild from scratch
 
 **3. After CRYSTALLIZE phase:**
+
 - "Ready to adopt AI-DLC. Where do you want to start?"
   - [ ] New features only (Construction phase for new work)
   - [ ] Specific module (migrate one unit first)
@@ -498,14 +507,14 @@ memory-bank/
 
 **Single Platform, Any Starting Point**
 
-```
+```text
 "Whether you're modernizing a 30-year-old COBOL system or
 converting last week's vibe-coded prototype, specs.md
 provides the same powerful pipeline: Understand → Extract →
 Crystallize → Evolve.
 
 One workflow. Any codebase. Spec-driven future."
-```
+```text
 
 ### Key Differentiators
 
@@ -533,6 +542,7 @@ One workflow. Any codebase. Spec-driven future."
 The research conclusively shows that legacy modernization and vibe-to-spec conversion share the same fundamental challenge: **existing code with embedded knowledge that people want to preserve while adopting spec-driven development**.
 
 The unified model treats ANY existing codebase as input to the same pipeline:
+
 1. **UNDERSTAND** - Code archaeology to build comprehension
 2. **EXTRACT** - Specification mining to capture knowledge
 3. **CRYSTALLIZE** - Transform to AI-DLC compatible specs

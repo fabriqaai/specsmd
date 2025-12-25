@@ -8,7 +8,7 @@ This document defines the boundaries and integration points for the Agentic Codi
 
 ## System Boundary
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────┐
 │                         External Systems                            │
 │  ┌────────────┐  ┌────────────┐  ┌───────────────┐  ┌───────────┐ │
@@ -51,22 +51,26 @@ This document defines the boundaries and integration points for the Agentic Codi
 ## External Systems
 
 ### Claude Code
+
 - **Type**: AI-powered coding assistant
 - **Integration**: Slash commands in `.claude/commands/` + agents in `.claude/agents/`
 - **Interface**: `/specsmd*` commands and Claude-invoked agents
 - **Features**: Supports both user-invoked commands and AI-delegated agents
 
 ### Cursor
+
 - **Type**: AI-powered code editor
 - **Integration**: Rules in `.cursor/rules/` (MDC format with frontmatter)
 - **Interface**: Rules with `alwaysApply: true` for automatic activation
 
 ### GitHub Copilot
+
 - **Type**: AI pair programmer
 - **Integration**: Workspace agents in `.github/agents/` (`.agent.md` format)
 - **Interface**: `@specsmd*` agent invocation
 
 ### Google Antigravity
+
 - **Type**: AI-powered IDE
 - **Integration**: Agents in `.agent/agents/`
 - **Interface**: Agent-based invocation
@@ -76,14 +80,17 @@ This document defines the boundaries and integration points for the Agentic Codi
 ## Internal Components
 
 ### CLI Entry Point
+
 - **Component**: `bin/cli.js`
 - **Responsibility**: Parse commands, display UI, orchestrate installation
 
 ### Installer Factory
+
 - **Component**: `lib/InstallerFactory.js`
 - **Responsibility**: Create appropriate installer based on detected tools
 
 ### Tool Installers
+
 - **Components**: `ClaudeInstaller.js`, `CursorInstaller.js`, `CopilotInstaller.js`, `AntigravityInstaller.js`
 - **Responsibility**: Tool-specific installation logic
 - **Note**: ClaudeInstaller and CopilotInstaller install both commands and agents from the same source
@@ -93,7 +100,8 @@ This document defines the boundaries and integration points for the Agentic Codi
 ## Data Flow
 
 ### Installation Flow
-```
+
+```text
 User runs `npx specsmd install`
          │
          ▼

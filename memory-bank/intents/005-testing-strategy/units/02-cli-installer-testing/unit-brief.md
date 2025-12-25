@@ -9,6 +9,7 @@ Traditional deterministic testing for CLI commands and installer operations. Thi
 ## Scope
 
 ### In Scope
+
 - Unit tests for installer components
 - Integration tests for slash commands via BATS
 - Snapshot tests for generated file content
@@ -16,6 +17,7 @@ Traditional deterministic testing for CLI commands and installer operations. Thi
 - Mock filesystem for isolated testing
 
 ### Out of Scope
+
 - Agent behavior testing (handled by Agent Behavior Evaluation unit)
 - Schema validation (handled by Specification Contract Testing unit)
 - LLM output evaluation (handled by Agent Behavior Evaluation unit)
@@ -25,17 +27,20 @@ Traditional deterministic testing for CLI commands and installer operations. Thi
 ## Technical Context
 
 ### Entry Points
+
 - `npm run test:unit` - Run unit tests
 - `npm run test:integration` - Run integration tests (BATS)
 - `npm run test:snapshots` - Run snapshot tests
 
 ### Dependencies
+
 - Jest or Vitest (test runner)
 - BATS (Bash Automated Testing System)
 - mock-fs (filesystem mocking)
 - fast-check (property-based testing)
 
 ### Outputs
+
 - Test reports with coverage metrics
 - Snapshot files for comparison
 - Integration test logs
@@ -51,7 +56,8 @@ Traditional deterministic testing for CLI commands and installer operations. Thi
 **Location**: `__tests__/unit/installers/`
 
 **Test Files**:
-```
+
+```text
 __tests__/unit/installers/
 ├── installer-factory.test.ts
 ├── claude-code-installer.test.ts
@@ -61,6 +67,7 @@ __tests__/unit/installers/
 ```
 
 **Test Cases for Each Installer**:
+
 - ✅ Creates correct directory structure
 - ✅ Copies templates to correct locations
 - ✅ Handles existing directories gracefully
@@ -68,6 +75,7 @@ __tests__/unit/installers/
 - ✅ Validates tool detection
 
 **Example Test**:
+
 ```typescript
 describe('ClaudeCodeInstaller', () => {
   let mockFs: MockFileSystem;
@@ -100,7 +108,8 @@ describe('ClaudeCodeInstaller', () => {
 **Location**: `__tests__/integration/cli/`
 
 **Test Files**:
-```
+
+```text
 __tests__/integration/cli/
 ├── install.bats
 ├── inception-commands.bats
@@ -109,6 +118,7 @@ __tests__/integration/cli/
 ```
 
 **Example BATS Test**:
+
 ```bash
 #!/usr/bin/env bats
 
@@ -166,7 +176,8 @@ teardown() {
 **Location**: `__tests__/unit/template-generation/`
 
 **Test Files**:
-```
+
+```text
 __tests__/unit/template-generation/
 ├── bolt-template.test.ts
 ├── intent-template.test.ts
@@ -178,6 +189,7 @@ __tests__/unit/template-generation/
 ```
 
 **Example Snapshot Test**:
+
 ```typescript
 describe('BoltTemplate', () => {
   it('generates DDD bolt with correct structure', () => {
@@ -213,7 +225,8 @@ describe('BoltTemplate', () => {
 **Location**: `__tests__/integration/memory-bank/`
 
 **Test Files**:
-```
+
+```text
 __tests__/integration/memory-bank/
 ├── crud-operations.test.ts
 ├── file-system-state.test.ts
@@ -221,6 +234,7 @@ __tests__/integration/memory-bank/
 ```
 
 **Test Cases**:
+
 - ✅ Create intent creates correct directory structure
 - ✅ Read intent returns parsed content
 - ✅ Update intent preserves existing sections
@@ -229,6 +243,7 @@ __tests__/integration/memory-bank/
 - ✅ Concurrent writes don't corrupt state
 
 **Property-Based Test Example**:
+
 ```typescript
 import fc from 'fast-check';
 
@@ -262,6 +277,7 @@ describe('MemoryBank CRUD', () => {
 ### Test Configuration
 
 **Jest Configuration** (`jest.config.js`):
+
 ```javascript
 module.exports = {
   preset: 'ts-jest',
@@ -284,6 +300,7 @@ module.exports = {
 ```
 
 **BATS Setup**:
+
 ```bash
 # Install BATS
 npm install --save-dev bats bats-support bats-assert
@@ -328,6 +345,7 @@ afterEach(() => {
 ## Acceptance Criteria
 
 ### AC-1: Installer Unit Tests
+
 - GIVEN installer unit tests
 - WHEN tests run
 - THEN all installers have test coverage > 90%
@@ -335,6 +353,7 @@ afterEach(() => {
 - AND tests complete in < 30 seconds
 
 ### AC-2: CLI Integration Tests
+
 - GIVEN BATS integration tests
 - WHEN tests run in clean environment
 - THEN all commands produce expected filesystem state
@@ -342,6 +361,7 @@ afterEach(() => {
 - AND tests are idempotent (can run multiple times)
 
 ### AC-3: Snapshot Tests
+
 - GIVEN template snapshot tests
 - WHEN templates change
 - THEN snapshots detect the change
@@ -349,6 +369,7 @@ afterEach(() => {
 - AND snapshots are updated with `--updateSnapshot`
 
 ### AC-4: Memory Bank Tests
+
 - GIVEN Memory Bank CRUD tests
 - WHEN property-based tests run
 - THEN any valid input roundtrips correctly

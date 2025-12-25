@@ -18,7 +18,7 @@ The Standards System provides a three-tier architecture for creating project sta
 
 ## Dependency Graph
 
-```
+```text
 ┌─────────────────────┐
 │  standards-catalog  │
 │     (catalog.yaml)  │
@@ -45,7 +45,7 @@ The Standards System provides a three-tier architecture for creating project sta
 
 ## File Structure
 
-```
+```text
 .specsmd/aidlc/templates/standards/
 ├── catalog.yaml                    # Registry of all standards
 ├── tech-stack.guide.md             # Facilitation guide for tech stack
@@ -63,12 +63,15 @@ The Standards System provides a three-tier architecture for creating project sta
 ## Three-Tier Architecture
 
 ### Tier 1: Standards Catalog
+
 Defines WHAT standards exist and WHAT decisions need to be made.
 
 ### Tier 2: Facilitation Guides
+
 Defines HOW to gather each decision through conversation.
 
 ### Tier 3: Standards Templates
+
 Defines the OUTPUT format for generated standards.
 
 ---

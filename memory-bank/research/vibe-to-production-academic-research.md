@@ -14,6 +14,7 @@ This research addresses the core challenge for specs.md: **How to transform vibe
 ### The Core Problem
 
 When converting vibe-coded prototypes to AI-DLC specifications:
+
 1. **Non-determinism Risk**: Studies show 75% variance in LLM code generation outputs
 2. **Knowledge Preservation**: Tech stack, UX flows, domain objects, and business logic must transfer
 3. **Regeneration Drift**: Specs regenerated from different models/tools may produce fundamentally different code
@@ -32,12 +33,14 @@ Academic research validates this concern: **"Setting temperature to 0 does not g
 **Approach**: Extract formal specifications from vibe-coded prototypes using LLMs, then use **symbolic execution** to create deterministic behavioral anchors.
 
 **Academic Foundation**:
+
 - **AutoSpec** (arXiv:2404.00762) achieves 79% automated verification through specification synthesis
 - **Symbolic Clustering** (arXiv:2502.11620) enables precise functional equivalence checking
 - **SpecRover/SpecGen** (arXiv:2408.02232, arXiv:2401.08807) for code intent extraction
 
 **How It Works**:
-```
+
+```text
 Vibe-Coded Prototype
         ↓
 [1] LLM extracts specifications (AutoSpec approach)
@@ -49,14 +52,16 @@ Vibe-Coded Prototype
 [4] Any regenerated code must pass symbolic equivalence check
         ↓
 Production Code (verified equivalent)
-```
+```text
 
 **Pros**:
+
 - Mathematically verifiable equivalence
 - Addresses non-determinism directly
 - Works for "ditch prototype" path
 
 **Cons**:
+
 - Symbolic execution has scalability limits
 - May not capture all behavioral nuances
 - Requires formal methods expertise
@@ -70,12 +75,14 @@ Production Code (verified equivalent)
 **Approach**: Generate comprehensive "golden tests" from the running prototype that serve as behavioral contracts. Any regenerated code must pass all golden tests.
 
 **Academic Foundation**:
+
 - **FreshBrew** (arXiv:2510.04852) validates migrations through 3 sequential gates: compilation → original tests pass → coverage preservation
 - **Test-Driven Development for Code Generation** (arXiv:2402.13521) - TDD principles for LLM verification
 - **HyClone** (arXiv:2508.01357) combines LLM understanding with execution-based validation
 
 **How It Works**:
-```
+
+```text
 Vibe-Coded Prototype
         ↓
 [1] Dynamic analysis captures runtime behaviors (InspectCoder approach)
@@ -89,20 +96,23 @@ Vibe-Coded Prototype
 [5] Validate against golden tests (3-gate validation)
         ↓
 Production Code (behaviorally verified)
-```
+```text
 
 **FreshBrew 3-Gate Validation**:
+
 1. **Gate 1**: Successful compilation
 2. **Gate 2**: Pass all original tests
 3. **Gate 3**: Test coverage within 5% of baseline
 
 **Pros**:
+
 - Practical and executable validation
 - Works across different AI models/tools
 - Captures actual runtime behavior
 - Supports "build on prototype" path
 
 **Cons**:
+
 - Test coverage may miss edge cases
 - Tests capture "what is" not "what should be"
 - May preserve bugs from prototype
@@ -116,13 +126,15 @@ Production Code (behaviorally verified)
 **Approach**: Keep the vibe-coded prototype running while incrementally replacing components with spec-driven modules, using **semantic clone detection** to ensure functional equivalence.
 
 **Academic Foundation**:
+
 - **Strangler Fig Pattern** (AWS, Microsoft architecture patterns)
 - **HyClone** (arXiv:2508.01357) - LLM + execution validation for semantic clone detection
 - **Legacy Code Modernization** (arXiv:2411.14971, arXiv:2407.04017)
 - **Migrating Code at Scale** (arXiv:2504.09691) - Google's approach with TRANSAGENT
 
 **How It Works**:
-```
+
+```text
 Vibe-Coded Prototype (Running in Production)
         ↓
 [1] Identify bounded context for migration
@@ -140,18 +152,20 @@ Vibe-Coded Prototype (Running in Production)
 [7] Repeat for next component
         ↓
 Production (Incrementally Migrated)
-```
+```text
 
 **Key Insight from Google Paper**:
 > "UniTrans uses test-cases as a benchmark and to guide code translation"
 
 **Pros**:
+
 - Zero downtime migration
 - Rollback capability at any point
 - Incremental risk management
 - Ideal for brownfield projects
 
 **Cons**:
+
 - Longer migration timeline
 - Operational complexity (running two systems)
 - May never complete migration
@@ -165,13 +179,15 @@ Production (Incrementally Migrated)
 **Approach**: Build a **semantic knowledge graph** of domain objects, business logic flows, and UX patterns from the vibe-coded prototype. Use this graph as a generation anchor rather than text specifications.
 
 **Academic Foundation**:
+
 - **RepoGraph** - Repository-level code graph for AI software engineering
 - **RefExpo** (arXiv:2407.02620) - Dependency graph extraction
 - **CodeKGC** (arXiv:2304.09048) - Knowledge graph construction from code
 - **Knowledge-Based Multi-Agent Framework** (arXiv:2503.20536) for architecture design
 
 **How It Works**:
-```
+
+```text
 Vibe-Coded Prototype
         ↓
 [1] Static analysis extracts code structure (RefExpo)
@@ -192,18 +208,20 @@ Vibe-Coded Prototype
 [6] Validate regenerated code against graph constraints
         ↓
 Production Code (Graph-Anchored)
-```
+```text
 
 **Key Insight from RefExpo**:
 > "Nodes can be methods, classes, files, modules. Logical dependencies are identified by how each component references others."
 
 **Pros**:
+
 - Captures structural relationships, not just behavior
 - Graph provides deterministic anchoring
 - Supports both "ditch" and "build on" paths
 - Natural fit for DDD-based AI-DLC
 
 **Cons**:
+
 - Requires graph database infrastructure
 - Complex implementation
 - May miss dynamic behaviors
@@ -217,13 +235,15 @@ Production Code (Graph-Anchored)
 **Approach**: Use a **specialized multi-agent system** where different agents handle extraction, specification, generation, and validation—with explicit human validation gates at each stage.
 
 **Academic Foundation**:
+
 - **Self-Organized Agents (SoA)** (arXiv:2404.02183) - Scalable multi-agent code generation
 - **Codelevate** (arXiv:2511.07257) - Bridging prototype-production gap with MASA
 - **LLM-Based Multi-Agent Systems for SE** (arXiv:2404.04834) - Survey of approaches
 - **Seeking Specifications** (arXiv:2504.21061) - LLMs distinguish implemented vs intended behavior
 
 **How It Works**:
-```
+
+```text
 Vibe-Coded Prototype
         ↓
 [Extractor Agent]
@@ -251,7 +271,7 @@ Vibe-Coded Prototype
 - Coordinates rollback if needed
         ↓
 Production Code (Multi-Validated)
-```
+```text
 
 **Key Insight from Codelevate**:
 > "Structured multi-agent frameworks emphasize role specialization and modularity, ensuring each agent operates with clear and coordinated purpose."
@@ -260,12 +280,14 @@ Production Code (Multi-Validated)
 > "LLMs with advanced reasoning capabilities were resilient against the implementation-versus-intent problem—almost always able to identify bugs and target intended behavior."
 
 **Pros**:
+
 - Multiple validation layers
 - Explicit human-AI collaboration points
 - Scales with Self-Organized Agents approach
 - Natural fit for specsmd multi-agent architecture
 
 **Cons**:
+
 - Highest implementation complexity
 - Coordination overhead
 - Requires robust agent orchestration
@@ -297,6 +319,7 @@ Production Code (Multi-Validated)
 **"An Empirical Study of the Non-determinism of ChatGPT in Code Generation"** (arXiv:2308.02828, ACM TOSEM 2024)
 
 Key findings:
+
 - **75.76%** of CodeContests tasks produced different outputs across requests
 - **51.00%** variance on APPS benchmark
 - **47.56%** variance on HumanEval
@@ -331,6 +354,7 @@ Key findings:
 > "When the legacy system has a high business value, it is a candidate for modernization by re-engineering or migration, independently of its internal quality."
 
 **Key challenges for brownfield AI-DLC adoption**:
+
 1. Understanding existing architecture without documentation
 2. Preserving knowledge embedded in legacy code
 3. Incremental adoption without disrupting operations
@@ -357,7 +381,7 @@ Combine **Option 3 (Strangler)** with **Option 2 (Test-Contract)**:
 
 **Test-Contract Driven with Multi-Agent Orchestration**
 
-```
+```text
 specs.md Architecture
 ├── Extraction Layer
 │   ├── Code Analyzer Agent
@@ -383,7 +407,7 @@ specs.md Architecture
     ├── Strangler Coordinator (for brownfield)
     ├── Shadow Deployer
     └── Cutover Manager
-```
+```text
 
 ### User Choice Points
 

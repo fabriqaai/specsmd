@@ -14,9 +14,11 @@
 ## Unit 1: tag-based-publish
 
 ### Responsibility
+
 Modify GitHub Actions workflow to stop auto-publishing on push to main and instead publish only when version tags are pushed.
 
 ### Stories
+
 1. As a maintainer, I need pushes to main to NOT trigger npm publish
 2. As a maintainer, I need tags matching `v*` pattern to trigger npm publish
 3. As a maintainer, I need the version to be extracted from the tag (not package.json)
@@ -102,6 +104,7 @@ jobs:
 ```
 
 ### Acceptance Criteria
+
 - Push to main does NOT trigger publish
 - Tag `v1.2.3` triggers publish with version 1.2.3
 - Invalid tag format fails validation
@@ -113,9 +116,11 @@ jobs:
 ## Unit 2: prerelease-support
 
 ### Responsibility
+
 Add support for pre-release versions with appropriate npm tags.
 
 ### Stories
+
 1. As a maintainer, I need pre-release tags (`v1.0.0-beta.1`) to publish with npm tag `next`
 2. As a maintainer, I need stable versions to publish with npm tag `latest`
 3. As a user, I need to install pre-releases via `npm install specsmd@next`
@@ -149,6 +154,7 @@ Add to publish workflow:
 ```
 
 ### Acceptance Criteria
+
 - `v1.0.0` publishes with `latest` tag
 - `v1.0.0-beta.1` publishes with `next` tag
 - Pre-releases marked as such on GitHub
@@ -158,9 +164,11 @@ Add to publish workflow:
 ## Unit 3: release-documentation
 
 ### Responsibility
+
 Document the release process for maintainers and contributors.
 
 ### Stories
+
 1. As a contributor, I need to understand the branching strategy
 2. As a maintainer, I need step-by-step release instructions
 3. As a maintainer, I need to know how to create pre-releases
@@ -234,6 +242,7 @@ If you need to publish without creating a tag:
 ```
 
 ### Acceptance Criteria
+
 - RELEASING.md exists in repo root
 - README references RELEASING.md
 - Instructions are accurate and complete
@@ -243,9 +252,11 @@ If you need to publish without creating a tag:
 ## Unit 4: changelog-automation
 
 ### Responsibility
+
 Automatically generate changelog from commit history (Phase 2, post-1.0).
 
 ### Stories
+
 1. As a maintainer, I need changelog entries generated from commits
 2. As a user, I need to see what changed between versions
 3. As a maintainer, I need commits to follow conventional format
@@ -260,9 +271,11 @@ Automatically generate changelog from commit history (Phase 2, post-1.0).
 | **Manual** | Write changelog by hand | Lowest |
 
 ### Recommendation
+
 Start with manual CHANGELOG.md, evaluate Release Please for 1.0 release.
 
 ### Acceptance Criteria (Future)
+
 - CHANGELOG.md maintained in repo
 - Changelog entries auto-generated from commits
 - GitHub releases include changelog excerpt
@@ -271,7 +284,7 @@ Start with manual CHANGELOG.md, evaluate Release Please for 1.0 release.
 
 ## Dependency Graph
 
-```
+```text
 ┌────────────────────┐
 │ tag-based-publish  │ ← Must be done first
 └─────────┬──────────┘

@@ -13,13 +13,14 @@ Today, specs.md announces the release of specsmd, an open-source implementation 
 specsmd provides four specialized AI agents - Master, Inception, Construction, and Operations - that guide developers through the complete software lifecycle. Each agent is equipped with domain-specific skills and follows the AI-DLC principle that "AI drives workflows by breaking down high-level intents into actionable tasks, while humans serve as approvers, validating and confirming decisions at critical junctures."
 
 Key features include:
+
 - **Multi-Tool Support**: Works with Claude Code, Cursor, and GitHub Copilot
 - **Memory Bank System**: File-based artifact storage for project context
 - **Bolt Execution**: Rapid iteration cycles with DDD, TDD, BDD, and Spike bolt types
 - **Standards-Driven**: Built-in facilitation for tech-stack, coding standards, and architecture decisions
 - **Human Oversight**: Validation points at every stage to catch errors early
 
-specsmd is available now at https://specs.md and can be installed via npm.
+specsmd is available now at <https://specs.md> and can be installed via npm.
 
 ---
 
@@ -38,6 +39,7 @@ A: specsmd is designed for AI-native engineers who want to leverage AI throughou
 
 **Q: What agentic coding tools are supported?**
 A: Currently supported:
+
 - Claude Code (Anthropic)
 - Cursor
 - GitHub Copilot
@@ -46,13 +48,16 @@ A: Currently supported:
 
 **Q: How do I install specsmd?**
 A: Install via npx:
+
 ```bash
 npx specsmd install
 ```
+
 The installer will detect available agentic coding tools and guide you through setup.
 
 **Q: What gets installed?**
 A: specsmd installs:
+
 - Agent definitions (markdown files)
 - Skills for each agent
 - Templates for artifacts
@@ -66,6 +71,7 @@ A: Yes. During installation, you can select multiple tools and specsmd will inst
 
 **Q: What agents are available?**
 A: Four agents:
+
 1. **Master Agent** - Central orchestrator that analyzes project state and routes to specialist agents
 2. **Inception Agent** - Handles requirements, decomposition into units, and story creation
 3. **Construction Agent** - Executes bolts through domain design, logical design, code, and test stages
@@ -73,6 +79,7 @@ A: Four agents:
 
 **Q: How do I invoke an agent?**
 A: Use slash commands in your agentic coding tool:
+
 - `/specsmd-master-agent` - Master agent
 - `/specsmd-inception-agent` - Inception agent
 - `/specsmd-construction-agent` - Construction agent
@@ -94,6 +101,7 @@ A: A Bolt is the smallest iteration in AI-DLC, designed for rapid implementation
 
 **Q: What are the AI-DLC phases?**
 A: Three phases:
+
 1. **Inception** - Capture intents, elaborate into stories/NFRs, decompose into units, plan bolts
 2. **Construction** - Execute bolts through domain design → logical design → code → test
 3. **Operations** - Deploy, verify, and monitor
@@ -102,6 +110,7 @@ A: Three phases:
 
 **Q: What bolt types are available?**
 A: Two bolt types:
+
 1. **DDD Construction Bolt** - Domain-Driven Design stages (model, design, ADR, implement, test)
 2. **Simple Construction Bolt** - Lightweight stages for UI, integrations, utilities (spec, implement, test)
 
@@ -115,6 +124,7 @@ A: The Memory Bank is a file-based storage system for all project artifacts. It 
 
 **Q: What's stored in the Memory Bank?**
 A:
+
 - `intents/` - Feature intents and their decomposition
 - `bolts/` - Bolt execution instances
 - `standards/` - Project standards (tech-stack, coding, architecture)
@@ -124,6 +134,7 @@ A:
 
 **Q: What standards does specsmd support?**
 A: Five standards types:
+
 1. **Tech Stack** - Languages, frameworks, databases, infrastructure
 2. **Coding Standards** - Formatting, linting, naming, testing strategy
 3. **System Architecture** - Architecture style, API design, state management
@@ -140,6 +151,7 @@ A: Human oversight functions as a "loss function" - catching and correcting erro
 
 **Q: Where are the validation points?**
 A: Key validation points:
+
 - After requirements elaboration
 - After unit decomposition
 - After story creation
@@ -150,6 +162,7 @@ A: Key validation points:
 
 **Q: How is AI-DLC different from Agile/Scrum?**
 A: Key differences:
+
 | Aspect | Agile/Scrum | AI-DLC |
 |--------|-------------|--------|
 | Iteration duration | Weeks (Sprints) | Hours/days (Bolts) |
@@ -168,11 +181,13 @@ A: Each agent invocation starts fresh. Agents read context from the Memory Bank 
 
 **Q: How do I reset project state?**
 A: Clear the `memory-bank/` directory to reset all artifacts. To remove specsmd entirely:
+
 1. Delete the `.specsmd/` directory
 2. Delete tool-specific command files (`.claude/commands/specsmd-*.md`, `.cursor/commands/specsmd-*.md`, `.github/copilot/commands/specsmd-*.md`)
 3. Optionally delete `memory-bank/` if you don't need to preserve project context
 
 **Q: Where can I get help?**
 A:
-- Documentation: https://specs.md
-- Issues: https://github.com/fabriqaai/specsmd/issues
+
+- Documentation: <https://specs.md>
+- Issues: <https://github.com/fabriqaai/specsmd/issues>

@@ -80,7 +80,7 @@ As you move UP the pyramid, tests become slower, more expensive, less determinis
 
 ## Frequency & Triggers
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                          TEST EXECUTION SCHEDULE                        │
 ├─────────────────────────────────────────────────────────────────────────┤
@@ -116,7 +116,7 @@ As you move UP the pyramid, tests become slower, more expensive, less determinis
 
 When implementing a new capability (e.g., new skill, new agent behavior):
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    ADDING A NEW FEATURE                                 │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -157,6 +157,7 @@ When implementing a new capability (e.g., new skill, new agent behavior):
 ```
 
 **Checklist for New Features**:
+
 - [ ] Spec files follow schema (`memory-bank/intents/.../`)
 - [ ] Unit tests for new utilities
 - [ ] Golden dataset input/output pair added
@@ -170,7 +171,7 @@ When implementing a new capability (e.g., new skill, new agent behavior):
 
 When modifying how an agent responds (e.g., changing prompt, output format):
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    CHANGING AGENT BEHAVIOR                              │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -214,6 +215,7 @@ When modifying how an agent responds (e.g., changing prompt, output format):
 ```
 
 **Checklist for Behavior Changes**:
+
 - [ ] Baseline captured before changes
 - [ ] After scores compared to baseline
 - [ ] Golden outputs updated (if intentional)
@@ -227,7 +229,7 @@ When modifying how an agent responds (e.g., changing prompt, output format):
 
 When fixing incorrect agent behavior:
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         FIXING A BUG                                    │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -256,6 +258,7 @@ When fixing incorrect agent behavior:
 ```
 
 **Checklist for Bug Fixes**:
+
 - [ ] Failing test created first
 - [ ] Fix makes test pass
 - [ ] No regressions
@@ -267,7 +270,7 @@ When fixing incorrect agent behavior:
 
 When golden examples need refresh:
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    UPDATING GOLDEN DATASET                              │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -369,7 +372,7 @@ This makes specsmd's specification-first approach inherently testable.
 
 Since specsmd is specification-driven, markdown specs serve as contracts:
 
-```
+```text
 memory-bank/
 ├── intents/          → Contract: Each intent follows schema
 ├── units/            → Contract: Each unit has required fields
@@ -468,7 +471,7 @@ LLM outputs are non-deterministic. Traditional exact-match testing fails.
 
 Record and replay known-good LLM responses:
 
-```
+```text
 __tests__/fixtures/mock-responses/
 ├── inception-agent/
 │   ├── intent-create-success.json
@@ -553,7 +556,7 @@ def test_agent_output_structure():
 
 Test complete AI-DLC flows across phases:
 
-```
+```text
 Inception → Construction → Operations
 ```
 
@@ -606,7 +609,7 @@ A curated collection of inputs and their ideal outputs for regression testing.
 
 ### Structure
 
-```
+```text
 __tests__/golden-datasets/
 ├── inception/
 │   ├── inputs/
@@ -732,7 +735,7 @@ jobs:
 
 ## Recommended Test Directory Structure
 
-```
+```text
 specsmd/
 ├── __tests__/
 │   ├── unit/
@@ -997,6 +1000,7 @@ def test_agent_generates_valid_intent():
 ### Dashboard
 
 Track over time:
+
 - Quality scores per agent
 - Regression trends
 - Test flakiness rate

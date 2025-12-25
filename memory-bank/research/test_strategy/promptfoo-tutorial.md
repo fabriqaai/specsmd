@@ -8,7 +8,7 @@ A comprehensive guide to Promptfoo - the open-source tool for evaluating and tes
 
 Promptfoo is an open-source CLI and library for **testing and evaluating LLM outputs**. Think of it as "Jest for LLMs" - it lets you write test cases for your prompts and automatically evaluate whether outputs meet your quality standards.
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                         PROMPTFOO                                │
 │                                                                  │
@@ -16,10 +16,10 @@ Promptfoo is an open-source CLI and library for **testing and evaluating LLM out
 │                                                                  │
 │   "Does my prompt produce good outputs consistently?"            │
 └─────────────────────────────────────────────────────────────────┘
-```
+```text
 
-**GitHub**: https://github.com/promptfoo/promptfoo
-**Docs**: https://promptfoo.dev/docs
+**GitHub**: <https://github.com/promptfoo/promptfoo>
+**Docs**: <https://promptfoo.dev/docs>
 
 ---
 
@@ -28,10 +28,12 @@ Promptfoo is an open-source CLI and library for **testing and evaluating LLM out
 ### The LLM Testing Challenge
 
 Traditional software testing relies on **determinism**:
+
 - Input X always produces Output Y
 - You can assert `expect(add(2,2)).toBe(4)`
 
 LLMs are **non-deterministic**:
+
 - Same prompt can produce different outputs
 - "Good" vs "bad" is subjective
 - Outputs are natural language, not structured data
@@ -47,9 +49,10 @@ def test_prompt():
     assert "summary" in output.lower()  # Fragile
     assert len(output) < 500            # Arbitrary
     # ... manual review for quality?
-```
+```text
 
 **Problems**:
+
 - No systematic way to test prompts
 - Can't catch regressions when prompts change
 - No comparison between different models
@@ -76,9 +79,10 @@ tests:
         value: "Is this a coherent summary under 200 words?"
       - type: javascript
         value: output.length < 1000
-```
+```text
 
 **Benefits**:
+
 - Systematic, repeatable testing
 - Compare multiple models side-by-side
 - LLM-as-judge for quality evaluation
@@ -106,7 +110,7 @@ prompts:
     content: "You are a helpful assistant"
   - role: user
     content: "{{user_input}}"
-```
+```text
 
 ### 2. Providers
 
@@ -133,7 +137,7 @@ providers:
   - id: my-api
     config:
       url: https://my-api.com/generate
-```
+```text
 
 ### 3. Tests
 
@@ -158,7 +162,7 @@ tests:
         value: "ERROR"
       - type: llm-rubric
         value: "Is this grammatically correct French?"
-```
+```text
 
 ### 4. Assertions
 
@@ -214,7 +218,7 @@ assert:
   - type: similar
     value: "The expected output content"
     threshold: 0.8
-```
+```text
 
 ---
 
@@ -228,14 +232,14 @@ npm install -g promptfoo
 
 # Or use npx without installing
 npx promptfoo@latest init
-```
+```text
 
 ### Initialize a Project
 
 ```bash
 # Create promptfoo.yaml in current directory
 promptfoo init
-```
+```text
 
 ### Set API Keys
 
@@ -248,7 +252,7 @@ export OPENAI_API_KEY=sk-...
 
 # Anthropic (if using)
 export ANTHROPIC_API_KEY=sk-ant-...
-```
+```text
 
 ---
 
@@ -278,13 +282,13 @@ tests:
     assert:
       - type: contains
         value: "Paris"
-```
+```text
 
 ### Step 2: Run Tests
 
 ```bash
 promptfoo eval
-```
+```text
 
 ### Step 3: View Results
 
@@ -294,7 +298,7 @@ promptfoo eval
 
 # Web UI (recommended)
 promptfoo view
-```
+```text
 
 ---
 
@@ -346,7 +350,7 @@ tests:
         value: "gonna"
       - type: not-contains
         value: "stuff"
-```
+```text
 
 ### Example 2: Comparing Models
 
@@ -388,12 +392,13 @@ tests:
         value: "Does this capture the key points of the article?"
       - type: javascript
         value: output.split('\n').filter(l => l.startsWith('-')).length === 3
-```
+```text
 
 Run with comparison view:
+
 ```bash
 promptfoo eval --output comparison.html
-```
+```text
 
 ### Example 3: Regression Testing
 
@@ -432,7 +437,7 @@ tests:
       - type: similar
         value: file://golden/payment-intent-001-expected.md
         threshold: 0.8
-```
+```text
 
 ### Example 4: Using Variables from Files
 
@@ -450,14 +455,15 @@ tests:
 
   # Or from JSON
   - vars: file://test-data/inputs.json
-```
+```text
 
 `test-data/inputs.csv`:
+
 ```csv
 input,expected_contains
 "What is Python?","programming language"
 "Explain REST APIs","HTTP"
-```
+```text
 
 ---
 
@@ -467,7 +473,7 @@ The most powerful feature for testing AI agents.
 
 ### How It Works
 
-```
+```text
 ┌──────────────────────────────────────────────────────────────────┐
 │                        LLM-as-Judge Flow                         │
 │                                                                  │
@@ -478,7 +484,7 @@ The most powerful feature for testing AI agents.
 │                                              "PASS: meets        │
 │                                               all criteria"      │
 └──────────────────────────────────────────────────────────────────┘
-```
+```text
 
 ### Basic LLM-Rubric
 
@@ -486,7 +492,7 @@ The most powerful feature for testing AI agents.
 assert:
   - type: llm-rubric
     value: "Is this response helpful and accurate?"
-```
+```text
 
 ### Detailed Rubric
 
@@ -510,7 +516,7 @@ assert:
       ACTIONABILITY: X/10 - reasoning
       AVERAGE: X/10
       RESULT: PASS/FAIL
-```
+```text
 
 ### Custom Judge Provider
 
@@ -521,7 +527,7 @@ assert:
   - type: llm-rubric
     provider: openrouter:meta-llama/llama-3.1-8b-instruct:free
     value: "Is this response professional?"
-```
+```text
 
 ### Model-Graded Closedqa
 
@@ -531,7 +537,7 @@ For factual correctness:
 assert:
   - type: model-graded-closedqa
     value: "The capital of France is Paris"
-```
+```text
 
 ---
 
@@ -569,7 +575,7 @@ jobs:
         with:
           name: promptfoo-results
           path: promptfoo-output.json
-```
+```text
 
 ### Exit Codes
 
@@ -581,7 +587,7 @@ jobs:
 
 ```bash
 promptfoo eval --output results.json --ci
-```
+```text
 
 ---
 
@@ -640,14 +646,14 @@ tests:
     assert:
       - type: contains
         value: "expected"
-```
+```text
 
 ### 2. Use Free Models for CI
 
 ```yaml
 providers:
   - openrouter:meta-llama/llama-3.1-8b-instruct:free  # $0
-```
+```text
 
 ### 3. Layer Your Assertions
 
@@ -662,14 +668,14 @@ assert:
   # Expensive LLM checks last
   - type: llm-rubric
     value: "Is this high quality?"
-```
+```text
 
 ### 4. Build Golden Datasets Gradually
 
 ```bash
 # Save good outputs as golden examples
 promptfoo eval --output golden/
-```
+```text
 
 ### 5. Use Variables for Reusability
 
@@ -683,7 +689,7 @@ defaultTest:
     - type: llm-rubric
       provider: ${JUDGE_MODEL}
       value: "Basic quality check"
-```
+```text
 
 ---
 
@@ -692,32 +698,36 @@ defaultTest:
 ### Common Issues
 
 **"No tests found"**
+
 ```bash
 # Ensure promptfoo.yaml exists in current directory
 ls promptfoo.yaml
-```
+```text
 
 **"API key not found"**
+
 ```bash
 # Set environment variable
 export OPENROUTER_API_KEY=sk-or-...
-```
+```text
 
 **"Rate limited"**
+
 ```yaml
 # Add delay between tests
 providers:
   - id: my-provider
     delay: 1000  # 1 second between calls
-```
+```text
 
 **"Output too long"**
+
 ```yaml
 providers:
   - openai:gpt-4o
     config:
       max_tokens: 500
-```
+```text
 
 ---
 
@@ -749,7 +759,7 @@ promptfoo eval -c config1.yaml -c config2.yaml
 
 # Cache results (faster re-runs)
 promptfoo eval --cache
-```
+```text
 
 ### Environment Variables
 
@@ -758,7 +768,7 @@ OPENROUTER_API_KEY=sk-or-...     # OpenRouter
 OPENAI_API_KEY=sk-...            # OpenAI
 ANTHROPIC_API_KEY=sk-ant-...     # Anthropic
 PROMPTFOO_CACHE_ENABLED=true     # Enable caching
-```
+```text
 
 ---
 

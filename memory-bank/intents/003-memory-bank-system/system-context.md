@@ -8,7 +8,7 @@ This document defines the boundaries and integration points for the Memory Bank 
 
 ## System Boundary
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────┐
 │                         Agent Layer                                 │
 │  ┌────────────┐   ┌────────────┐   ┌────────────┐   ┌──────────┐  │
@@ -57,11 +57,13 @@ This document defines the boundaries and integration points for the Memory Bank 
 ## External Systems
 
 ### File System
+
 - **Type**: Local filesystem
 - **Interface**: Node.js fs/fs-extra operations
 - **Constraint**: Must be git-friendly (no binary files, no large files)
 
 ### Git
+
 - **Type**: Version control system
 - **Interface**: User's git workflow
 - **Constraint**: All Memory Bank files must be safe to commit
@@ -71,12 +73,15 @@ This document defines the boundaries and integration points for the Memory Bank 
 ## Internal Components
 
 ### Configuration File (memory-bank.yaml)
+
 - **Location**: `.specsmd/memory-bank.yaml`
 - **Purpose**: Single source of truth for artifact paths and agent ownership
 - **Consumers**: All agents read this on activation
 
 ### Structure Section
+
 Defines the conceptual organization:
+
 ```yaml
 structure:
   - path: intents/
@@ -86,7 +91,9 @@ structure:
 ```
 
 ### Schema Section
+
 Provides path templates:
+
 ```yaml
 schema:
   intents: "memory-bank/intents/{intent-name}/"
@@ -95,7 +102,9 @@ schema:
 ```
 
 ### Ownership Section
+
 Maps agents to artifact types:
+
 ```yaml
 ownership:
   inception: [intents, units, stories]
@@ -108,7 +117,8 @@ ownership:
 ## Data Flow
 
 ### Agent Activation
-```
+
+```text
 Agent starts
     │
     ▼
@@ -128,7 +138,8 @@ Execute skills with context
 ```
 
 ### Artifact Creation
-```
+
+```text
 Skill needs to create artifact
     │
     ▼
@@ -149,11 +160,13 @@ Write markdown file from template
 ## Integration Contracts
 
 ### Configuration Format
+
 - YAML format with structure, schema, and ownership sections
 - All paths relative to project root
 - Path templates use `{variable-name}` syntax
 
 ### Artifact Format
+
 - All artifacts are markdown files
 - Artifacts may have YAML frontmatter for metadata
 - Human-readable and editable

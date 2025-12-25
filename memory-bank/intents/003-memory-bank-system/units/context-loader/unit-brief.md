@@ -9,6 +9,7 @@ The Context Loader unit handles reading the memory-bank.yaml configuration and l
 ## Scope
 
 ### In Scope
+
 - Reading memory-bank.yaml on agent activation
 - Resolving path templates
 - Loading phase-relevant artifacts
@@ -16,6 +17,7 @@ The Context Loader unit handles reading the memory-bank.yaml configuration and l
 - Determining project state (phase, progress)
 
 ### Out of Scope
+
 - Schema definition (handled by configuration-schema)
 - Actual file I/O (handled by artifact-storage)
 
@@ -24,10 +26,12 @@ The Context Loader unit handles reading the memory-bank.yaml configuration and l
 ## Technical Context
 
 ### Activation Point
+
 Every agent reads context at activation before executing any skill.
 
 ### Agent Activation Pattern
-```
+
+```text
 User invokes /specsmd-{agent}
          │
          ▼
@@ -83,7 +87,7 @@ Agent executes skill with context
 
 ### Phase Determination Logic
 
-```
+```text
 function determinePhase(memoryBank):
     IF no intents exist:
         return "none"  // Need to start inception
@@ -103,30 +107,34 @@ function determinePhase(memoryBank):
 Each agent loads different context based on its phase:
 
 **Master Agent**:
+
 - All intents (names, status)
 - All bolts (status)
 - Standards (if exist)
 - Determines overall project phase
 
 **Inception Agent**:
+
 - All intents with details
 - Current intent's requirements, context, units
 - Story status per unit
 
 **Construction Agent**:
+
 - Current unit brief
 - Stories for current unit
 - Active bolts
 - Standards (tech-stack, coding-standards)
 
 **Operations Agent**:
+
 - Completed bolts
 - Deployment context
 - Standards
 
 ### Context Loading Algorithm
 
-```
+```text
 function loadContext(agentType):
     // 1. Read config
     config = readYAML(".specsmd/memory-bank.yaml")
@@ -188,6 +196,7 @@ function listActiveBolts():
 **No caching between sessions**. Agents are stateless, so context is loaded fresh each time.
 
 Rationale:
+
 - Memory bank may change between invocations
 - User may have manually edited files
 - Fresh state ensures accuracy
@@ -208,24 +217,28 @@ Rationale:
 ## Acceptance Criteria
 
 ### AC-1: Fresh Context on Activation
+
 - GIVEN agent was invoked 5 minutes ago
 - WHEN agent is invoked again
 - THEN fresh context is loaded from disk
 - AND changes made since last invocation are reflected
 
 ### AC-2: Phase Detection
+
 - GIVEN memory bank with intents but no bolts
 - WHEN Master Agent loads context
 - THEN project.phase equals "inception" or "construction"
 - AND routing recommendations match phase
 
 ### AC-3: Agent-Specific Loading
+
 - GIVEN Construction Agent activates
 - WHEN context is loaded
 - THEN standards are included (for code generation)
 - AND only construction-relevant artifacts loaded
 
 ### AC-4: Graceful Degradation
+
 - GIVEN partially populated memory bank
 - WHEN context is loaded
 - THEN missing sections are null/empty

@@ -9,6 +9,7 @@ The installer core provides the base framework for installing specsmd into agent
 ## Scope
 
 ### In Scope
+
 - Abstract `ToolInstaller` base class
 - `InstallerFactory` for creating tool-specific installers
 - `CLIUtils` for terminal UI (logo, boxes, colors, progress)
@@ -16,6 +17,7 @@ The installer core provides the base framework for installing specsmd into agent
 - Main `installer.js` orchestration logic
 
 ### Out of Scope
+
 - Tool-specific installation logic (handled by tool installers)
 
 ---
@@ -23,10 +25,12 @@ The installer core provides the base framework for installing specsmd into agent
 ## Technical Context
 
 ### Entry Point
+
 - `npx specsmd install` - Invokes CLI which calls `installer.js`
 
 ### File Structure
-```
+
+```text
 src/
 ├── bin/
 │   └── cli.js                    # CLI entry point (Commander.js)
@@ -80,6 +84,7 @@ class ToolInstaller {
 ```
 
 **Key Properties**:
+
 | Property | Type | Description |
 |----------|------|-------------|
 | `key` | string | Unique identifier (e.g., 'claude', 'cursor', 'copilot') |
@@ -143,6 +148,7 @@ const FLOWS = {
 Terminal UI utilities using chalk, figlet, gradient-string, and oh-my-logo.
 
 **Key Functions**:
+
 | Function | Purpose |
 |----------|---------|
 | `displayLogo()` | Render gradient ASCII logo |
@@ -155,6 +161,7 @@ Terminal UI utilities using chalk, figlet, gradient-string, and oh-my-logo.
 | `getVersion()` | Read version from package.json |
 
 **Theme Object**:
+
 ```javascript
 const theme = {
     primary: chalk.hex(THEME.primary),
@@ -172,7 +179,8 @@ const theme = {
 Orchestrates the installation flow.
 
 **Installation Flow**:
-```
+
+```text
 1. detectTools() - Check which tools are installed
 2. Display detected tools
 3. Prompt user to select tools (multiselect)
@@ -210,11 +218,13 @@ Orchestrates the installation flow.
 ## Acceptance Criteria
 
 ### AC-1: Tool Detection
+
 - GIVEN a project directory
 - WHEN installer runs detectTools()
 - THEN it correctly identifies installed tools by checking for their directories
 
 ### AC-2: Installation
+
 - GIVEN user selects Claude Code and AI-DLC flow
 - WHEN installation completes
 - THEN .claude/commands/ contains specsmd-*.md files
@@ -223,6 +233,7 @@ Orchestrates the installation flow.
 - AND .specsmd/manifest.yaml records installation
 
 ### AC-3: Rollback
+
 - GIVEN installation fails midway
 - WHEN error is caught
 - THEN all created files are removed

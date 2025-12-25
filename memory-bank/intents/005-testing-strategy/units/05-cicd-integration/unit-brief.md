@@ -11,6 +11,7 @@ Pipeline automation for test execution and quality gate enforcement. This unit o
 ## Scope
 
 ### In Scope
+
 - GitHub Actions workflow configuration
 - Tiered test execution (PR, main, nightly, release)
 - Quality gate enforcement
@@ -19,6 +20,7 @@ Pipeline automation for test execution and quality gate enforcement. This unit o
 - Dashboard and metrics integration
 
 ### Out of Scope
+
 - Test implementation (handled by other testing units)
 - Golden dataset curation (handled by Golden Dataset Management unit)
 - Evaluation logic (handled by Agent Behavior Evaluation unit)
@@ -28,12 +30,14 @@ Pipeline automation for test execution and quality gate enforcement. This unit o
 ## Technical Context
 
 ### Entry Points
+
 - PR opened → Tier 1 tests
 - Merge to main → Tier 2 tests
 - Scheduled (2 AM) → Tier 3 tests
 - Release tag → Tier 4 tests
 
 ### Dependencies
+
 - GitHub Actions
 - Test runners (Vitest, BATS)
 - **Promptfoo** (evaluation framework)
@@ -43,6 +47,7 @@ Pipeline automation for test execution and quality gate enforcement. This unit o
 **Cost**: $0 using OpenRouter free tier models.
 
 ### Outputs
+
 - Test results in PR comments
 - Quality dashboards
 - Release gates
@@ -70,6 +75,7 @@ Pipeline automation for test execution and quality gate enforcement. This unit o
 **Location**: `.github/workflows/`
 
 **Tier 1: PR Tests** (`.github/workflows/pr-tests.yml`):
+
 ```yaml
 name: PR Tests (Tier 1)
 
@@ -184,6 +190,7 @@ jobs:
 ```
 
 **Tier 2: Main Branch Tests** (`.github/workflows/main-tests.yml`):
+
 ```yaml
 name: Main Branch Tests (Tier 2)
 
@@ -252,6 +259,7 @@ jobs:
 ```
 
 **Tier 3: Nightly Evaluation** (`.github/workflows/nightly-eval.yml`):
+
 ```yaml
 name: Nightly Evaluation (Tier 3)
 
@@ -322,6 +330,7 @@ jobs:
 ```
 
 **Tier 4: Release Tests** (`.github/workflows/release-tests.yml`):
+
 ```yaml
 name: Release Tests (Tier 4)
 
@@ -406,6 +415,7 @@ jobs:
 **Purpose**: Enforce minimum quality standards
 
 **Configuration** (`quality-gates.yaml`):
+
 ```yaml
 # Quality gate thresholds
 gates:
@@ -446,6 +456,7 @@ metrics_to_track:
 **Purpose**: Provide visibility into test results
 
 **PR Comments**:
+
 ```typescript
 // Generate PR comment with test summary
 async function generatePRComment(results: TestResults): string {
@@ -465,6 +476,7 @@ ${results.allPassed ? '✅ All checks passed!' : '❌ Some checks failed. See de
 ```
 
 **Dashboard** (`eval:report` generates):
+
 - Quality scores over time chart
 - Per-agent score breakdown
 - Regression history
@@ -475,10 +487,12 @@ ${results.allPassed ? '✅ All checks passed!' : '❌ Some checks failed. See de
 **Purpose**: Require human review for critical transitions
 
 **Environments** (`.github/environments/`):
+
 - `staging`: Auto-deploy, no approval required
 - `production`: Requires manual approval
 
 **Implementation**:
+
 ```yaml
 # In workflow
 human-approval:
@@ -533,6 +547,7 @@ human-approval:
 ## Acceptance Criteria
 
 ### AC-1: Tier 1 Execution
+
 - GIVEN a PR is opened
 - WHEN CI triggers
 - THEN schema, CLI, unit, and snapshot tests run
@@ -540,6 +555,7 @@ human-approval:
 - AND PR is blocked on failure
 
 ### AC-2: Tier 2 Execution
+
 - GIVEN a merge to main
 - WHEN CI triggers
 - THEN Tier 1 + quick agent eval runs
@@ -547,6 +563,7 @@ human-approval:
 - AND team is alerted on failure
 
 ### AC-3: Tier 3 Execution
+
 - GIVEN 2 AM UTC
 - WHEN nightly cron triggers
 - THEN full golden dataset evaluation runs
@@ -554,6 +571,7 @@ human-approval:
 - AND alerts are sent on regression
 
 ### AC-4: Tier 4 Execution
+
 - GIVEN a release tag is pushed
 - WHEN CI triggers
 - THEN full suite runs with strict thresholds
@@ -561,6 +579,7 @@ human-approval:
 - AND publish only proceeds after approval
 
 ### AC-5: Quality Gate Enforcement
+
 - GIVEN quality gate thresholds
 - WHEN tests complete
 - THEN scores are compared to thresholds

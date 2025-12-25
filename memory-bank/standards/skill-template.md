@@ -298,6 +298,7 @@ Every skill output MUST end with a suggested next step:
 ```
 
 This pattern:
+
 - Presents all available options as numbered list
 - Highlights the recommended action with `→`
 - Provides clear call-to-action for the user

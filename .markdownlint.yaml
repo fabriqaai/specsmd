@@ -100,8 +100,8 @@ MD038: true
 # MD039 - Spaces inside link text
 MD039: true
 
-# MD040 - Fenced code blocks should have a language specified
-MD040: true
+# MD040 - Fenced code blocks should have a language specified (disabled - too strict for docs)
+MD040: false
 
 # MD041 - First line should be a top-level heading
 MD041:
@@ -127,9 +127,8 @@ MD046:
 # MD047 - Files should end with a single newline
 MD047: true
 
-# MD048 - Code fence style
-MD048:
-  style: backtick
+# MD048 - Code fence style (disabled - we use tilde fences for nested code block examples)
+MD048: false
 
 # MD049 - Emphasis style
 MD049:

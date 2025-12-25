@@ -9,10 +9,12 @@ The Google Antigravity Installer handles installation of specsmd agents into Ant
 ## Scope
 
 ### In Scope
+
 - Google Antigravity detection
 - Agent file installation to `.agent/agents/`
 
 ### Out of Scope
+
 - Base installation logic (handled by ToolInstaller)
 - Other tool installations
 
@@ -21,13 +23,15 @@ The Google Antigravity Installer handles installation of specsmd agents into Ant
 ## Technical Context
 
 ### File Structure
-```
+
+```text
 src/lib/installers/
 └── AntigravityInstaller.js
 ```
 
 ### Target Installation Path
-```
+
+```text
 project-root/
 └── .agent/
     └── agents/
@@ -79,10 +83,13 @@ module.exports = AntigravityInstaller;
 | `detectPath` | `'.agent'` | Directory to check for detection |
 
 ### Detection Logic
+
 Google Antigravity is detected if `.agent/` directory exists in the project root. This directory is created when Antigravity initializes a workspace.
 
 ### Command Installation
+
 Inherits `installCommands()` from `ToolInstaller`:
+
 1. Creates `.agent/agents/` if it doesn't exist
 2. Copies all `.md` files from `src/flows/{flow}/commands/`
 3. Prefixes each file with `specsmd-`
@@ -94,7 +101,8 @@ Inherits `installCommands()` from `ToolInstaller`:
 Google Antigravity is an agentic development platform launched by Google in November 2025.
 
 ### Directory Structure
-```
+
+```text
 .agent/
 ├── agents/        # Agent definitions
 ├── rules/         # Project-level rules
@@ -102,11 +110,13 @@ Google Antigravity is an agentic development platform launched by Google in Nove
 ```
 
 ### Key Concepts
+
 - **Agents**: Markdown files that define AI agent behavior
 - **Rules**: Guidelines that agents follow during code generation
 - **Workflows**: Multi-step automation sequences
 
 ### Configuration Locations
+
 | Type | Location |
 |------|----------|
 | Project agents | `.agent/agents/` |
@@ -119,23 +129,27 @@ Google Antigravity is an agentic development platform launched by Google in Nove
 ## Acceptance Criteria
 
 ### AC-1: Detection
+
 - GIVEN a project with `.agent/` directory
 - WHEN detectTools() runs
 - THEN Google Antigravity is listed as detected
 
 ### AC-2: Installation
+
 - GIVEN user selects Google Antigravity
 - WHEN installation completes
 - THEN `.agent/agents/specsmd-*.md` files exist
 - AND files contain agent definitions
 
 ### AC-3: Non-Detection
+
 - GIVEN a project without `.agent/` directory
 - WHEN detectTools() runs
 - THEN Google Antigravity is NOT listed as detected
 - BUT user can still select it manually
 
 ### AC-4: No Conflicts
+
 - GIVEN `.agent/` directory exists for other purposes
 - WHEN specsmd installs to `.agent/agents/`
 - THEN existing files in `.agent/` are not modified

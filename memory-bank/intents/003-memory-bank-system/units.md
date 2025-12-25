@@ -18,7 +18,7 @@ The Memory Bank System intent is decomposed into units for configuration, storag
 
 ## Dependency Graph
 
-```
+```text
 ┌─────────────────────┐
 │ configuration-schema│
 └──────────┬──────────┘
@@ -43,6 +43,7 @@ The Memory Bank System intent is decomposed into units for configuration, storag
 **Purpose**: Define and manage the `memory-bank.yaml` configuration that all agents read.
 
 **Responsibility**:
+
 - Provide schema definition for artifact paths
 - Define structure and schema sections
 - Define agent ownership boundaries
@@ -59,6 +60,7 @@ The Memory Bank System intent is decomposed into units for configuration, storag
 **Purpose**: Store and retrieve markdown artifacts in the filesystem.
 
 **Responsibility**:
+
 - Write artifacts following schema paths
 - Read artifacts from resolved paths
 - Create directories on-demand
@@ -75,6 +77,7 @@ The Memory Bank System intent is decomposed into units for configuration, storag
 **Purpose**: Load relevant context from Memory Bank when agents activate.
 
 **Responsibility**:
+
 - Read `memory-bank.yaml` on agent activation
 - Resolve path templates to actual paths
 - Load phase-relevant artifacts

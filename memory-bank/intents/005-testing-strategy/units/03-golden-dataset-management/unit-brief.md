@@ -11,6 +11,7 @@ Curated test cases with known-good outputs for regression testing. This unit man
 ## Scope
 
 ### In Scope
+
 - Curating input/output examples per agent
 - Tracking baseline quality scores
 - Detecting regressions from baseline
@@ -18,6 +19,7 @@ Curated test cases with known-good outputs for regression testing. This unit man
 - Generating evaluation reports
 
 ### Out of Scope
+
 - Evaluation logic (handled by Agent Behavior Evaluation unit)
 - LLM-as-judge implementation (handled by Agent Behavior Evaluation unit)
 - CI/CD pipeline configuration (handled by CI/CD Integration unit)
@@ -27,17 +29,20 @@ Curated test cases with known-good outputs for regression testing. This unit man
 ## Technical Context
 
 ### Entry Points
+
 - `npm run golden:add -- --agent=inception` - Add new golden example
 - `npm run golden:update-baseline` - Update baseline scores
 - `npm run golden:report` - Generate coverage report
 
 ### Dependencies
+
 - File system for dataset storage
 - YAML parser for rubric files
 - Git for versioning
 - Evaluation framework (via Agent Behavior Evaluation unit)
 
 ### Outputs
+
 - Golden dataset files (inputs/outputs)
 - Baseline score files
 - Coverage reports
@@ -54,7 +59,8 @@ Curated test cases with known-good outputs for regression testing. This unit man
 **Location**: `__tests__/evaluation/golden-datasets/`
 
 **Structure**:
-```
+
+```text
 __tests__/evaluation/golden-datasets/
 ├── README.md                    # Dataset documentation
 ├── metadata.yaml                # Dataset versioning info
@@ -138,6 +144,7 @@ __tests__/evaluation/golden-datasets/
 **Location**: `__tests__/evaluation/golden-datasets/metadata.yaml`
 
 **Schema**:
+
 ```yaml
 # metadata.yaml
 version: 1.0.0
@@ -178,6 +185,7 @@ baselines:
 ```
 
 **Agent Metadata**:
+
 ```yaml
 # inception/metadata.yaml
 agent: inception
@@ -209,7 +217,8 @@ verification_notes: "All examples manually reviewed and approved"
 **Location**: `__tests__/evaluation/regression/baselines/`
 
 **Structure**:
-```
+
+```text
 __tests__/evaluation/regression/
 ├── baselines/
 │   ├── v1.0.0.json
@@ -222,6 +231,7 @@ __tests__/evaluation/regression/
 ```
 
 **Baseline File Format**:
+
 ```json
 {
   "version": "1.1.0",
@@ -275,6 +285,7 @@ __tests__/evaluation/regression/
 **Purpose**: Identify quality degradation from baseline
 
 **Implementation**:
+
 ```typescript
 interface RegressionResult {
   hasRegression: boolean;
@@ -328,7 +339,8 @@ async function detectRegression(
 **Purpose**: Process for adding and validating golden examples
 
 **Workflow**:
-```
+
+```text
 1. Identify coverage gap (missing skill or scenario)
         │
         ▼
@@ -354,6 +366,7 @@ async function detectRegression(
 ```
 
 **CLI Tool**:
+
 ```bash
 # Add new golden example
 npm run golden:add -- \
@@ -386,6 +399,7 @@ npm run golden:add -- \
 ### Scenario Categories
 
 Each agent should have examples covering:
+
 - **Happy Path**: Standard, expected usage
 - **Edge Cases**: Boundary conditions, unusual inputs
 - **Error Cases**: Invalid inputs, missing context
@@ -411,6 +425,7 @@ Each agent should have examples covering:
 ## Acceptance Criteria
 
 ### AC-1: Dataset Organization
+
 - GIVEN golden dataset structure
 - WHEN dataset is accessed
 - THEN inputs and outputs are paired correctly
@@ -418,6 +433,7 @@ Each agent should have examples covering:
 - AND coverage statistics are accurate
 
 ### AC-2: Baseline Tracking
+
 - GIVEN evaluation scores over time
 - WHEN baseline is updated
 - THEN previous baselines are preserved
@@ -425,6 +441,7 @@ Each agent should have examples covering:
 - AND commit hash is recorded
 
 ### AC-3: Regression Detection
+
 - GIVEN current evaluation scores
 - WHEN compared to baseline
 - THEN regressions > 5% are flagged
@@ -432,6 +449,7 @@ Each agent should have examples covering:
 - AND summary report is generated
 
 ### AC-4: Coverage Reporting
+
 - GIVEN golden dataset
 - WHEN coverage report is generated
 - THEN skill coverage is shown per agent
@@ -439,6 +457,7 @@ Each agent should have examples covering:
 - AND gaps are highlighted
 
 ### AC-5: Example Curation
+
 - GIVEN new golden example submission
 - WHEN curation workflow completes
 - THEN input/output are validated

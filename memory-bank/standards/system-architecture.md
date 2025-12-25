@@ -10,7 +10,7 @@ High-level architectural patterns and design decisions for specsmd.
 
 specsmd implements a multi-agent architecture where specialized AI agents collaborate through a shared Memory Bank.
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                    User (AI-Native Engineer)            │
 └───────────────────────────┬─────────────────────────────┘
@@ -47,23 +47,27 @@ specsmd implements a multi-agent architecture where specialized AI agents collab
 ## Component Architecture
 
 ### Agents
+
 - **Stateless**: Each invocation starts fresh
 - **Context-Aware**: Read Memory Bank on activation
 - **Skill-Based**: Execute focused skills for specific tasks
 - **Human-Validated**: Request approval at decision points
 
 ### Skills
+
 - **Single Responsibility**: One skill = one capability
 - **Template-Driven**: Use templates for artifact generation
 - **Composable**: Skills can reference other skills
 
 ### Memory Bank
+
 - **File-Based**: No database, pure filesystem
 - **Markdown-First**: All artifacts are markdown
 - **Schema-Defined**: Structure defined in `memory-bank.yaml`
 - **Git-Friendly**: Version controllable
 
 ### Installers
+
 - **Factory Pattern**: `InstallerFactory` creates tool-specific installers
 - **Interface-Based**: All installers extend `ToolInstaller` base class
 - **Pluggable**: New tools can be added via new installer class
@@ -73,12 +77,14 @@ specsmd implements a multi-agent architecture where specialized AI agents collab
 ## State Management
 
 ### No Global State
+
 - Agents are stateless
 - All state persisted in Memory Bank
 - Fresh context loaded on each invocation
 
 ### Artifact-Based State
-```
+
+```text
 Project State = f(Memory Bank Artifacts)
 
 Current Phase = determined by:
@@ -93,11 +99,13 @@ Current Phase = determined by:
 ## Security Patterns
 
 ### No Secrets in Memory Bank
+
 - Memory Bank contains only project artifacts
 - No credentials, tokens, or sensitive data
 - All files safe to commit to git
 
 ### Human Oversight
+
 - All significant actions require human approval
 - Validation points at phase boundaries
 - No autonomous code deployment
@@ -107,11 +115,13 @@ Current Phase = determined by:
 ## API Design
 
 ### Slash Command Interface
+
 - Entry point for all agent interactions
 - Parameters via `--param="value"` format
 - Optional parameters have defaults
 
 ### Skill Interface
+
 - Input: Context from Memory Bank + user request
 - Process: Defined workflow steps
 - Output: Artifacts written to Memory Bank
@@ -121,12 +131,14 @@ Current Phase = determined by:
 ## Deployment Architecture
 
 ### Distribution: npm Package
-```
+
+```bash
 npx specsmd install
 ```
 
 ### Installation Targets
-```
+
+```text
 Project Root/
 ├── .specsmd/           # specsmd runtime
 │   ├── skills/
@@ -143,6 +155,7 @@ Project Root/
 ## Caching Strategy
 
 ### No Caching Required
+
 - File-based storage eliminates caching needs
 - Each agent invocation reads fresh state
 - Filesystem provides inherent caching
@@ -152,11 +165,13 @@ Project Root/
 ## Error Handling Patterns
 
 ### Graceful Degradation
+
 - Missing directories created automatically
 - Missing templates produce helpful errors
 - Partial artifacts saved on interruption
 
 ### User-Friendly Errors
+
 - Technical errors translated to actionable messages
 - Clear next steps provided
 - No stack traces in production output

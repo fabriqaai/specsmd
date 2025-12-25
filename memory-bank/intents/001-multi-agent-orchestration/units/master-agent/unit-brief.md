@@ -9,6 +9,7 @@ The Master Agent is the central orchestrator of the specsmd system. It analyzes 
 ## Scope
 
 ### In Scope
+
 - Agent persona and definition
 - Project state analysis (analyze-context skill)
 - User routing to specialist agents (route-request skill)
@@ -17,6 +18,7 @@ The Master Agent is the central orchestrator of the specsmd system. It analyzes 
 - Project initialization via standards (project-init skill)
 
 ### Out of Scope
+
 - Inception phase execution (Inception Agent)
 - Construction phase execution (Construction Agent)
 - Operations phase execution (Operations Agent)
@@ -26,15 +28,18 @@ The Master Agent is the central orchestrator of the specsmd system. It analyzes 
 ## Technical Context
 
 ### Entry Points
+
 - `/specsmd-master-agent` - Activate Master Agent (the ONLY command - no aliases)
 
 ### Dependencies
+
 - Memory Bank schema (`memory-bank.yaml`)
 - Memory Bank artifacts (intents, units, bolts)
 - Standards catalog (`templates/standards/catalog.yaml`)
 - Facilitation guides (`templates/standards/*.guide.md`)
 
 ### Outputs
+
 - Project health dashboard
 - Routing recommendations
 - Initialized standards files in `memory-bank/standards/`
@@ -52,6 +57,7 @@ The catalog is the registry of all available standards and their configuration.
 **Location**: `.specsmd/aidlc/templates/standards/catalog.yaml`
 
 **Structure**:
+
 ```yaml
 standards:
   tech-stack:
@@ -78,6 +84,7 @@ project_types:
 ```
 
 **Key Concepts**:
+
 - **Standards**: High-level categories (tech-stack, coding-standards, system-architecture, ux-guide, api-conventions)
 - **Decisions**: Individual choices within a standard (languages, framework, database, etc.)
 - **Dependencies**: Decisions can depend on other decisions (`framework` depends on `languages`)
@@ -91,12 +98,14 @@ Guides are conversational prompts that help the Master Agent facilitate standard
 **Location**: `.specsmd/aidlc/templates/standards/{standard-name}.guide.md`
 
 **Purpose**:
+
 - Guide discovery through conversation, not forms
 - Adapt communication style based on user expertise
 - Surface tradeoffs the user may not have considered
 - Capture rationale, not just the choice
 
 **Structure**:
+
 ```markdown
 # {Standard Name} Facilitation Guide
 
@@ -121,6 +130,7 @@ Template for the final standard file
 ```
 
 **Available Guides**:
+
 - `tech-stack.guide.md` - Technology choices (languages, framework, database, ORM, auth, infrastructure)
 - `coding-standards.guide.md` - Code style (formatting, linting, naming, testing, error handling, logging)
 - `system-architecture.guide.md` - Architecture patterns (style, API design, state management, caching, security)
@@ -134,6 +144,7 @@ The final output files created in `memory-bank/standards/`.
 **Location**: `memory-bank/standards/{standard-name}.md`
 
 **Example tech-stack.md**:
+
 ```markdown
 # Tech Stack
 
@@ -178,7 +189,7 @@ Fast, disk-efficient package manager with monorepo support.
 
 ### Project Initialization Flow
 
-```
+```text
 User invokes /specsmd-master-agent (redirected to project-init for uninitialized projects)
          │
          ▼
@@ -213,11 +224,13 @@ Project initialization complete
 ## Implementation Notes
 
 ### Persona Characteristics
+
 - Role: AI-DLC Flow Orchestrator & Project Navigator
 - Communication Style: Concise and directive (for routing), conversational and adaptive (for standards)
 - Principle: Route based on project state, not user guesses
 
 ### Critical Actions
+
 1. ALWAYS read `memory-bank.yaml` first
 2. READ project state before routing
 3. ANALYZE before routing - never send to wrong agent
@@ -227,7 +240,9 @@ Project initialization complete
 7. ADAPT communication style based on user's expertise level
 
 ### Output Formatting Requirements
+
 All agent outputs MUST follow the output formatting standards:
+
 - 🚫 **NEVER** use ASCII tables for options
 - ✅ **ALWAYS** use numbered list format: `N - **Option**: Description`
 - ✅ **ALWAYS** use status indicators: ✅ (done) ⏳ (current) [ ] (pending) 🚫 (blocked)
@@ -534,17 +549,20 @@ project_types:
 ## Acceptance Criteria
 
 ### AC-1: Context Analysis
+
 - GIVEN Master Agent is invoked
 - WHEN reading project state
 - THEN agent correctly identifies current phase (none, inception, construction, operations)
 - AND provides accurate routing recommendation
 
 ### AC-2: Routing Accuracy
+
 - GIVEN project has intents but no bolts started
 - WHEN user asks "what should I do next"
 - THEN agent routes to Inception Agent for story/bolt planning
 
 ### AC-3: Project Initialization
+
 - GIVEN fresh project with no standards
 - WHEN user invokes project-init
 - THEN agent reads catalog.yaml
@@ -553,6 +571,7 @@ project_types:
 - AND generates standard files in memory-bank/standards/
 
 ### AC-4: Standards Facilitation
+
 - GIVEN project-init in progress
 - WHEN facilitating tech-stack standard
 - THEN agent follows tech-stack.guide.md

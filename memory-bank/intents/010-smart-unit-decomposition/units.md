@@ -28,6 +28,7 @@ This intent decomposes into 3 units that modify the inception flow to be project
 - **Priority**: Must (foundation for other units)
 
 **Key Changes**:
+
 - Add `unit_structure` to each project type in `catalog.yaml`
 - Define: enabled, decomposition strategy, default_bolt_type, naming pattern
 
@@ -43,6 +44,7 @@ This intent decomposes into 3 units that modify the inception flow to be project
 - **Priority**: Must (core functionality)
 
 **Key Changes**:
+
 - Add `project.yaml` and `catalog.yaml` to Input requirements
 - Add step to load project type configuration
 - Add logic to create frontend unit when enabled
@@ -60,6 +62,7 @@ This intent decomposes into 3 units that modify the inception flow to be project
 - **Priority**: Must (needed for frontend bolts)
 
 **Key Changes**:
+
 - Create `simple-construction-bolt.md` with 3 stages: Spec, Implement, Test
 - No domain model or technical design artifacts required
 - Suitable for UI, integrations, utilities
@@ -68,7 +71,7 @@ This intent decomposes into 3 units that modify the inception flow to be project
 
 ## Dependency Graph
 
-```
+```text
 catalog-extension (no dependencies)
         │
         ▼

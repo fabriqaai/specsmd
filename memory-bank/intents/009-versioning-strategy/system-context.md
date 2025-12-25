@@ -3,6 +3,7 @@
 ## Boundaries
 
 ### In Scope
+
 - Release workflow configuration (GitHub Actions)
 - Version number management
 - npm publish triggers
@@ -11,6 +12,7 @@
 - Changelog generation (future)
 
 ### Out of Scope
+
 - Feature development workflow
 - Code review process
 - Testing strategy (separate intent)
@@ -23,17 +25,20 @@
 ### Primary Actors
 
 #### Maintainer
+
 - Decides when to release
 - Creates version tags
 - Writes release notes
 - Reviews PRs before release
 
 #### Contributor
+
 - Creates feature branches
 - Opens PRs to main
 - Follows commit conventions
 
 #### End User
+
 - Installs specsmd via npm/npx
 - Depends on stable versions
 - Reads changelog for updates
@@ -41,11 +46,13 @@
 ### System Actors
 
 #### GitHub Actions
+
 - Detects release triggers (tags)
 - Executes publish workflow
 - Updates GitHub releases
 
 #### npm Registry
+
 - Hosts published packages
 - Manages version tags (latest, next)
 - Enforces version uniqueness
@@ -55,16 +62,19 @@
 ## External Systems
 
 ### GitHub
+
 - **Interface**: Git push, tags, releases API
 - **Data Exchange**: Code, tags, release notes
 - **Dependency**: Source code hosting, CI/CD
 
 ### npm Registry
+
 - **Interface**: npm publish command
 - **Data Exchange**: Package tarball, metadata
 - **Dependency**: Package distribution
 
 ### Git
+
 - **Interface**: CLI commands
 - **Data Exchange**: Commits, tags, branches
 - **Dependency**: Version control
@@ -74,7 +84,8 @@
 ## Integration Points
 
 ### Git ↔ GitHub Actions
-```
+
+```text
 Tag pushed (v*)
   → GitHub detects tag event
   → Triggers publish workflow
@@ -84,7 +95,8 @@ Tag pushed (v*)
 ```
 
 ### GitHub Actions ↔ npm
-```
+
+```text
 Publish step
   → Authenticate with NPM_TOKEN
   → Check version doesn't exist
@@ -96,7 +108,7 @@ Publish step
 
 ## Context Diagram
 
-```
+```text
                     ┌─────────────────────┐
                     │     Maintainer      │
                     └──────────┬──────────┘
@@ -137,7 +149,8 @@ Publish step
 ## Current vs Proposed Flow
 
 ### Current Flow (Auto-Publish)
-```
+
+```text
 Developer pushes to main
        │
        ▼
@@ -156,7 +169,8 @@ Version commit pushed
 **Problem**: Every push = release
 
 ### Proposed Flow (Tag-Based)
-```
+
+```text
 Developer pushes to main
        │
        ▼
@@ -185,16 +199,19 @@ GitHub release created
 ## Constraints
 
 ### Technical Constraints
+
 - npm versions are immutable once published
 - Tags should not be force-pushed (breaks references)
 - package.json version must match npm version
 
 ### Process Constraints
+
 - Small team = lightweight process preferred
 - Pre-1.0 = more flexibility, post-1.0 = more rigor
 - Backward compatibility expectations grow with adoption
 
 ### Organizational Constraints
+
 - Single maintainer currently (may grow)
 - Open source = public releases visible to all
 
@@ -203,7 +220,8 @@ GitHub release created
 ## Version Number Semantics
 
 ### Semantic Versioning (SemVer)
-```
+
+```text
 MAJOR.MINOR.PATCH[-PRERELEASE]
 
 MAJOR: Breaking changes
@@ -234,18 +252,22 @@ PRERELEASE: Pre-release identifier (alpha, beta, rc)
 ## Quality Attributes
 
 ### Predictability
+
 - Users know what to expect from version numbers
 - Release timing is intentional, not accidental
 
 ### Traceability
+
 - Every release traceable to git tag
 - Every tag traceable to commits
 
 ### Reversibility
+
 - Can deprecate bad releases
 - Can publish patch releases quickly
 
 ### Transparency
+
 - Public changelog
 - GitHub releases with notes
 - Clear communication of changes

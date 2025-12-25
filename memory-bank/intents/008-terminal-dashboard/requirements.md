@@ -20,6 +20,7 @@ Provide a terminal-based dashboard accessible via `npx @specs.md/specsmd` that d
 ### Recommended Approach: Ink
 
 Ink is the recommended choice because:
+
 - React component model is familiar to most developers
 - Flexbox layout via Yoga makes complex dashboards manageable
 - Actively maintained with good TypeScript support
@@ -31,6 +32,7 @@ Ink is the recommended choice because:
 ## Problem Statement
 
 Currently, users have no quick way to understand the state of their specsmd project:
+
 - What flow is installed?
 - Which tools are configured?
 - How many intents exist and their status?
@@ -141,7 +143,7 @@ npx @specs.md/specsmd --section=standards
 
 ## Dashboard Layout (ASCII Mockup)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │  specs.md - Project Dashboard                          v0.2.55  │
 ├─────────────────────────────────────────────────────────────────┤
@@ -184,31 +186,37 @@ npx @specs.md/specsmd --section=standards
 ## Acceptance Criteria
 
 ### AC-1: Project Detection
+
 - GIVEN a directory with `.specsmd/manifest.yaml`
 - WHEN user runs `npx @specs.md/specsmd`
 - THEN dashboard displays with project information
 
 ### AC-2: Non-Project Directory
+
 - GIVEN a directory without `.specsmd/manifest.yaml`
 - WHEN user runs `npx @specs.md/specsmd`
 - THEN helpful message is shown with installation instructions
 
 ### AC-3: Memory Bank Stats
+
 - GIVEN a project with 3 intents and 10 units
 - WHEN dashboard loads
 - THEN correct counts are displayed
 
 ### AC-4: Active Bolt Display
+
 - GIVEN an active bolt in stage 2
 - WHEN dashboard loads
 - THEN active bolt section shows bolt name, stage, and progress
 
 ### AC-5: JSON Output
+
 - GIVEN `--json` flag is passed
 - WHEN dashboard runs
 - THEN valid JSON is output to stdout (no interactive UI)
 
 ### AC-6: Graceful Exit
+
 - GIVEN interactive dashboard is running
 - WHEN user presses `q` or `Ctrl+C`
 - THEN dashboard exits cleanly with no error

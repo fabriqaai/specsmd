@@ -9,6 +9,7 @@ The Standards Catalog is a YAML configuration file that defines all available pr
 ## Scope
 
 ### In Scope
+
 - Standard definitions (id, description, importance)
 - Decision definitions within each standard
 - Decision dependencies and ordering
@@ -16,6 +17,7 @@ The Standards Catalog is a YAML configuration file that defines all available pr
 - Standard inter-dependencies
 
 ### Out of Scope
+
 - How to facilitate decisions (handled by facilitation-guides)
 - Output format (handled by standards-templates)
 
@@ -24,6 +26,7 @@ The Standards Catalog is a YAML configuration file that defines all available pr
 ## Technical Context
 
 ### File Location
+
 `.specsmd/aidlc/templates/standards/catalog.yaml`
 
 ---
@@ -316,7 +319,7 @@ project_types:
 
 Decisions are processed in dependency order:
 
-```
+```text
 1. Languages (no dependencies)
 2. Framework (depends on: languages)
 3. Package Manager (depends on: languages)
@@ -331,18 +334,21 @@ Decisions are processed in dependency order:
 ## Acceptance Criteria
 
 ### AC-1: Standard Discovery
+
 - GIVEN Master Agent runs project-init
 - WHEN catalog.yaml is read
 - THEN all standards are available for selection
 - AND importance levels are respected
 
 ### AC-2: Decision Dependencies
+
 - GIVEN tech-stack standard being facilitated
 - WHEN framework decision is reached
 - THEN languages decision has already been made
 - AND framework options are filtered by language
 
 ### AC-3: Project Type Preset
+
 - GIVEN user selects "backend-api" project type
 - WHEN standards are determined
 - THEN tech-stack and coding-standards are required

@@ -40,9 +40,11 @@ graph TB
 ## Unit 1: Specification Contract Testing
 
 ### Description
+
 Schema validation and contract enforcement for all markdown-based specifications.
 
 ### Responsibilities
+
 - Validate `memory-bank.yaml` against JSON Schema
 - Enforce required sections in intent artifacts
 - Validate unit brief template compliance
@@ -50,6 +52,7 @@ Schema validation and contract enforcement for all markdown-based specifications
 - Run markdown linting for structure consistency
 
 ### Components
+
 | Component | File | Description |
 |-----------|------|-------------|
 | Schema Validator | `__tests__/unit/schema-validation/` | JSON Schema validation |
@@ -58,6 +61,7 @@ Schema validation and contract enforcement for all markdown-based specifications
 | Markdown Linter | `.markdownlint.yaml` | Markdown structure rules |
 
 ### Dependencies
+
 - JSON Schema library (Ajv)
 - markdownlint
 - remark-lint
@@ -67,15 +71,18 @@ Schema validation and contract enforcement for all markdown-based specifications
 ## Unit 2: CLI & Installer Testing
 
 ### Description
+
 Traditional testing for deterministic CLI commands and installer operations.
 
 ### Responsibilities
+
 - Unit test installer components
 - Integration test slash commands
 - Snapshot test generated files
 - Property-based test Memory Bank operations
 
 ### Components
+
 | Component | File | Description |
 |-----------|------|-------------|
 | Installer Tests | `__tests__/unit/installers/` | Unit tests for installers |
@@ -84,6 +91,7 @@ Traditional testing for deterministic CLI commands and installer operations.
 | Memory Bank Tests | `__tests__/integration/memory-bank/` | CRUD operation tests |
 
 ### Dependencies
+
 - Jest/Vitest
 - BATS (Bash Automated Testing System)
 - Mock filesystem library
@@ -93,11 +101,13 @@ Traditional testing for deterministic CLI commands and installer operations.
 ## Unit 3: Agent Behavior Evaluation
 
 ### Description
+
 Non-deterministic testing for LLM-driven agent outputs using multiple evaluation strategies.
 
 **See**: `memory-bank/research/test_strategy/promptfoo-tutorial.md` for Promptfoo configuration and assertions.
 
 ### Responsibilities
+
 - Mock LLM responses for deterministic CI runs
 - Evaluate outputs via LLM-as-judge
 - Compute semantic similarity against golden examples
@@ -105,6 +115,7 @@ Non-deterministic testing for LLM-driven agent outputs using multiple evaluation
 - Handle test flakiness from non-determinism
 
 ### Components
+
 | Component | File | Description |
 |-----------|------|-------------|
 | **Promptfoo Config** | `promptfoo.yaml` | Declarative test configuration |
@@ -114,6 +125,7 @@ Non-deterministic testing for LLM-driven agent outputs using multiple evaluation
 | Behavioral Assertions | `__tests__/e2e/` | Property-based checks |
 
 ### Dependencies
+
 - **Promptfoo** (primary evaluation framework)
 - **OpenRouter** (LLM-as-judge provider, free tier)
   - `x-ai/grok-4.1-fast:free` - Coding agents (2M context)
@@ -121,6 +133,7 @@ Non-deterministic testing for LLM-driven agent outputs using multiple evaluation
 - vcrpy/responses for mocking
 
 ### Evaluation Rubrics
+
 | Rubric | File | Criteria |
 |--------|------|----------|
 | Intent Quality | `rubrics/intent-quality.yaml` | Completeness, clarity, testability |
@@ -132,11 +145,13 @@ Non-deterministic testing for LLM-driven agent outputs using multiple evaluation
 ## Unit 4: Golden Dataset Management
 
 ### Description
+
 Curated test cases with known-good outputs for regression testing.
 
 **See**: `memory-bank/research/test_strategy/promptfoo-specsmd-tutorial.md` for detailed golden dataset and fixture guide.
 
 ### Responsibilities
+
 - Maintain input/output examples per agent
 - Track baseline quality scores
 - Detect regressions from baseline
@@ -144,6 +159,7 @@ Curated test cases with known-good outputs for regression testing.
 - Manage pre-configured memory bank fixtures
 
 ### Components
+
 | Component | File | Description |
 |-----------|------|-------------|
 | Inception Dataset | `__tests__/evaluation/golden-datasets/inception/` | Inception agent examples |
@@ -154,7 +170,8 @@ Curated test cases with known-good outputs for regression testing.
 | **Test Fixtures** | `__tests__/fixtures/memory-bank-states/` | Pre-configured memory bank states |
 
 ### Dataset Structure
-```
+
+```text
 golden-datasets/
 ├── inception/
 │   ├── inputs/
@@ -185,7 +202,8 @@ Pre-configured memory bank states for reproducible testing:
 | `06-construction-complete/` | All bolts completed | Transition to operations |
 
 **Structure**:
-```
+
+```text
 __tests__/fixtures/memory-bank-states/
 ├── 01-empty-project/
 │   └── (empty)
@@ -204,6 +222,7 @@ __tests__/fixtures/memory-bank-states/
 ```
 
 ### Minimum Coverage
+
 | Agent | Minimum Examples | Target Coverage |
 |-------|-----------------|-----------------|
 | Master Agent | 20 | 100+ |
@@ -216,9 +235,11 @@ __tests__/fixtures/memory-bank-states/
 ## Unit 5: CI/CD Integration
 
 ### Description
+
 Pipeline automation for test execution and quality gate enforcement.
 
 ### Responsibilities
+
 - Trigger tests on PR and merge events
 - Enforce quality thresholds
 - Report results to PRs
@@ -226,6 +247,7 @@ Pipeline automation for test execution and quality gate enforcement.
 - Support human approval gates
 
 ### Components
+
 | Component | File | Description |
 |-----------|------|-------------|
 | PR Workflow | `.github/workflows/pr-tests.yml` | Fast deterministic tests |
@@ -234,6 +256,7 @@ Pipeline automation for test execution and quality gate enforcement.
 | Quality Gates | `.github/workflows/quality-gates.yml` | Threshold enforcement |
 
 ### Pipeline Tiers
+
 | Tier | Trigger | Tests | Duration |
 |------|---------|-------|----------|
 | Tier 1 | Every PR | Schema, CLI, Snapshots | ~2 min |
@@ -242,6 +265,7 @@ Pipeline automation for test execution and quality gate enforcement.
 | Tier 4 | Release | Full suite + human review | ~1 hour |
 
 ### Quality Thresholds
+
 | Metric | Target | Alert |
 |--------|--------|-------|
 | Schema Validation | 100% | < 100% |
@@ -254,7 +278,7 @@ Pipeline automation for test execution and quality gate enforcement.
 
 ## Unit Dependency Graph
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    CI/CD Integration                        │
 │                       (Unit 5)                              │

@@ -9,6 +9,7 @@ The Construction Agent is the software engineer that executes bolts through thei
 ## Scope
 
 ### In Scope
+
 - Bolt planning for units (bolt-plan skill)
 - Bolt execution and management (bolt-start skill)
 - Bolt status tracking (bolt-status skill)
@@ -16,6 +17,7 @@ The Construction Agent is the software engineer that executes bolts through thei
 - Navigation menu (navigator skill)
 
 ### Out of Scope
+
 - Requirements gathering (Inception Agent)
 - Project routing (Master Agent)
 - Deployment (Operations Agent)
@@ -25,9 +27,11 @@ The Construction Agent is the software engineer that executes bolts through thei
 ## Technical Context
 
 ### Entry Points
+
 - `/specsmd-construction-agent` - Activate Construction Agent
 
 ### Dependencies
+
 - Memory Bank schema (`memory-bank.yaml`)
 - Unit briefs from Inception
 - Bolt type definitions (`bolt-types/`)
@@ -35,6 +39,7 @@ The Construction Agent is the software engineer that executes bolts through thei
 - Construction templates (`templates/construction/`)
 
 ### Outputs
+
 - Bolt artifacts (`memory-bank/bolts/{bolt-id}.md`)
 - Domain designs
 - Logical designs
@@ -65,6 +70,7 @@ The Construction Agent is the software engineer that executes bolts through thei
 | Complex | 5-8 | 2-3 hours | 2-4 hours | 4-7 hours |
 
 **Only use DAY estimates when:**
+
 - Requires learning unfamiliar technology (human ramp-up)
 - Heavy external API integration with unknowns
 - Complex cross-system coordination
@@ -75,11 +81,13 @@ The Construction Agent is the software engineer that executes bolts through thei
 ## Implementation Notes
 
 ### Persona Characteristics
+
 - Role: Software Engineer
 - Communication Style: Technical and methodical
 - Principle: Follow bolt stages exactly as defined, never skip validation
 
 ### Critical Actions
+
 1. ALWAYS read bolt type definition before starting
 2. LOAD project standards (tech-stack, coding-standards) before coding
 3. EXECUTE stages in order - never skip stages
@@ -92,7 +100,9 @@ The Construction Agent is the software engineer that executes bolts through thei
 10. CHECK bolt dependencies (requires_bolts, requires_units) before starting
 
 ### Output Formatting Requirements
+
 All agent outputs MUST follow the output formatting standards:
+
 - 🚫 **NEVER** use ASCII tables for options
 - ✅ **ALWAYS** use numbered list format: `N - **Option**: Description`
 - ✅ **ALWAYS** use status indicators: ✅ (done) ⏳ (current) [ ] (pending) 🚫 (blocked)

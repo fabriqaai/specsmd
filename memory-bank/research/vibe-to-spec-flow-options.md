@@ -24,11 +24,13 @@ This document presents three flow options for enabling the transition from vibe-
 **Origin**: Computer scientist Andrej Karpathy coined "vibe coding" in February 2025, describing it as "fully giving in to the vibes, embracing exponentials, and forgetting that the code even exists."
 
 **Adoption**:
+
 - 25% of Y Combinator's Winter 2025 batch has codebases that are 95% AI-generated
 - Named Collins Dictionary's Word of the Year for 2025
 - 90% of software professionals now rely on AI tools (2025 DORA report)
 
 **Critical Problems Exposed**:
+
 - 45% of vibe-coded projects contain security vulnerabilities (Veracode)
 - 70%+ failure rate in Java environments
 - "Vibe coding hangover" reported by Fast Company (September 2025)
@@ -53,6 +55,7 @@ Three major tools emerged to address vibe coding's limitations:
 > — [MIT Technology Review](https://www.technologyreview.com/2025/11/05/1127477/from-vibe-coding-to-context-engineering-2025-in-software-development/)
 
 **Key Insight**: Context engineering treats context as a "first-class system with its own architecture, lifecycle, and constraints." This includes:
+
 - Data, metadata, and memory structures
 - Compaction (summarizing context at window limits)
 - Structured context injection from codebases
@@ -108,6 +111,7 @@ Three major tools emerged to address vibe coding's limitations:
 ### Option 1: Crystallize Flow (Reverse Engineering Approach)
 
 #### Philosophy
+>
 > "Extract before you build more"
 
 Treats vibe-coded prototypes as **discovery artifacts** and systematically extracts specifications from working code—running AI-DLC in reverse.
@@ -123,12 +127,14 @@ Treats vibe-coded prototypes as **discovery artifacts** and systematically extra
 #### Agents & Skills
 
 **Prototype Analyzer Agent**
+
 - `codebase-scan` - Inventory files, dependencies, architecture
 - `behavior-extract` - Generate user stories from code (F1=0.8 validated)
 - `architecture-reverse` - Extract SADs from source
 - `domain-discover` - Identify bounded contexts, entities, aggregates
 
 **Specification Generator Agent**
+
 - `intent-synthesize` - Create intent from extracted behaviors
 - `requirements-generate` - Generate requirements.md from code analysis
 - `story-extract` - Convert code paths to user stories with acceptance criteria
@@ -136,7 +142,7 @@ Treats vibe-coded prototypes as **discovery artifacts** and systematically extra
 
 #### Workflow
 
-```
+```text
 Vibe-Coded Prototype
         ↓
   [Capture Phase]
@@ -161,7 +167,7 @@ Vibe-Coded Prototype
 
 #### Memory Bank Extension
 
-```
+```text
 memory-bank/
 ├── crystallized/                 # NEW: Reverse-engineered projects
 │   └── {project-name}/
@@ -176,6 +182,7 @@ memory-bank/
 ```
 
 #### Best For
+
 - Legacy vibe-coded projects needing documentation
 - Projects that grew organically without specs
 - Teams wanting to understand "what we actually built"
@@ -186,6 +193,7 @@ memory-bank/
 ### Option 2: Sandbox Flow (Dual-Track Approach) [RECOMMENDED]
 
 #### Philosophy
+>
 > "Explore fast, specify what works"
 
 Runs **exploration and specification in parallel**, with explicit gates between sandbox experimentation and production-track development. Directly implements the "Explore → Specify → Engineer" cycle.
@@ -201,12 +209,14 @@ Runs **exploration and specification in parallel**, with explicit gates between 
 #### Agents & Skills
 
 **Sandbox Agent**
+
 - `experiment-start` - Create isolated sandbox environment
 - `prototype-build` - Vibe-code with explicit "throwaway" framing
 - `insight-capture` - Document discoveries during exploration
 - `experiment-conclude` - Summarize what was learned
 
 **Distillation Agent**
+
 - `learning-extract` - Convert sandbox insights to specs
 - `pattern-identify` - Recognize reusable patterns from prototypes
 - `anti-pattern-flag` - Mark approaches that didn't work
@@ -214,7 +224,7 @@ Runs **exploration and specification in parallel**, with explicit gates between 
 
 #### Workflow
 
-```
+```text
 New Idea/Feature Request
         ↓
   [Sandbox Phase] ← Can iterate multiple times
@@ -240,7 +250,7 @@ New Idea/Feature Request
 
 #### Memory Bank Extension
 
-```
+```text
 memory-bank/
 ├── sandboxes/                    # NEW: Sandbox experiments
 │   └── {experiment-name}/
@@ -255,6 +265,7 @@ memory-bank/
 ```
 
 #### Best For
+
 - Greenfield projects exploring new domains
 - Teams that want to "try before they specify"
 - Innovation projects with uncertain requirements
@@ -274,6 +285,7 @@ memory-bank/
 ### Option 3: Lifecycle-Aware Flow (Graduated Rigor Approach)
 
 #### Philosophy
+>
 > "Right level of rigor for each stage"
 
 Uses **graduated specification levels** that increase as code moves toward production. Based on V-Bounce model and lifecycle-aware code generation research.
@@ -282,36 +294,40 @@ Uses **graduated specification levels** that increase as code moves toward produ
 
 | Phase | Spec Level | Code Quality | Purpose |
 |-------|------------|--------------|---------|
-| 1 | **Sketch** | L0: Idea | Throwaway | Rapid ideation |
-| 2 | **Draft** | L1: Functional Spec | Working prototype | Validate concept |
-| 3 | **Refine** | L2: Technical Spec | Tested code | Prepare for production |
-| 4 | **Harden** | L3: Full AI-DLC | Production-ready | Ship with confidence |
+| 1 - Sketch | L0: Idea | Throwaway | Rapid ideation |
+| 2 - Draft | L1: Functional Spec | Working prototype | Validate concept |
+| 3 - Refine | L2: Technical Spec | Tested code | Prepare for production |
+| 4 - Harden | L3: Full AI-DLC | Production-ready | Ship with confidence |
 
 #### Agents & Skills
 
 **Sketch Agent (L0)**
+
 - `idea-capture` - Natural language description only
 - `quick-prototype` - Vibe-code without constraints
 - `viability-assess` - Quick check: worth pursuing?
 
 **Draft Agent (L1)**
+
 - `functional-spec-generate` - Create user stories from prototype
 - `acceptance-criteria-draft` - Define "what done looks like"
 - `prototype-refactor` - Clean up code minimally
 
 **Refine Agent (L2)**
+
 - `technical-spec-generate` - Architecture, APIs, schemas
 - `test-suite-add` - Add automated tests
 - `code-review-ai` - AI reviews for patterns/anti-patterns
 
 **Harden Agent (L3)**
+
 - `ai-dlc-bridge` - Generate full AI-DLC artifacts
 - `production-checklist` - Security, performance, observability
 - `documentation-generate` - ADRs, runbooks, API docs
 
 #### Quality Gates
 
-```
+```text
 L0 → L1: "Does this solve a real problem?"
 L1 → L2: "Is this worth building properly?"
 L2 → L3: "Is this ready for production?"
@@ -319,7 +335,7 @@ L2 → L3: "Is this ready for production?"
 
 #### Workflow
 
-```
+```text
 New Idea
     ↓
 [Sketch - L0]
@@ -349,7 +365,7 @@ New Idea
 
 #### Memory Bank Extension
 
-```
+```text
 memory-bank/
 ├── lifecycle/                    # NEW: Graduated artifacts
 │   └── {project-name}/
@@ -369,6 +385,7 @@ memory-bank/
 ```
 
 #### Best For
+
 - Teams that want flexibility in rigor levels
 - Projects where not everything needs full AI-DLC treatment
 - Organizations transitioning from vibe-coding to structured development
@@ -410,6 +427,7 @@ memory-bank/
 ### Primary Flow: Sandbox Flow
 
 **Rationale**:
+
 1. Directly implements "Explore → Specify → Engineer" cycle from user's article
 2. Matches 2025 industry reality (vibe coding is here to stay for exploration)
 3. Natural integration with existing AI-DLC architecture
@@ -419,6 +437,7 @@ memory-bank/
 ### Companion Capability: Crystallize
 
 **Rationale**:
+
 1. Addresses "rescue" problem for existing vibe-coded projects
 2. Research-validated (F1=0.8 for user story extraction)
 3. Complements Sandbox Flow (backward vs forward direction)
@@ -427,6 +446,7 @@ memory-bank/
 ### Implementation Roadmap
 
 **Phase 1: Sandbox Flow (Core)**
+
 - sandbox-agent.md
 - distillation-agent.md
 - Skills: experiment-start, insight-capture, learning-extract, spec-draft
@@ -434,12 +454,14 @@ memory-bank/
 - Templates: experiment.md, insight.md, distillation.md
 
 **Phase 2: Crystallize Capability (Add-on)**
+
 - crystallize-agent.md
 - Skills: codebase-scan, behavior-extract, requirements-generate
 - Memory bank: crystallized/
 - Integration with Sandbox → promote both to AI-DLC Inception
 
 **Phase 3: Tool Integration**
+
 - GitHub Spec Kit .specify/ format compatibility
 - Kiro requirements.md/design.md/tasks.md output
 - MCP integration for Tessl compatibility
@@ -451,6 +473,7 @@ memory-bank/
 ### Naming Alternatives
 
 "Sandbox" may conflict with existing terminology. Consider:
+
 - **Explore Flow** - matches article terminology
 - **Discovery Flow** - emphasizes learning aspect
 - **Spike Flow** - familiar to agile teams

@@ -9,6 +9,7 @@ Facilitation Guides are markdown files that instruct the Master Agent on HOW to 
 ## Scope
 
 ### In Scope
+
 - Conversational prompts for each decision area
 - Recommendations by use case
 - Tradeoff explanations
@@ -17,6 +18,7 @@ Facilitation Guides are markdown files that instruct the Master Agent on HOW to 
 - Summary templates
 
 ### Out of Scope
+
 - What decisions exist (handled by standards-catalog)
 - Output format (handled by standards-templates)
 
@@ -25,9 +27,11 @@ Facilitation Guides are markdown files that instruct the Master Agent on HOW to 
 ## Technical Context
 
 ### File Location
+
 `.specsmd/aidlc/templates/standards/{standard-id}.guide.md`
 
 ### Available Guides
+
 - `tech-stack.guide.md`
 - `coding-standards.guide.md`
 - `system-architecture.guide.md`
@@ -138,7 +142,8 @@ After confirmation, create `standards/{output-file}.md`:
 - Capture rationale - "why" is as important as "what"
 - Respect existing choices - don't second-guess without reason
 - It's okay to leave things TBD - not every decision needed upfront
-```
+
+```markdown
 
 ### Example: Tech Stack Guide Excerpt
 
@@ -182,18 +187,21 @@ After confirmation, create `standards/{output-file}.md`:
 The guide instructs the agent to adapt based on signals:
 
 **Expert signals** (be concise):
+
 - Mentions specific versions ("Node 20", "React 18")
 - Uses technical jargon correctly
 - States preferences with confidence
 - Knows about tradeoffs
 
 **Beginner signals** (provide context):
+
 - Asks "what's the difference between..."
 - Says "I've heard of X but..."
 - Uncertain language ("maybe", "I think")
 - No strong preferences
 
 **Opinionated signals** (respect, probe):
+
 - "We always use X"
 - Strong negative reactions to suggestions
 - Mentions past experiences
@@ -214,24 +222,28 @@ The guide instructs the agent to adapt based on signals:
 ## Acceptance Criteria
 
 ### AC-1: Guide Loading
+
 - GIVEN Master Agent facilitating tech-stack
 - WHEN guide is loaded
 - THEN all decision areas are available
 - AND recommendations are context-appropriate
 
 ### AC-2: Adaptive Communication
+
 - GIVEN user says "We're a TypeScript shop"
 - WHEN agent continues facilitation
 - THEN agent skips basic language explanation
 - AND focuses on framework selection
 
 ### AC-3: Tradeoff Surfacing
+
 - GIVEN user selects Next.js
 - WHEN agent validates choice
 - THEN agent mentions React lock-in
 - AND confirms user is comfortable with implication
 
 ### AC-4: Summary Generation
+
 - GIVEN all decisions made
 - WHEN facilitation completes
 - THEN summary includes all choices with rationale

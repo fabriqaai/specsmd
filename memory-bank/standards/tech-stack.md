@@ -25,6 +25,7 @@ Technology choices for specsmd.
 ## UI Libraries
 
 ### Terminal UI
+
 - **chalk** - Terminal string styling
 - **figlet** - ASCII art text generation
 - **gradient-string** - Color gradients for terminal

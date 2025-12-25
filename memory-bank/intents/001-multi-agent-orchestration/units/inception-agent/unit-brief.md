@@ -9,6 +9,7 @@ The Inception Agent is the requirements architect that transforms high-level int
 ## Scope
 
 ### In Scope
+
 - Intent creation and management (intent-create, intent-list skills)
 - Requirements gathering (requirements skill)
 - System context definition (context skill)
@@ -19,6 +20,7 @@ The Inception Agent is the requirements architect that transforms high-level int
 - Navigation menu (navigator skill)
 
 ### Out of Scope
+
 - Project state analysis (Master Agent)
 - Bolt execution (Construction Agent)
 - Deployment (Operations Agent)
@@ -28,9 +30,11 @@ The Inception Agent is the requirements architect that transforms high-level int
 ## Technical Context
 
 ### Entry Points
+
 - `/specsmd-inception-agent` - Activate Inception Agent
 
 ### Dependencies
+
 - Memory Bank schema (`memory-bank.yaml`)
 - Intent templates (`templates/inception/`)
 - Requirements template
@@ -38,6 +42,7 @@ The Inception Agent is the requirements architect that transforms high-level int
 - Story template
 
 ### Outputs
+
 - Intent artifacts (`memory-bank/intents/{intent-name}/`)
 - Requirements documents
 - System context documents
@@ -59,6 +64,7 @@ All naming is derived from folder/file names - NO frontmatter prefixes needed.
 | **Bolt file** | `bolt-{unit-name}-{N}.md` | `bolt-auth-service-1.md` |
 
 Where:
+
 - `{NNN}` = 3-digit intent number (001, 002, etc.)
 - `{SSS}` = 3-digit story number within unit (001, 002, etc.)
 - `{N}` = Sequential bolt number for unit (1, 2, 3, etc.)
@@ -90,6 +96,7 @@ Where:
 | Complex | 5-8 | 2-3 hours | 2-4 hours | 4-7 hours |
 
 **Only use DAY estimates when:**
+
 - Requires learning unfamiliar technology (human ramp-up)
 - Heavy external API integration with unknowns
 - Complex cross-system coordination
@@ -100,11 +107,13 @@ Where:
 ## Implementation Notes
 
 ### Persona Characteristics
+
 - Role: Requirements Architect
 - Communication Style: Inquisitive and structured
 - Principle: Gather requirements through conversation, validate before proceeding
 
 ### Critical Actions
+
 1. ALWAYS read existing intents before creating new ones
 2. VALIDATE intent names follow numbered prefix convention (001-, 002-, etc.)
 3. NEVER proceed without human validation at key decision points
@@ -115,7 +124,9 @@ Where:
 8. UPDATE global story index (default: `memory-bank/story-index.md`) after creating stories
 
 ### Output Formatting Requirements
+
 All agent outputs MUST follow the output formatting standards:
+
 - 🚫 **NEVER** use ASCII tables for options
 - ✅ **ALWAYS** use numbered list format: `N - **Option**: Description`
 - ✅ **ALWAYS** use status indicators: ✅ (done) ⏳ (current) [ ] (pending) 🚫 (blocked)

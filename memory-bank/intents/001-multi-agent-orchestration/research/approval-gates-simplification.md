@@ -558,6 +558,7 @@ Execute the `analyze` skill to determine project state and route appropriately.
 ### Before: inception-agent.md (342 lines)
 
 Large file with:
+
 - Mandatory Output Rules (duplicated)
 - Full workflow logic
 - Menu display logic (duplicated in navigator.md)
@@ -638,6 +639,7 @@ Execute the `menu` skill to show current state and guide user through inception.
 ### Before: construction-agent.md (427 lines)
 
 Large file with:
+
 - Mandatory Output Rules
 - Full bolt execution process
 - Bolt type loading logic

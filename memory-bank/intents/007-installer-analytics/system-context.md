@@ -3,6 +3,7 @@
 ## Boundaries
 
 ### In Scope
+
 - Event collection during installer execution
 - User consent management
 - Analytics data transmission
@@ -10,6 +11,7 @@
 - Environment detection (CI, offline)
 
 ### Out of Scope
+
 - Analytics dashboard/visualization (separate backend concern)
 - Long-term data storage architecture
 - A/B testing or feature flags
@@ -23,11 +25,13 @@
 ### Primary Actors
 
 #### AI-Native Engineer (End User)
+
 - Runs the specsmd installer
 - Provides (or declines) consent for analytics
 - Benefits from improved installer experience based on analytics insights
 
 #### specs.md Product Team
+
 - Reviews analytics dashboards
 - Makes product decisions based on data
 - Defines which events to track
@@ -35,11 +39,13 @@
 ### System Actors
 
 #### Installer CLI
+
 - Collects events during installation
 - Manages consent state
 - Transmits events to analytics endpoint
 
 #### Analytics Backend
+
 - Receives and stores events
 - Aggregates data for dashboards
 - Ensures privacy compliance
@@ -49,17 +55,20 @@
 ## External Systems
 
 ### Analytics Endpoint (specs.md)
+
 - **Interface**: HTTPS POST `/api/analytics/events`
 - **Data Exchange**: Batch of anonymous events (JSON)
 - **Dependency**: Optional - failures are silent
 - **Auth**: None required (events are anonymous)
 
 ### Local File System
+
 - **Interface**: File read/write
 - **Data Exchange**: Consent preference stored in `~/.specsmd/telemetry-consent`
 - **Dependency**: Required for consent persistence
 
 ### Environment Variables
+
 - **Interface**: `process.env`
 - **Data Exchange**: `SPECSMD_TELEMETRY_DISABLED`, `DO_NOT_TRACK`, `CI`
 - **Dependency**: Optional overrides
@@ -69,7 +78,8 @@
 ## Integration Points
 
 ### Installer CLI ↔ Analytics Module
-```
+
+```text
 Installation starts
   → Check consent state
   → If consented: collect events
@@ -78,7 +88,8 @@ Installation starts
 ```
 
 ### Analytics Module ↔ Backend
-```
+
+```text
 Events collected
   → Serialize to JSON
   → POST to endpoint (2s timeout)
@@ -87,7 +98,8 @@ Events collected
 ```
 
 ### Consent Manager ↔ Local Storage
-```
+
+```text
 First run
   → Check ~/.specsmd/telemetry-consent
   → If missing: prompt user
@@ -99,7 +111,7 @@ First run
 
 ## Context Diagram
 
-```
+```text
                     ┌─────────────────────┐
                     │   AI-Native Engineer │
                     └──────────┬──────────┘
@@ -142,18 +154,21 @@ First run
 ## Constraints
 
 ### Technical Constraints
+
 - Must work offline (graceful degradation)
 - Must not add significant latency (<100ms)
 - Must work across all supported platforms (macOS, Linux, Windows)
 - Must not require additional dependencies if possible
 
 ### Privacy Constraints
+
 - GDPR compliance required
 - No PII collection
 - Opt-in only
 - Clear disclosure of what is collected
 
 ### Operational Constraints
+
 - Analytics backend infrastructure not yet built
 - Need simple solution that can be implemented quickly
 - Budget constraints for hosted analytics services
@@ -163,7 +178,8 @@ First run
 ## Data Flow
 
 ### Happy Path (Consent Given)
-```
+
+```text
 1. User runs: npx @specs.md/specsmd
 2. Installer checks ~/.specsmd/telemetry-consent → not found
 3. Installer prompts: "Help improve specsmd? (anonymous usage stats) [y/N]"
@@ -178,7 +194,8 @@ First run
 ```
 
 ### Opt-Out Path
-```
+
+```text
 1. User runs: npx @specs.md/specsmd --no-telemetry
 2. Telemetry disabled for this session
 3. No consent prompt shown
@@ -187,7 +204,8 @@ First run
 ```
 
 ### CI Detection Path
-```
+
+```text
 1. CI runs: npx @specs.md/specsmd
 2. Installer detects CI=true environment variable
 3. Telemetry auto-disabled
@@ -201,16 +219,19 @@ First run
 ## Quality Attributes
 
 ### Privacy
+
 - Privacy by design, not as an afterthought
 - Minimal data collection principle
 - Anonymous by default
 
 ### Reliability
+
 - Never break installation
 - Silent failures
 - Offline-capable
 
 ### Transparency
+
 - Open source implementation
 - Clear documentation
 - Auditable data collection

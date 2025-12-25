@@ -25,14 +25,14 @@ The GitHub Copilot Installer handles installation of specsmd prompts and agents 
 
 ### File Structure
 
-```
+```text
 src/lib/installers/
 └── CopilotInstaller.js
 ```
 
 ### Target Installation Paths
 
-```
+```text
 project-root/
 └── .github/
     ├── prompts/

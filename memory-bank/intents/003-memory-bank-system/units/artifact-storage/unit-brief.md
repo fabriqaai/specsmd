@@ -9,12 +9,14 @@ The Artifact Storage unit handles the actual reading and writing of markdown art
 ## Scope
 
 ### In Scope
+
 - Creating directories on-demand
 - Writing markdown artifacts following templates
 - Reading artifacts from resolved paths
 - Maintaining git-friendly file structure
 
 ### Out of Scope
+
 - Schema definition (handled by configuration-schema)
 - Agent context loading (handled by context-loader)
 
@@ -23,9 +25,11 @@ The Artifact Storage unit handles the actual reading and writing of markdown art
 ## Technical Context
 
 ### Storage Location
+
 `memory-bank/` directory in project root
 
 ### File Format
+
 All artifacts are stored as markdown files (.md) with optional YAML frontmatter.
 
 ---
@@ -36,7 +40,7 @@ All artifacts are stored as markdown files (.md) with optional YAML frontmatter.
 
 After full usage, the memory bank looks like:
 
-```
+```text
 memory-bank/
 ├── intents/
 │   ├── 001-user-auth/
@@ -103,7 +107,7 @@ Content...
 
 ### Write Operation
 
-```
+```text
 function writeArtifact(templateKey, variables, content):
     1. Resolve path using schema template + variables
     2. Ensure parent directories exist (fs.ensureDir)
@@ -116,7 +120,7 @@ function writeArtifact(templateKey, variables, content):
 
 ### Read Operation
 
-```
+```text
 function readArtifact(templateKey, variables):
     1. Resolve path using schema template + variables
     2. Check if file exists
@@ -126,7 +130,7 @@ function readArtifact(templateKey, variables):
 
 ### List Operation
 
-```
+```text
 function listArtifacts(templateKey):
     1. Get base path from schema (without variables)
     2. List all directories/files under path
@@ -160,24 +164,28 @@ function listArtifacts(templateKey):
 ## Acceptance Criteria
 
 ### AC-1: Directory Creation
+
 - GIVEN path `memory-bank/intents/001-new-feature/`
 - WHEN artifact is written and directory doesn't exist
 - THEN directory is created automatically
 - AND parent directories are created if needed
 
 ### AC-2: Artifact Write
+
 - GIVEN Inception Agent creates requirements.md
 - WHEN write operation completes
 - THEN file exists at `memory-bank/intents/{intent}/requirements.md`
 - AND content matches template + provided data
 
 ### AC-3: Artifact Read
+
 - GIVEN existing artifact at path
 - WHEN read operation is performed
 - THEN content is returned correctly
 - AND frontmatter is parsed if present
 
 ### AC-4: Git Safety
+
 - GIVEN any artifact in memory bank
 - WHEN committed to git
 - THEN no merge conflicts from encoding

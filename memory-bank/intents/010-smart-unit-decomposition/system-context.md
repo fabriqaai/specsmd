@@ -4,7 +4,7 @@
 
 This intent modifies the Inception phase to be project-type aware when decomposing intents into units.
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                        Inception Agent                          │
 │  ┌─────────────────────────────────────────────────────────┐   │
@@ -30,7 +30,7 @@ This intent modifies the Inception phase to be project-type aware when decomposi
 
 ## Data Flow
 
-```
+```text
 project-init
      │
      ▼
@@ -64,11 +64,13 @@ catalog.yaml ──────────────────────�
 ## Components Modified
 
 ### 1. catalog.yaml (Extended)
+
 **Location**: `.specsmd/aidlc/templates/standards/catalog.yaml`
 
 **Change**: Add `unit_structure` to each project type definition.
 
 **Before**:
+
 ```yaml
 project_types:
   full-stack-web:
@@ -78,6 +80,7 @@ project_types:
 ```
 
 **After**:
+
 ```yaml
 project_types:
   full-stack-web:
@@ -97,16 +100,19 @@ project_types:
 ```
 
 ### 2. units.md (Modified)
+
 **Location**: `.specsmd/aidlc/skills/inception/units.md`
 
 **Change**: Add project type awareness, create frontend unit when enabled.
 
 ### 3. bolt-plan.md (Modified)
+
 **Location**: `.specsmd/aidlc/skills/inception/bolt-plan.md`
 
 **Change**: Read default bolt type from catalog instead of hardcoding DDD.
 
 ### 4. simple-construction-bolt.md (New)
+
 **Location**: `.specsmd/aidlc/templates/construction/bolt-types/simple-construction-bolt.md`
 
 **Purpose**: Lightweight 3-stage bolt for non-DDD work.

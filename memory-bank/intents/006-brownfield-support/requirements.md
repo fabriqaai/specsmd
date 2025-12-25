@@ -5,6 +5,7 @@
 Add support for brownfield application development workflows in specsmd. This enables working with existing codebases - enhancements, migrations, modernization, defect fixes, and refactoring.
 
 Currently specsmd only supports greenfield (new application) workflows. This intent adds:
+
 1. Level 1 Plan generation based on intent type
 2. Elevation phase (code archaeology → living specification)
 3. Different workflow paths for non-greenfield scenarios
@@ -45,7 +46,7 @@ Per AI-DLC specification:
 
 From `/memory-bank/research/unified-modernization-model.md`:
 
-```
+```text
 ANY Existing Codebase (Legacy OR Vibe-Coded)
                 ↓
     [1. UNDERSTAND] - Code Archaeology
@@ -172,7 +173,7 @@ The Elevation phase combines these three steps to prepare existing code for AI-D
 
 ## Memory Bank Extension
 
-```
+```text
 memory-bank/
 ├── elevation/                       # NEW: Elevation phase artifacts
 │   └── {project-name}/

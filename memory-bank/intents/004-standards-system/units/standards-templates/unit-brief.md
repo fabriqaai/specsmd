@@ -9,12 +9,14 @@ Standards Templates define the output format for generated standard files. After
 ## Scope
 
 ### In Scope
+
 - Output file structure for each standard
 - Section headers and organization
 - Placeholder syntax for decision values
 - Formatting conventions
 
 ### Out of Scope
+
 - What decisions exist (handled by standards-catalog)
 - How to gather decisions (handled by facilitation-guides)
 
@@ -23,9 +25,11 @@ Standards Templates define the output format for generated standard files. After
 ## Technical Context
 
 ### File Location
+
 `.specsmd/aidlc/templates/standards/{standard-id}-template.md`
 
 ### Output Location
+
 `memory-bank/standards/{standard-id}.md`
 
 ---
@@ -116,7 +120,7 @@ Templates use placeholder syntax for dynamic content:
 
 ### Coding Standards Template
 
-```markdown
+~~~~markdown
 # Coding Standards
 
 ## Overview
@@ -154,8 +158,10 @@ Code style and quality standards for this project.
 ## File & Folder Organization
 {organization_pattern}
 
-```
+```text
+
 {folder_structure_example}
+
 ```
 
 ---
@@ -188,11 +194,11 @@ Code style and quality standards for this project.
 
 ### Branch Strategy
 {branch_strategy}
-```
+~~~~
 
 ### System Architecture Template
 
-```markdown
+~~~~markdown
 # System Architecture
 
 ## Overview
@@ -209,8 +215,10 @@ Code style and quality standards for this project.
 
 ## Component Diagram
 
-```
+```text
+
 {ascii_diagram}
+
 ```
 
 ---
@@ -249,7 +257,7 @@ Code style and quality standards for this project.
 
 ## Deployment Architecture
 {deployment_description}
-```
+~~~~
 
 ### Placeholder Syntax
 
@@ -258,7 +266,7 @@ Code style and quality standards for this project.
 | `{decision_id}` | Value of the decision |
 | `{decision_id_choice}` | Just the choice name |
 | `{decision_id_rationale}` | Just the rationale |
-| `{value | "default"}` | Use default if value is empty |
+| `{value \| "default"}` | Use default if value is empty |
 | `{section_if:condition}...{/section_if}` | Conditional section |
 
 ### Generated Output Example
@@ -342,7 +350,7 @@ via workspaces.
 
 ## Template Generation Process
 
-```
+```text
 1. Load template from templates/standards/{id}-template.md
 2. For each placeholder in template:
    - Look up value in gathered decisions
@@ -357,24 +365,28 @@ via workspaces.
 ## Acceptance Criteria
 
 ### AC-1: Template Loading
+
 - GIVEN tech-stack facilitation complete
 - WHEN template is loaded
 - THEN all placeholders are identified
 - AND template structure is valid markdown
 
 ### AC-2: Placeholder Resolution
+
 - GIVEN decisions { languages: "TypeScript", languages_rationale: "Type safety..." }
 - WHEN template is processed
 - THEN {languages} is replaced with "TypeScript"
 - AND {languages_rationale} is replaced with explanation
 
 ### AC-3: Default Handling
+
 - GIVEN database decision is TBD
 - WHEN template is processed
 - THEN {database | "TBD"} renders as "TBD"
 - AND output is still valid
 
 ### AC-4: File Generation
+
 - GIVEN all decisions gathered and template processed
 - WHEN output is written
 - THEN file exists at memory-bank/standards/tech-stack.md

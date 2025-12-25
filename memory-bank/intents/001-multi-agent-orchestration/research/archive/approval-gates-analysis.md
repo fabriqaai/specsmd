@@ -265,6 +265,7 @@ The agent spec says "ALWAYS ask which bolt to start - NEVER auto-select". This i
 ### 2. Inception: Too Many Serial Gates
 
 The Inception flow asks 7 separate approvals **one at a time**:
+
 - Requirements -> approval -> Context -> approval -> Units -> approval...
 
 **Problem**: Each artifact validated separately instead of batched.

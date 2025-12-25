@@ -14,9 +14,11 @@
 ## Unit 1: project-scanner
 
 ### Responsibility
+
 Detect specsmd project, read manifest, and scan memory bank to build a complete project state object.
 
 ### Stories
+
 1. As a dashboard, I need to detect if cwd has `.specsmd/manifest.yaml`
 2. As a dashboard, I need to parse manifest for flow, version, and tools
 3. As a dashboard, I need to count intents in `memory-bank/intents/`
@@ -28,6 +30,7 @@ Detect specsmd project, read manifest, and scan memory bank to build a complete 
 9. As a dashboard, I need to handle missing/malformed files gracefully
 
 ### Key Interfaces
+
 ```typescript
 interface ProjectScanner {
   isValidProject(dir: string): Promise<boolean>;
@@ -78,6 +81,7 @@ type BoltStatus = 'planned' | 'active' | 'completed' | 'failed';
 ```
 
 ### Acceptance Criteria
+
 - Correctly detects valid specsmd projects
 - Parses manifest without errors
 - Counts all memory bank entities accurately
@@ -89,9 +93,11 @@ type BoltStatus = 'planned' | 'active' | 'completed' | 'failed';
 ## Unit 2: dashboard-renderer
 
 ### Responsibility
+
 Render the terminal dashboard UI using Ink (React for CLI). Display project state in a clear, visually appealing layout.
 
 ### Stories
+
 1. As a dashboard, I need to render header with specs.md branding and version
 2. As a dashboard, I need to render flow and tools information
 3. As a dashboard, I need to render memory bank statistics panel
@@ -104,6 +110,7 @@ Render the terminal dashboard UI using Ink (React for CLI). Display project stat
 10. As a dashboard, I need to support ASCII-only mode
 
 ### Key Interfaces
+
 ```typescript
 // React/Ink components
 interface DashboardProps {
@@ -137,6 +144,7 @@ interface FooterProps {
 ```
 
 ### Acceptance Criteria
+
 - Dashboard renders without flicker
 - Layout adapts to terminal width
 - Colors are readable in both themes
@@ -148,9 +156,11 @@ interface FooterProps {
 ## Unit 3: navigation-handler
 
 ### Responsibility
+
 Handle keyboard input for interactive navigation between dashboard sections and views.
 
 ### Stories
+
 1. As a user, I need to press `i` to focus on intents section
 2. As a user, I need to press `b` to focus on bolts section
 3. As a user, I need to press `s` to focus on standards section
@@ -161,6 +171,7 @@ Handle keyboard input for interactive navigation between dashboard sections and 
 8. As a user, I need arrow keys to navigate within a section
 
 ### Key Interfaces
+
 ```typescript
 interface NavigationHandler {
   currentSection: 'overview' | 'intents' | 'bolts' | 'standards';
@@ -177,6 +188,7 @@ type NavigationAction =
 ```
 
 ### Acceptance Criteria
+
 - All documented keys work as expected
 - Navigation state updates immediately
 - Visual feedback on key press
@@ -187,9 +199,11 @@ type NavigationAction =
 ## Unit 4: output-formatter
 
 ### Responsibility
+
 Provide alternative output formats for non-interactive use cases (JSON, compact).
 
 ### Stories
+
 1. As a user, I need `--json` to output project state as JSON
 2. As a user, I need `--compact` to output minimal one-line summary
 3. As a user, I need `--section=X` to output only a specific section
@@ -197,6 +211,7 @@ Provide alternative output formats for non-interactive use cases (JSON, compact)
 5. As a script, I need non-zero exit code if not a specsmd project
 
 ### Key Interfaces
+
 ```typescript
 interface OutputFormatter {
   formatJson(state: ProjectState): string;
@@ -211,6 +226,7 @@ interface OutputFormatter {
 ```
 
 ### Acceptance Criteria
+
 - JSON is valid and parseable
 - Compact output fits in 80 columns
 - Section filter works for all sections
@@ -220,7 +236,7 @@ interface OutputFormatter {
 
 ## Dependency Graph
 
-```
+```text
 ┌─────────────────┐
 │ project-scanner │ ← Scans project state
 └────────┬────────┘

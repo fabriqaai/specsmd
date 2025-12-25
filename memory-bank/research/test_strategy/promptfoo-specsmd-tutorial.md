@@ -7,7 +7,7 @@ A practical guide to testing AI-DLC agents using Promptfoo, including test setup
 ## Table of Contents
 
 1. [Golden Datasets Explained](#golden-datasets-explained)
-2. [Test Setup & Fixtures](#test-setup--fixtures)
+2. [Test Setup and Fixtures](#test-setup-and-fixtures)
 3. [Free Coding Models on OpenRouter](#free-coding-models-on-openrouter)
 4. [Testing Each Agent](#testing-each-agent)
 5. [Complete Example Configuration](#complete-example-configuration)
@@ -20,7 +20,7 @@ A practical guide to testing AI-DLC agents using Promptfoo, including test setup
 
 A **golden dataset** is a curated collection of **known-good input/output pairs** that serve as your quality baseline. Think of it as "these are examples of what correct agent behavior looks like."
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         GOLDEN DATASET                                  │
 ├─────────────────────────────────────────────────────────────────────────┤
@@ -51,7 +51,7 @@ A **golden dataset** is a curated collection of **known-good input/output pairs*
 
 ### Golden Dataset Structure
 
-```
+```text
 __tests__/
 ├── golden-datasets/
 │   ├── inception-agent/
@@ -90,23 +90,27 @@ __tests__/
 ### Building Golden Examples
 
 **Step 1: Run the agent and capture output**
+
 ```bash
 # Run agent, save output
 promptfoo eval --output captured.json
 ```
 
 **Step 2: Human review**
+
 - Is this output high quality?
 - Does it follow our formatting rules?
 - Would we be happy if users saw this?
 
 **Step 3: If yes, promote to golden**
+
 ```bash
 # Save as golden example
 cp captured-output.md __tests__/golden-datasets/inception-agent/outputs/001-auth.md
 ```
 
 **Step 4: Use in regression tests**
+
 ```yaml
 # promptfoo.yaml
 tests:
@@ -129,13 +133,13 @@ tests:
 
 ---
 
-## Test Setup & Fixtures
+## Test Setup and Fixtures
 
 ### The Problem: Agents Need State
 
 Each agent expects the memory bank to be in a specific state:
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    AGENT STATE REQUIREMENTS                             │
 ├─────────────────────────────────────────────────────────────────────────┤
@@ -165,7 +169,7 @@ Each agent expects the memory bank to be in a specific state:
 
 **Fixtures** are pre-configured memory bank states that tests can load before running.
 
-```
+```text
 __tests__/
 └── fixtures/
     └── memory-bank-states/
@@ -691,7 +695,7 @@ tests:
 
 ### Directory Structure
 
-```
+```text
 specsmd/
 ├── __tests__/
 │   ├── evaluation/

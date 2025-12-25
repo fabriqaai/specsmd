@@ -3,6 +3,7 @@
 ## Boundaries
 
 ### In Scope
+
 - Terminal UI rendering and layout
 - Project state detection and reading
 - Memory bank file parsing
@@ -10,6 +11,7 @@
 - Multiple output formats (interactive, JSON, compact)
 
 ### Out of Scope
+
 - Modifying project state (read-only dashboard)
 - Remote data fetching (local files only)
 - Agent execution (just displays state)
@@ -22,17 +24,20 @@
 ### Primary Actors
 
 #### AI-Native Engineer (End User)
+
 - Runs dashboard to understand project state
 - Navigates between sections to find information
 - Uses JSON output for scripting/automation
 
 #### CI/CD Pipeline
+
 - Uses `--json` output for automated checks
 - Validates project state before deployments
 
 ### System Actors
 
 #### File System
+
 - Provides manifest, memory bank, and project files
 - Source of truth for all dashboard data
 
@@ -41,11 +46,13 @@
 ## External Systems
 
 ### Local File System
+
 - **Interface**: Node.js `fs` module
 - **Data Exchange**: Read manifest.yaml, memory-bank files, intent/unit/story files
 - **Dependency**: Required - dashboard is read-only viewer
 
 ### Terminal Emulator
+
 - **Interface**: stdout/stdin
 - **Data Exchange**: Render UI, receive keyboard input
 - **Dependency**: Required - user interaction channel
@@ -55,7 +62,8 @@
 ## Integration Points
 
 ### Dashboard ↔ File System
-```
+
+```text
 Dashboard starts
   → Check for .specsmd/manifest.yaml
   → Parse manifest for flow/tools
@@ -66,7 +74,8 @@ Dashboard starts
 ```
 
 ### Dashboard ↔ User
-```
+
+```text
 User presses key
   → Dashboard handles input
   → Updates view if navigation key
@@ -77,7 +86,7 @@ User presses key
 
 ## Context Diagram
 
-```
+```text
                     ┌─────────────────────┐
                     │   AI-Native Engineer │
                     └──────────┬──────────┘
@@ -115,7 +124,8 @@ User presses key
 ## Data Flow
 
 ### Interactive Mode
-```
+
+```text
 1. User runs: npx @specs.md/specsmd
 2. CLI checks for .specsmd/manifest.yaml
 3. If not found: show "Not a specsmd project" message and exit
@@ -132,7 +142,8 @@ User presses key
 ```
 
 ### JSON Mode
-```
+
+```text
 1. User runs: npx @specs.md/specsmd --json
 2. Perform same scanning as interactive mode
 3. Build JSON object with all data
@@ -145,17 +156,20 @@ User presses key
 ## Constraints
 
 ### Technical Constraints
+
 - Must work in terminals without Unicode support (ASCII fallback)
 - Must handle narrow terminals (min 80 columns)
 - Must work without color support
 - Memory scanning must be efficient for large projects
 
 ### Platform Constraints
+
 - Must work on macOS, Linux, Windows
 - Must handle different path separators
 - Must handle case-sensitive and case-insensitive file systems
 
 ### Performance Constraints
+
 - Initial render under 500ms
 - Memory under 50MB
 - Responsive to keyboard input (<100ms)
@@ -165,17 +179,20 @@ User presses key
 ## Quality Attributes
 
 ### Usability
+
 - Clear visual hierarchy
 - Obvious navigation affordances
 - Helpful empty states
 - Consistent key bindings
 
 ### Reliability
+
 - Never crash on malformed files
 - Graceful handling of missing data
 - Clean exit on interrupt signals
 
 ### Performance
+
 - Fast initial load
 - Lazy loading for deep data
 - Efficient file scanning

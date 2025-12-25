@@ -155,6 +155,7 @@ Two custom validators were created to keep dependencies minimal:
 | `remark-lint` | Requires custom plugins for section validation |
 
 Custom validators are:
+
 - Simple (~200 lines total)
 - Declarative (YAML schemas)
 - Fast (<300ms for all tests)

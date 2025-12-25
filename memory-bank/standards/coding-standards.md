@@ -11,6 +11,7 @@ Code style and quality standards for specsmd.
 **Rationale**: Project is primarily markdown and simple JavaScript. Consistent style maintained manually.
 
 ### Indentation
+
 - JavaScript: 4 spaces
 - Markdown: 2 spaces for lists
 - YAML: 2 spaces
@@ -20,6 +21,7 @@ Code style and quality standards for specsmd.
 ## Naming Conventions
 
 ### Files
+
 - **JavaScript**: `camelCase.js` (e.g., `cli-utils.js`, `installer.js`)
 - **Classes**: `PascalCase.js` (e.g., `ClaudeInstaller.js`, `InstallerFactory.js`)
 - **Markdown**: `kebab-case.md` (e.g., `tech-stack.md`, `bolt-plan.md`)
@@ -27,12 +29,14 @@ Code style and quality standards for specsmd.
 - **Skills**: `{skill-name}.md` (e.g., `analyze-context.md`)
 
 ### Variables & Functions
+
 - **Variables**: `camelCase`
 - **Constants**: `UPPER_SNAKE_CASE`
 - **Functions**: `camelCase`
 - **Classes**: `PascalCase`
 
 ### Directories
+
 - Lowercase with hyphens (e.g., `bolt-types/`, `skills/`)
 
 ---
@@ -40,7 +44,8 @@ Code style and quality standards for specsmd.
 ## File Organization
 
 ### Source Structure
-```
+
+```text
 src/
 ├── bin/          # CLI entry points
 ├── lib/          # Core library modules
@@ -52,9 +57,10 @@ src/
         └── .specsmd/ # Runtime assets
             ├── skills/
             └── templates/
-```
+```text
 
 ### Agent File Structure
+
 ```markdown
 # Agent Name
 
@@ -71,9 +77,10 @@ src/
 ## Workflow
 
 ## Begin
-```
+```text
 
 ### Skill File Structure
+
 ```markdown
 # Skill: {Name}
 
@@ -102,7 +109,7 @@ src/
 
 ## Transition
 {What happens after skill completes}
-```
+```text
 
 See `memory-bank/standards/skill-template.md` for complete specification.
 
@@ -115,6 +122,7 @@ See `memory-bank/standards/skill-template.md` for complete specification.
 **Rationale**: Project is primarily configuration and markdown. Automated testing would require complex setup for minimal benefit.
 
 ### Future Consideration
+
 - Integration tests for installer flow
 - Validation tests for agent/skill loading
 
@@ -123,11 +131,13 @@ See `memory-bank/standards/skill-template.md` for complete specification.
 ## Error Handling
 
 ### CLI Errors
+
 - Display user-friendly error messages with chalk colors
 - Exit with appropriate exit codes
 - Never expose stack traces to end users
 
 ### File Operations
+
 - Always check file existence before read
 - Create directories recursively with `fs-extra`
 - Handle permission errors gracefully
@@ -137,6 +147,7 @@ See `memory-bank/standards/skill-template.md` for complete specification.
 ## Logging Standards
 
 ### Console Output
+
 - Use `chalk` for colored output
 - Info: Default color
 - Success: Green
@@ -144,6 +155,7 @@ See `memory-bank/standards/skill-template.md` for complete specification.
 - Error: Red
 
 ### No Debug Logging
+
 - Production code should not include console.log for debugging
 - Remove debug statements before commit
 
@@ -152,11 +164,13 @@ See `memory-bank/standards/skill-template.md` for complete specification.
 ## Documentation
 
 ### Code Comments
+
 - Comment complex logic only
 - No redundant comments that restate the code
 - Use JSDoc for function signatures in complex utilities
 
 ### Markdown Documentation
+
 - Every agent has a `-agent.md` file
 - Every skill has a `.md` file
 - Templates define artifact structure
@@ -166,11 +180,13 @@ See `memory-bank/standards/skill-template.md` for complete specification.
 ## Version Control
 
 ### Commit Messages
+
 - Use conventional commits style
 - Format: `type(scope): description`
 - Types: `feat`, `fix`, `docs`, `refactor`, `chore`
 
 ### Branch Strategy
+
 - `main` - stable releases
 - Feature branches for development
 

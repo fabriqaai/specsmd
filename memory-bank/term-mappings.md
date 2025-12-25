@@ -85,22 +85,27 @@ Mapping between AI-DLC terminology and traditional Agile/Scrum terminology.
 ## Key Conceptual Differences
 
 ### Iteration Duration
+
 - **Agile**: Weeks (2-4 week sprints)
 - **AI-DLC**: Hours or days (bolts)
 
 ### Driver
+
 - **Agile**: Human-driven (developers lead)
 - **AI-DLC**: AI-driven (AI proposes, humans validate)
 
 ### Design Integration
+
 - **Agile**: Design techniques out of scope
 - **AI-DLC**: DDD, TDD, BDD integrated into core
 
 ### Phase Structure
+
 - **Agile**: Iterative sprints with fixed duration
 - **AI-DLC**: Inherently iterative with three phases (Inception, Construction, Operations) allowing continuous refinement and adaptation
 
 ### Estimation
+
 - **Agile**: Story points, velocity, day-based estimates
 - **AI-DLC**: Dual estimates (AI implements, human validates)
   - **AI Implementation Time**: Time for AI agent to generate code/artifacts
@@ -111,5 +116,6 @@ Mapping between AI-DLC terminology and traditional Agile/Scrum terminology.
   - Only use day estimates for genuinely complex work (unknown tech, heavy integration)
 
 ### Workflow
+
 - **Agile**: Human-initiated conversations with AI (AI-Assisted)
 - **AI-DLC**: AI-initiated conversations with humans (AI-Driven)

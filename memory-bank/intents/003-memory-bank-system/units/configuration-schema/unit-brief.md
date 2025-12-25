@@ -9,12 +9,14 @@ The Configuration Schema unit defines the `memory-bank.yaml` file structure that
 ## Scope
 
 ### In Scope
+
 - YAML schema definition for memory bank structure
 - Path template syntax and resolution
 - Agent ownership boundaries
 - Default configuration values
 
 ### Out of Scope
+
 - Actual artifact storage (handled by artifact-storage unit)
 - Agent reading logic (handled by context-loader unit)
 
@@ -23,6 +25,7 @@ The Configuration Schema unit defines the `memory-bank.yaml` file structure that
 ## Technical Context
 
 ### File Location
+
 `.specsmd/memory-bank.yaml`
 
 ---
@@ -103,13 +106,15 @@ Path templates with variable placeholders. Agents resolve these to actual paths.
 **Variable Syntax**: `{variable-name}`
 
 **Resolution Example**:
-```
+
+```text
 Template: memory-bank/intents/{intent-name}/
 Variables: { intent-name: "001-user-auth" }
 Resolved:  memory-bank/intents/001-user-auth/
 ```
 
 **Schema Keys**:
+
 | Key | Template | Example Resolved Path |
 |-----|----------|----------------------|
 | `intents` | `memory-bank/intents/{intent-name}/` | `memory-bank/intents/001-user-auth/` |
@@ -135,7 +140,7 @@ Maps agents to artifact types they can create/modify.
 
 ## Path Resolution Algorithm
 
-```
+```text
 function resolvePath(templateKey, variables):
     1. Get template from schema[templateKey]
     2. For each variable in template:
@@ -145,6 +150,7 @@ function resolvePath(templateKey, variables):
 ```
 
 **Example**:
+
 ```javascript
 // Input
 templateKey = "units"
@@ -179,17 +185,20 @@ When memory-bank.yaml is installed, these are the defaults:
 ## Acceptance Criteria
 
 ### AC-1: Schema Completeness
+
 - GIVEN a freshly installed specsmd
 - WHEN agent reads memory-bank.yaml
 - THEN all artifact types have defined paths in schema section
 - AND all paths use consistent variable syntax
 
 ### AC-2: Path Resolution
+
 - GIVEN schema template `memory-bank/intents/{intent-name}/`
 - WHEN resolved with `{ "intent-name": "001-test" }`
 - THEN result is `memory-bank/intents/001-test/`
 
 ### AC-3: Ownership Validation
+
 - GIVEN Construction Agent
 - WHEN attempting to create an intent
 - THEN operation is blocked (intents owned by inception)

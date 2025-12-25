@@ -21,6 +21,7 @@ All AI agents and skills in specsmd MUST follow these output formatting standard
 **Why**: ASCII tables break at different terminal widths and are harder to read in CLI environments.
 
 **Incorrect**:
+
 ```markdown
 | # | Option | Description |
 |---|--------|-------------|
@@ -29,6 +30,7 @@ All AI agents and skills in specsmd MUST follow these output formatting standard
 ```
 
 **Correct**:
+
 ```markdown
 1 - **Build**: Create artifacts
 2 - **Deploy**: Deploy to env
@@ -39,11 +41,13 @@ All AI agents and skills in specsmd MUST follow these output formatting standard
 **Rule**: ✅ **ALWAYS** use numbered list format: `N - **Option**: Description`
 
 **Format**:
-```
+
+```text
 {number} - **{option-name}**: {description}
 ```
 
 **Example**:
+
 ```markdown
 1 - **requirements**: Gather functional and non-functional requirements
 2 - **context**: Define system context and integrations
@@ -63,6 +67,7 @@ All AI agents and skills in specsmd MUST follow these output formatting standard
 - `⚠️` - **Warning**: Needs attention
 
 **Example**:
+
 ```markdown
 ### Progress
 
@@ -78,6 +83,7 @@ All AI agents and skills in specsmd MUST follow these output formatting standard
 **Rule**: ✅ **ALWAYS** end skill outputs with a suggested next step.
 
 **Format**:
+
 ```markdown
 ### Actions
 
@@ -92,6 +98,7 @@ All AI agents and skills in specsmd MUST follow these output formatting standard
 ```
 
 **Components**:
+
 - **Actions section**: Numbered list of all available options
 - **Suggested Next Step**: Arrow (`→`) pointing to recommended option
 - **Call-to-action**: Clear instruction for user input

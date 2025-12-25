@@ -8,7 +8,7 @@ This document defines the boundaries and integration points for the Standards Sy
 
 ## System Boundary
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────┐
 │                         Agent Layer                                 │
 │  ┌────────────────────────────────────────────────────────────┐    │
@@ -51,6 +51,7 @@ This document defines the boundaries and integration points for the Standards Sy
 ## External Systems
 
 ### Project Codebase
+
 - **Type**: User's software project
 - **Interface**: File system
 - **Constraint**: Standards must be compatible with existing project
@@ -60,9 +61,11 @@ This document defines the boundaries and integration points for the Standards Sy
 ## Internal Components
 
 ### Standards Catalog
+
 - **Location**: `.specsmd/standards-catalog.yaml`
 - **Purpose**: Define available standards and their metadata
 - **Format**:
+
 ```yaml
 standards:
   - id: tech-stack
@@ -80,11 +83,13 @@ standards:
 ```
 
 ### Standard Files
+
 - **Location**: `memory-bank/standards/`
 - **Purpose**: Project-specific standard documentation
 - **Format**: Markdown files following templates
 
 ### Standard Templates
+
 - **Location**: `.specsmd/aidlc/templates/standards/`
 - **Purpose**: Boilerplate for creating standard files
 - **Examples**: `tech-stack-template.md`, `coding-standards-template.md`
@@ -94,7 +99,8 @@ standards:
 ## Data Flow
 
 ### Project Initialization
-```
+
+```text
 User runs project-init
     │
     ▼
@@ -112,7 +118,8 @@ Standards ready for agents to consume
 ```
 
 ### Agent Standards Consumption
-```
+
+```text
 Construction Agent starts bolt
     │
     ▼
@@ -130,11 +137,13 @@ Apply standards during implementation
 ## Integration Contracts
 
 ### Standard File Format
+
 - Markdown with clear sections
 - Human-readable and editable
 - No required frontmatter (optional YAML frontmatter allowed)
 
 ### Catalog Format
+
 - YAML format
 - Each standard has: id, name, description, required flag
 - Templates referenced by convention: `{id}-template.md`

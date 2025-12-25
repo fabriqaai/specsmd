@@ -11,6 +11,7 @@ Non-deterministic testing for LLM-driven agent outputs using multiple evaluation
 ## Scope
 
 ### In Scope
+
 - Mocking LLM responses for deterministic CI runs
 - LLM-as-judge evaluation with configurable rubrics
 - Semantic similarity testing against golden examples
@@ -18,6 +19,7 @@ Non-deterministic testing for LLM-driven agent outputs using multiple evaluation
 - Test flakiness handling for non-deterministic outputs
 
 ### Out of Scope
+
 - Schema validation (handled by Specification Contract Testing unit)
 - CLI command testing (handled by CLI/Installer Testing unit)
 - Golden dataset curation (handled by Golden Dataset Management unit)
@@ -27,6 +29,7 @@ Non-deterministic testing for LLM-driven agent outputs using multiple evaluation
 ## Technical Context
 
 ### Entry Points
+
 - `promptfoo eval` - Run agent evaluation
 - `promptfoo eval --cache` - Run with cached results (faster)
 - `promptfoo view` - Open web UI to review results
@@ -34,6 +37,7 @@ Non-deterministic testing for LLM-driven agent outputs using multiple evaluation
 - `npm run eval:full` - Run full golden dataset evaluation
 
 ### Dependencies
+
 - **Promptfoo** (primary evaluation framework) - Declarative YAML config
 - **OpenRouter Free Tier** (LLM-as-judge provider)
   - `x-ai/grok-4.1-fast:free` - Coding agents, release validation (2M context)
@@ -44,6 +48,7 @@ Non-deterministic testing for LLM-driven agent outputs using multiple evaluation
 **Cost**: $0 using OpenRouter free tier models.
 
 ### Outputs
+
 - Evaluation scores per agent
 - Regression reports
 - Quality dashboards (via `promptfoo view`)
@@ -59,7 +64,8 @@ Non-deterministic testing for LLM-driven agent outputs using multiple evaluation
 **Location**: `__tests__/fixtures/mock-responses/`
 
 **Structure**:
-```
+
+```text
 __tests__/fixtures/mock-responses/
 ├── inception-agent/
 │   ├── intent-create-feature.json
@@ -79,6 +85,7 @@ __tests__/fixtures/mock-responses/
 ```
 
 **Recording Strategy**:
+
 ```typescript
 // Record new response
 const recorder = new LLMRecorder('__tests__/fixtures/mock-responses');
@@ -98,6 +105,7 @@ const response = await agent.execute(prompt); // Uses recorded response
 **Location**: `__tests__/evaluation/rubrics/`
 
 **Rubric Files**:
+
 ```yaml
 # rubrics/intent-quality.yaml
 name: Intent Quality Evaluation
@@ -152,6 +160,7 @@ threshold: 0.80  # Minimum passing score (weighted average)
 ```
 
 **Implementation**:
+
 ```typescript
 import { DeepEval, GEvalMetric } from 'deepeval';
 
@@ -178,6 +187,7 @@ async function evaluateIntentQuality(generatedIntent: string): Promise<EvalResul
 **Location**: `__tests__/evaluation/semantic/`
 
 **Implementation**:
+
 ```typescript
 import { embed, cosineSimilarity } from './embedding-utils';
 
@@ -204,6 +214,7 @@ async function testSemanticSimilarity(
 ```
 
 **Test Example**:
+
 ```typescript
 describe('Inception Agent Semantic Similarity', () => {
   it('generates semantically similar intent for user auth feature', async () => {
@@ -225,6 +236,7 @@ describe('Inception Agent Semantic Similarity', () => {
 **Location**: `__tests__/evaluation/behavioral/`
 
 **Assertion Library**:
+
 ```typescript
 // behavioral-assertions.ts
 
@@ -286,6 +298,7 @@ export function assertContainsConcept(
 ```
 
 **Test Example**:
+
 ```typescript
 describe('Agent Output Behavioral Tests', () => {
   it('generates valid intent structure', async () => {
@@ -314,6 +327,7 @@ describe('Agent Output Behavioral Tests', () => {
 **Strategies**:
 
 **Retry with Tolerance**:
+
 ```typescript
 import { retryTest } from './test-utils';
 
@@ -325,6 +339,7 @@ test('agent generates valid output', retryTest(async () => {
 ```
 
 **Temperature Control**:
+
 ```typescript
 // Set temperature to 0 for deterministic tests
 beforeEach(() => {
@@ -333,6 +348,7 @@ beforeEach(() => {
 ```
 
 **Score Averaging**:
+
 ```typescript
 async function evaluateWithAveraging(
   agent: Agent,
@@ -385,6 +401,7 @@ tests:
 ```
 
 **Run Tests**:
+
 ```bash
 # Set OpenRouter API key
 export OPENROUTER_API_KEY=sk-or-...
@@ -409,6 +426,7 @@ promptfoo view
 ## Acceptance Criteria
 
 ### AC-1: Mock Response Testing
+
 - GIVEN recorded LLM responses
 - WHEN tests run in CI
 - THEN responses are replayed deterministically
@@ -416,6 +434,7 @@ promptfoo view
 - AND no external API calls are made
 
 ### AC-2: LLM-as-Judge Evaluation
+
 - GIVEN an evaluation rubric
 - WHEN agent output is evaluated
 - THEN scores are computed per criterion
@@ -423,6 +442,7 @@ promptfoo view
 - AND threshold determines pass/fail
 
 ### AC-3: Semantic Similarity
+
 - GIVEN a golden reference output
 - WHEN generated output is compared
 - THEN similarity score is computed
@@ -430,6 +450,7 @@ promptfoo view
 - AND similar meaning passes even with different words
 
 ### AC-4: Behavioral Assertions
+
 - GIVEN behavioral assertion tests
 - WHEN agent output is validated
 - THEN required sections are checked
