@@ -9,7 +9,7 @@ specsmd implements the [AI-Driven Development Lifecycle (AI-DLC)](https://aws.am
 [![Documentation](https://img.shields.io/badge/docs-specs.md-CD6B4D)](https://specs.md)
 
 <p align="center">
-  <img src="assets/demo.gif" alt="specs.md demo" width="800" />
+  <img src="docs.specs.md/images/quickstart.gif" alt="specs.md demo" width="800" />
 </p>
 
 ---
