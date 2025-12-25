@@ -3,17 +3,26 @@ id: bolt-artifact-parser-1
 unit: artifact-parser
 intent: 011-vscode-extension
 type: simple-construction-bolt
-status: planned
+status: complete
 stories:
   - 001-memory-bank-schema
   - 002-project-detection
   - 003-artifact-parsing
   - 004-frontmatter-parser
 created: 2025-12-25T17:00:00Z
-started: null
-completed: null
+started: 2025-12-25T18:45:00Z
+completed: 2025-12-25T19:15:00Z
 current_stage: null
-stages_completed: []
+stages_completed:
+  - name: spec
+    completed: 2025-12-25T18:50:00Z
+    artifact: implementation-plan.md
+  - name: implement
+    completed: 2025-12-25T19:00:00Z
+    artifact: implementation-walkthrough.md
+  - name: test
+    completed: 2025-12-25T19:15:00Z
+    artifact: test-walkthrough.md
 
 requires_bolts: []
 enables_bolts:
