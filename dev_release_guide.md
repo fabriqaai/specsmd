@@ -33,17 +33,19 @@ Semantic-release reads your commit messages and determines the version:
 
 | Commit Prefix | Version Bump | Example |
 |---------------|--------------|---------|
-| `fix:` | Patch | 0.0.32 → 0.0.33 |
-| `feat:` | Minor | 0.0.32 → 0.1.0 |
-| `feat!:` or `BREAKING CHANGE:` | Major | 0.0.32 → 1.0.0 |
+| `fix:` | Patch | 0.0.34 → 0.0.35 |
+| `feat:` | Minor | 0.0.34 → 0.1.0 |
+| `perf:` | Patch | 0.0.34 → 0.0.35 |
 | `chore:`, `docs:`, `style:` | No release | - |
+
+**Note:** Major versions (1.0.0, 2.0.0) are NOT auto-bumped. Edit `package.json` manually.
 
 ```mermaid
 flowchart LR
     A[Commit Message] --> B{Prefix?}
     B -->|fix:| C[Patch +0.0.1]
     B -->|feat:| D[Minor +0.1.0]
-    B -->|feat!: or BREAKING| E[Major +1.0.0]
+    B -->|perf:| E[Patch +0.0.1]
     B -->|chore: docs:| F[No Release]
 ```
 
@@ -100,10 +102,12 @@ git push
 
 - `feat:` - New feature (bumps minor)
 - `fix:` - Bug fix (bumps patch)
-- `feat!:` - Breaking change (bumps major)
+- `perf:` - Performance improvement (bumps patch)
 - `docs:` - Documentation only (no release)
 - `chore:` - Maintenance (no release)
 - `refactor:` - Code refactor (no release)
+
+**Major versions** require manual edit of `package.json`.
 
 CI runs automatically on push.
 
@@ -168,19 +172,21 @@ git rebase origin/main
 ### Commit Examples
 
 ```bash
-# Bug fix → patch release (0.0.32 → 0.0.33)
+# Bug fix → patch release (0.0.34 → 0.0.35)
 git commit -m "fix: resolve memory leak in watcher"
 
-# New feature → minor release (0.0.32 → 0.1.0)
+# New feature → minor release (0.0.34 → 0.1.0)
 git commit -m "feat: add YAML validation support"
 
-# Breaking change → major release (0.0.32 → 1.0.0)
-git commit -m "feat!: change CLI argument format"
+# Performance → patch release (0.0.34 → 0.0.35)
+git commit -m "perf: optimize file parsing"
 
 # No release
 git commit -m "docs: update README"
 git commit -m "chore: update dependencies"
 ```
+
+**For major releases:** Manually edit `version` in `package.json` then push.
 
 ### Deploy to Production
 

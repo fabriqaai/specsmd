@@ -200,20 +200,22 @@ This project uses **semantic-release** for automatic versioning. Commit messages
 |------|--------------|-------------|
 | `feat:` | Minor (0.1.0) | New feature or capability |
 | `fix:` | Patch (0.0.1) | Bug fix |
-| `feat!:` | Major (1.0.0) | Breaking change |
+| `perf:` | Patch (0.0.1) | Performance improvement |
 | `docs:` | No release | Documentation only |
 | `chore:` | No release | Maintenance, dependencies |
 | `refactor:` | No release | Code refactor, no behavior change |
 | `style:` | No release | Formatting, whitespace |
 | `test:` | No release | Adding or updating tests |
 
+**Note:** Major versions (1.0.0, 2.0.0) are NOT auto-bumped. Update `package.json` manually for major releases.
+
 ### Examples
 
 ```bash
 # Triggers releases
-feat: add YAML validation support
-fix: resolve memory leak in file watcher
-feat!: change CLI argument format
+feat: add YAML validation support      # → minor bump (0.1.0)
+fix: resolve memory leak in watcher    # → patch bump (0.0.1)
+perf: optimize file parsing            # → patch bump (0.0.1)
 
 # No release triggered
 docs: update README installation steps
@@ -227,7 +229,7 @@ test: add unit tests for validator
 - **Always use lowercase** for the type prefix
 - **Use present tense** ("add feature" not "added feature")
 - **Be concise but descriptive** in the description
-- **Breaking changes** can also use footer: `BREAKING CHANGE: description`
+- **Major versions** require manual `package.json` update
 
 See `/dev_release_guide.md` for full workflow documentation.
 
