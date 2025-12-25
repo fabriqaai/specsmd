@@ -12,6 +12,10 @@ export {
     UnitNode,
     StoryNode,
     BoltNode,
+    BoltStagesGroupNode,
+    BoltStageNode,
+    BoltStoriesGroupNode,
+    BoltStoryNode,
     StandardNode,
     NODE_ICONS,
     STATUS_INDICATORS,
@@ -20,7 +24,8 @@ export {
     getCollapsibleState,
     isRootNode,
     isIntentNode,
-    isUnitNode
+    isUnitNode,
+    isBoltNode
 } from './types';
 
 export {
@@ -33,6 +38,9 @@ export {
     createStoryNode,
     createBoltNodes,
     createBoltNode,
+    createBoltChildNodes,
+    createBoltStageNodes,
+    createBoltStoryNodes,
     createStandardNodes,
     createStandardNode,
     getChildNodes
@@ -42,3 +50,9 @@ export {
     MemoryBankTreeProvider,
     createTreeProvider
 } from './treeProvider';
+
+export {
+    getStatusIcon,
+    getNodeIcon,
+    getBoltTypeBadge
+} from './iconHelper';

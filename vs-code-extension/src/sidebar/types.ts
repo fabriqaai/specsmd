@@ -19,6 +19,10 @@ export type TreeNodeKind =
     | 'unit'
     | 'story'
     | 'bolt'
+    | 'bolt-stages-group'
+    | 'bolt-stage'
+    | 'bolt-stories-group'
+    | 'bolt-story'
     | 'standard';
 
 /**
@@ -78,6 +82,44 @@ export interface BoltNode extends BaseTreeNode {
 }
 
 /**
+ * Group node for bolt stages.
+ */
+export interface BoltStagesGroupNode extends BaseTreeNode {
+    kind: 'bolt-stages-group';
+    boltId: string;
+    data: Bolt;
+}
+
+/**
+ * Individual bolt stage node.
+ */
+export interface BoltStageNode extends BaseTreeNode {
+    kind: 'bolt-stage';
+    boltId: string;
+    stageName: string;
+    stageOrder: number;
+    status: ArtifactStatus;
+}
+
+/**
+ * Group node for bolt stories.
+ */
+export interface BoltStoriesGroupNode extends BaseTreeNode {
+    kind: 'bolt-stories-group';
+    boltId: string;
+    data: Bolt;
+}
+
+/**
+ * Individual bolt story node.
+ */
+export interface BoltStoryNode extends BaseTreeNode {
+    kind: 'bolt-story';
+    boltId: string;
+    storyId: string;
+}
+
+/**
  * Standard node with nested data.
  */
 export interface StandardNode extends BaseTreeNode {
@@ -96,6 +138,10 @@ export type TreeNode =
     | UnitNode
     | StoryNode
     | BoltNode
+    | BoltStagesGroupNode
+    | BoltStageNode
+    | BoltStoriesGroupNode
+    | BoltStoryNode
     | StandardNode;
 
 /**
@@ -109,6 +155,10 @@ export const NODE_ICONS: Record<TreeNodeKind, string> = {
     'unit': 'symbol-module',
     'story': 'note',
     'bolt': 'wrench',
+    'bolt-stages-group': 'list-tree',
+    'bolt-stage': 'circle-outline',
+    'bolt-stories-group': 'list-unordered',
+    'bolt-story': 'note',
     'standard': 'file-text'
 };
 
@@ -152,8 +202,20 @@ export function getCollapsibleState(node: TreeNode): CollapsibleStateValue {
             return node.data.stories.length > 0
                 ? CollapsibleState.Collapsed
                 : CollapsibleState.None;
-        case 'story':
         case 'bolt':
+            // Bolts are expandable to show stages and stories
+            return CollapsibleState.Collapsed;
+        case 'bolt-stages-group':
+            return node.data.stages.length > 0
+                ? CollapsibleState.Collapsed
+                : CollapsibleState.None;
+        case 'bolt-stories-group':
+            return node.data.stories.length > 0
+                ? CollapsibleState.Collapsed
+                : CollapsibleState.None;
+        case 'story':
+        case 'bolt-stage':
+        case 'bolt-story':
         case 'standard':
             return CollapsibleState.None;
     }
@@ -180,4 +242,11 @@ export function isIntentNode(node: TreeNode): node is IntentNode {
  */
 export function isUnitNode(node: TreeNode): node is UnitNode {
     return node.kind === 'unit';
+}
+
+/**
+ * Type guard for bolt nodes.
+ */
+export function isBoltNode(node: TreeNode): node is BoltNode {
+    return node.kind === 'bolt';
 }

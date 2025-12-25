@@ -222,7 +222,7 @@ type: simple-construction-bolt
 status: in-progress
 current_stage: implement
 stages_completed:
-  - name: spec
+  - name: plan
     completed: 2025-12-25T10:00:00Z
 stories:
   - 001-story
@@ -264,7 +264,7 @@ type: simple-construction-bolt
 status: in-progress
 current_stage: implement
 stages_completed:
-  - name: spec
+  - name: plan
 ---
 
 # Bolt`);
@@ -272,7 +272,7 @@ stages_completed:
             const result = await parseBolt(boltPath);
 
             assert.ok(result);
-            // spec should be Complete (in stages_completed)
+            // plan should be Complete (in stages_completed)
             assert.strictEqual(result.stages[0].status, ArtifactStatus.Complete);
             // implement should be InProgress (is current_stage)
             assert.strictEqual(result.stages[1].status, ArtifactStatus.InProgress);

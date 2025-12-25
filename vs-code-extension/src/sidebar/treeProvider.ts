@@ -7,13 +7,13 @@ import { MemoryBankModel } from '../parser/types';
 import { scanMemoryBank } from '../parser/artifactParser';
 import {
     TreeNode,
-    NODE_ICONS,
     getCollapsibleState
 } from './types';
 import {
     createRootNodes,
     getChildNodes
 } from './treeBuilder';
+import { getNodeIcon, getBoltTypeBadge } from './iconHelper';
 
 /**
  * TreeDataProvider for the memory-bank view.
@@ -80,16 +80,29 @@ export class MemoryBankTreeProvider implements vscode.TreeDataProvider<TreeNode>
      * Converts a TreeNode to a TreeItem for display.
      */
     getTreeItem(element: TreeNode): vscode.TreeItem {
+        // Add bolt type badge to bolt labels
+        let label = element.label;
+        if (element.kind === 'bolt') {
+            const badge = getBoltTypeBadge(element.data.type);
+            if (badge) {
+                // Insert badge before status indicator
+                const parts = label.split(' ');
+                if (parts.length > 1 && /[\u2713\u25CF\u25CB]/.test(parts[parts.length - 1])) {
+                    parts.splice(parts.length - 1, 0, badge);
+                    label = parts.join(' ');
+                } else {
+                    label = `${label} ${badge}`;
+                }
+            }
+        }
+
         const item = new vscode.TreeItem(
-            element.label,
+            label,
             getCollapsibleState(element)
         );
 
-        // Set icon
-        const iconId = NODE_ICONS[element.kind];
-        if (iconId) {
-            item.iconPath = new vscode.ThemeIcon(iconId);
-        }
+        // Set status-aware icon
+        item.iconPath = getNodeIcon(element);
 
         // Set unique ID for element tracking
         item.id = element.id;
@@ -139,7 +152,15 @@ export class MemoryBankTreeProvider implements vscode.TreeDataProvider<TreeNode>
             case 'story':
                 return `Story: ${node.data.id}-${node.data.title}\nPriority: ${node.data.priority}`;
             case 'bolt':
-                return `Bolt: ${node.data.id}\nType: ${node.data.type}\nStatus: ${node.data.status}`;
+                return `Bolt: ${node.data.id}\nType: ${node.data.type}\nStatus: ${node.data.status}\nStages: ${node.data.stages.length}`;
+            case 'bolt-stages-group':
+                return `Stages for ${node.boltId}`;
+            case 'bolt-stage':
+                return `Stage ${node.stageOrder}: ${node.stageName}\nStatus: ${node.status}`;
+            case 'bolt-stories-group':
+                return `Stories included in ${node.boltId}`;
+            case 'bolt-story':
+                return `Story: ${node.storyId}`;
             case 'standard':
                 return `Standard: ${node.data.name}`;
         }

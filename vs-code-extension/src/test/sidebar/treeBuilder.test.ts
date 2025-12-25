@@ -9,7 +9,7 @@ import {
     createStandardNodes,
     getChildNodes
 } from '../../sidebar/treeBuilder';
-import { MemoryBankModel, Intent, Unit, Bolt, ArtifactStatus } from '../../parser/types';
+import { MemoryBankModel, Intent, Unit, ArtifactStatus } from '../../parser/types';
 
 suite('Tree Builder Test Suite', () => {
 
@@ -301,9 +301,10 @@ suite('Tree Builder Test Suite', () => {
             assert.strictEqual(children.length, 0);
         });
 
-        test('should return empty array for bolt', () => {
+        test('should return empty array for bolt without stages/stories', () => {
             const boltNode = createBoltNodes(testModel)[0];
             const children = getChildNodes(boltNode, testModel);
+            // Bolt has no stages or stories, so no child groups
             assert.strictEqual(children.length, 0);
         });
     });

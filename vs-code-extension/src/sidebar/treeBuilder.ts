@@ -12,6 +12,10 @@ import {
     UnitNode,
     StoryNode,
     BoltNode,
+    BoltStagesGroupNode,
+    BoltStageNode,
+    BoltStoriesGroupNode,
+    BoltStoryNode,
     StandardNode,
     STATUS_INDICATORS
 } from './types';
@@ -154,6 +158,75 @@ export function createStandardNode(standard: Standard): StandardNode {
 }
 
 /**
+ * Creates child nodes for a bolt (stages group and stories group).
+ */
+export function createBoltChildNodes(bolt: Bolt): TreeNode[] {
+    const children: TreeNode[] = [];
+
+    // Add stages group if bolt has stages
+    if (bolt.stages && bolt.stages.length > 0) {
+        const stagesGroup: BoltStagesGroupNode = {
+            kind: 'bolt-stages-group',
+            label: 'Stages',
+            id: `bolt-${bolt.id}-stages`,
+            boltId: bolt.id,
+            data: bolt
+        };
+        children.push(stagesGroup);
+    }
+
+    // Add stories group if bolt has stories
+    if (bolt.stories && bolt.stories.length > 0) {
+        const storiesGroup: BoltStoriesGroupNode = {
+            kind: 'bolt-stories-group',
+            label: 'Stories',
+            id: `bolt-${bolt.id}-stories`,
+            boltId: bolt.id,
+            data: bolt
+        };
+        children.push(storiesGroup);
+    }
+
+    return children;
+}
+
+/**
+ * Creates stage nodes for a bolt.
+ */
+export function createBoltStageNodes(bolt: Bolt): BoltStageNode[] {
+    if (!bolt.stages) {
+        return [];
+    }
+
+    return bolt.stages.map(stage => ({
+        kind: 'bolt-stage' as const,
+        label: formatLabelWithStatus(stage.name, stage.status),
+        id: `bolt-${bolt.id}-stage-${stage.name}`,
+        boltId: bolt.id,
+        stageName: stage.name,
+        stageOrder: stage.order,
+        status: stage.status
+    }));
+}
+
+/**
+ * Creates story nodes for a bolt.
+ */
+export function createBoltStoryNodes(bolt: Bolt): BoltStoryNode[] {
+    if (!bolt.stories) {
+        return [];
+    }
+
+    return bolt.stories.map(storyId => ({
+        kind: 'bolt-story' as const,
+        label: storyId,
+        id: `bolt-${bolt.id}-story-${storyId}`,
+        boltId: bolt.id,
+        storyId: storyId
+    }));
+}
+
+/**
  * Gets children for a tree node.
  */
 export function getChildNodes(node: TreeNode, model: MemoryBankModel): TreeNode[] {
@@ -168,8 +241,15 @@ export function getChildNodes(node: TreeNode, model: MemoryBankModel): TreeNode[
             return createUnitNodes(node.data);
         case 'unit':
             return createStoryNodes(node.data);
-        case 'story':
         case 'bolt':
+            return createBoltChildNodes(node.data);
+        case 'bolt-stages-group':
+            return createBoltStageNodes(node.data);
+        case 'bolt-stories-group':
+            return createBoltStoryNodes(node.data);
+        case 'story':
+        case 'bolt-stage':
+        case 'bolt-story':
         case 'standard':
             return [];
     }

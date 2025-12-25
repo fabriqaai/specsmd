@@ -25,6 +25,10 @@ suite('Sidebar Types Test Suite', () => {
                 'unit',
                 'story',
                 'bolt',
+                'bolt-stages-group',
+                'bolt-stage',
+                'bolt-stories-group',
+                'bolt-story',
                 'standard'
             ];
 
@@ -135,7 +139,7 @@ suite('Sidebar Types Test Suite', () => {
             assert.strictEqual(getCollapsibleState(node), CollapsibleState.None);
         });
 
-        test('should return None for bolt', () => {
+        test('should return Collapsed for bolt (always expandable)', () => {
             const node: TreeNode = {
                 kind: 'bolt',
                 label: 'bolt-test-1',
@@ -153,7 +157,8 @@ suite('Sidebar Types Test Suite', () => {
                     path: '/test/path'
                 }
             };
-            assert.strictEqual(getCollapsibleState(node), CollapsibleState.None);
+            // Bolts are always Collapsed to show stages/stories groups
+            assert.strictEqual(getCollapsibleState(node), CollapsibleState.Collapsed);
         });
     });
 
