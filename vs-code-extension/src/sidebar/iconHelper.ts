@@ -10,22 +10,23 @@ import { TreeNode, NODE_ICONS } from './types';
 /**
  * Status icon configurations.
  * Maps status to icon ID and color.
+ * Uses consistent circle icons with color indicating status.
  */
 const STATUS_ICON_CONFIG: Record<ArtifactStatus, { icon: string; color: string }> = {
     [ArtifactStatus.Complete]: {
-        icon: 'check',
+        icon: 'circle-filled',
         color: 'charts.green'
     },
     [ArtifactStatus.InProgress]: {
-        icon: 'sync~spin',
+        icon: 'circle-filled',
         color: 'charts.yellow'
     },
     [ArtifactStatus.Draft]: {
         icon: 'circle-outline',
-        color: 'foreground'
+        color: 'disabledForeground'
     },
     [ArtifactStatus.Unknown]: {
-        icon: 'question',
+        icon: 'circle-outline',
         color: 'disabledForeground'
     }
 };

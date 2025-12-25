@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Variation 8: Command Center View</title>
+  <style>
+    /* VS Code Theme Variables */
+    :root {
+      --vscode-editor-background: #1e1e1e;
+      --vscode-editor-foreground: #cccccc;
+      --vscode-sideBar-background: #252526;
+      --vscode-sideBarSectionHeader-background: #2d2d2d;
+      --vscode-input-background: #3c3c3c;
+      --vscode-input-border: #3c3c3c;
+      --vscode-list-hoverBackground: #2a2d2e;
+      --vscode-badge-background: #4d4d4d;
+      --vscode-badge-foreground: #ffffff;
+      --vscode-descriptionForeground: #858585;
+
+      --status-complete: #22c55e;
+      --status-active: #f97316;
+      --status-pending: #6b7280;
+      --status-blocked: #ef4444;
+      --status-info: #3b82f6;
+      --accent-primary: #f97316;
+    }
+
+    .theme-light {
+      --vscode-editor-background: #ffffff;
+      --vscode-editor-foreground: #333333;
+      --vscode-sideBar-background: #f3f3f3;
+      --vscode-sideBarSectionHeader-background: #e8e8e8;
+      --vscode-input-background: #ffffff;
+      --vscode-input-border: #cecece;
+      --vscode-list-hoverBackground: #e8e8e8;
+      --vscode-descriptionForeground: #717171;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--vscode-editor-background);
+      color: var(--vscode-editor-foreground);
+      font-size: 13px;
+    }
+
+    .sidebar {
+      width: 340px;
+      min-height: 100vh;
+      background: var(--vscode-sideBar-background);
+      border-right: 1px solid var(--vscode-input-border);
+    }
+
+    .header {
+      padding: 10px 12px;
+      background: var(--vscode-sideBarSectionHeader-background);
+      border-bottom: 1px solid var(--vscode-input-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      color: var(--vscode-descriptionForeground);
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .icon-btn:hover {
+      background: var(--vscode-list-hoverBackground);
+      color: var(--vscode-editor-foreground);
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      padding: 8px 12px;
+      background: var(--vscode-editor-background);
+      border-bottom: 1px solid var(--vscode-input-border);
+      display: flex;
+      gap: 8px;
+    }
+
+    .theme-btn {
+      flex: 1;
+      padding: 6px;
+      font-size: 10px;
+      border: 1px solid var(--vscode-input-border);
+      background: var(--vscode-input-background);
+      color: var(--vscode-editor-foreground);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .theme-btn.active {
+      background: var(--accent-primary);
+      border-color: var(--accent-primary);
+      color: white;
+    }
+
+    /* Mission Status */
+    .mission-status {
+      padding: 16px;
+      background: linear-gradient(135deg, var(--vscode-editor-background) 0%, rgba(249, 115, 22, 0.1) 100%);
+      border-bottom: 1px solid var(--vscode-input-border);
+    }
+
+    .mission-label {
+      font-size: 9px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .mission-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .mission-stats {
+      display: flex;
+      gap: 16px;
+    }
+
+    .mission-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mission-stat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .mission-stat-value {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .mission-stat-label {
+      font-size: 10px;
+      color: var(--vscode-descriptionForeground);
+    }
+
+    /* Current Focus */
+    .focus-section {
+      padding: 16px;
+      border-bottom: 1px solid var(--vscode-input-border);
+    }
+
+    .section-label {
+      font-size: 9px;
+      color: var(--vscode-descriptionForeground);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-label-icon {
+      font-size: 12px;
+    }
+
+    /* Focus Card */
+    .focus-card {
+      background: var(--vscode-sideBar-background);
+      border: 2px solid var(--accent-primary);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .focus-card-header {
+      padding: 12px;
+      background: rgba(249, 115, 22, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .focus-card-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .focus-card-subtitle {
+      font-size: 10px;
+      color: var(--vscode-descriptionForeground);
+      margin-top: 2px;
+    }
+
+    .focus-card-badge {
+      font-size: 9px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .focus-card-body {
+      padding: 12px;
+    }
+
+    /* Circular Progress */
+    .progress-ring-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .progress-ring {
+      width: 64px;
+      height: 64px;
+      position: relative;
+    }
+
+    .progress-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring-bg {
+      fill: none;
+      stroke: var(--vscode-input-background);
+      stroke-width: 6;
+    }
+
+    .progress-ring-fill {
+      fill: none;
+      stroke: var(--accent-primary);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 157;
+      stroke-dashoffset: 94;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .progress-ring-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .progress-details {
+      flex: 1;
+    }
+
+    .progress-stage {
+      font-size: 11px;
+      color: var(--vscode-editor-foreground);
+      margin-bottom: 4px;
+    }
+
+    .progress-stage strong {
+      color: var(--accent-primary);
+    }
+
+    .progress-info {
+      font-size: 10px;
+      color: var(--vscode-descriptionForeground);
+    }
+
+    /* Stage Pipeline */
+    .stage-pipeline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding: 8px;
+      background: var(--vscode-editor-background);
+      border-radius: 6px;
+    }
+
+    .pipeline-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .pipeline-stage:hover {
+      transform: scale(1.1);
+    }
+
+    .pipeline-node {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .pipeline-node.complete {
+      background: var(--status-complete);
+      color: white;
+    }
+
+    .pipeline-node.active {
+      background: var(--accent-primary);
+      color: white;
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.6);
+      animation: node-glow 2s infinite;
+    }
+
+    .pipeline-node.pending {
+      background: var(--vscode-input-background);
+      color: var(--vscode-descriptionForeground);
+      border: 1px dashed var(--vscode-input-border);
+    }
+
+    @keyframes node-glow {
+      0%, 100% { box-shadow: 0 0 12px rgba(249, 115, 22, 0.6); }
+      50% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.9); }
+    }
+
+    .pipeline-label {
+      font-size: 8px;
+      color: var(--vscode-descriptionForeground);
+      text-transform: uppercase;
+    }
+
+    .pipeline-connector {
+      flex: 1;
+      height: 2px;
+      background: var(--vscode-input-border);
+      margin: 0 -4px;
+      margin-bottom: 16px;
+    }
+
+    .pipeline-connector.complete {
+      background: var(--status-complete);
+    }
+
+    /* Quick Actions */
+    .focus-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .action-btn-primary {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .action-btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .action-btn-secondary {
+      background: var(--vscode-input-background);
+      color: var(--vscode-editor-foreground);
+      border: 1px solid var(--vscode-input-border);
+    }
+
+    .action-btn-secondary:hover {
+      background: var(--vscode-list-hoverBackground);
+    }
+
+    /* Command Queue */
+    .queue-section {
+      padding: 12px;
+      border-bottom: 1px solid var(--vscode-input-border);
+    }
+
+    .queue-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .queue-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--vscode-descriptionForeground);
+    }
+
+    .queue-count {
+      font-size: 9px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: var(--vscode-badge-background);
+      color: var(--vscode-badge-foreground);
+    }
+
+    .queue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .queue-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--vscode-editor-background);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+    }
+
+    .queue-item:hover {
+      background: var(--vscode-list-hoverBackground);
+      border-left-color: var(--accent-primary);
+    }
+
+    .queue-item.expanded {
+      background: var(--vscode-list-hoverBackground);
+      border-left-color: var(--accent-primary);
+    }
+
+    .queue-priority {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+      background: var(--vscode-input-background);
+      color: var(--vscode-descriptionForeground);
+    }
+
+    .queue-priority.p1 {
+      background: rgba(249, 115, 22, 0.2);
+      color: var(--accent-primary);
+    }
+
+    .queue-priority.p2 {
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--status-info);
+    }
+
+    .queue-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .queue-name {
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .queue-meta {
+      font-size: 9px;
+      color: var(--vscode-descriptionForeground);
+      margin-top: 2px;
+    }
+
+    .queue-stages {
+      display: flex;
+      gap: 2px;
+    }
+
+    .queue-stage {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 600;
+    }
+
+    .queue-stage.complete {
+      background: var(--status-complete);
+      color: white;
+    }
+
+    .queue-stage.pending {
+      background: var(--vscode-input-background);
+      color: var(--vscode-descriptionForeground);
+    }
+
+    /* Expanded Queue Detail */
+    .queue-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .queue-item.expanded + .queue-detail {
+      max-height: 200px;
+    }
+
+    .queue-detail-inner {
+      padding: 12px;
+      background: var(--vscode-sideBar-background);
+      border-radius: 0 0 6px 6px;
+      margin-top: -6px;
+      border-left: 3px solid var(--accent-primary);
+    }
+
+    .queue-detail-stages {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .queue-detail-stage {
+      flex: 1;
+      padding: 6px;
+      text-align: center;
+      border-radius: 4px;
+      font-size: 9px;
+    }
+
+    .queue-detail-stage.complete {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--status-complete);
+    }
+
+    .queue-detail-stage.pending {
+      background: var(--vscode-input-background);
+      color: var(--vscode-descriptionForeground);
+    }
+
+    .queue-detail-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .queue-detail-btn {
+      flex: 1;
+      padding: 8px;
+      font-size: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .queue-detail-btn-primary {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .queue-detail-btn-secondary {
+      background: var(--vscode-input-background);
+      color: var(--vscode-editor-foreground);
+      border: 1px solid var(--vscode-input-border);
+    }
+
+    /* System Status */
+    .system-section {
+      padding: 12px;
+      background: var(--vscode-editor-background);
+    }
+
+    .system-header {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--vscode-descriptionForeground);
+      margin-bottom: 8px;
+    }
+
+    .system-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .system-card {
+      background: var(--vscode-sideBar-background);
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1px solid transparent;
+    }
+
+    .system-card:hover {
+      border-color: var(--vscode-input-border);
+    }
+
+    .system-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .system-icon.intents {
+      background: rgba(139, 92, 246, 0.2);
+      color: #8b5cf6;
+    }
+
+    .system-icon.standards {
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--status-info);
+    }
+
+    .system-icon.stories {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--status-complete);
+    }
+
+    .system-icon.bolts {
+      background: rgba(249, 115, 22, 0.2);
+      color: var(--accent-primary);
+    }
+
+    .system-info {
+      flex: 1;
+    }
+
+    .system-value {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .system-label {
+      font-size: 9px;
+      color: var(--vscode-descriptionForeground);
+    }
+
+    /* Keyboard Shortcut Hints */
+    .shortcuts {
+      padding: 12px;
+      background: var(--vscode-sideBarSectionHeader-background);
+      border-top: 1px solid var(--vscode-input-border);
+    }
+
+    .shortcuts-title {
+      font-size: 9px;
+      color: var(--vscode-descriptionForeground);
+      margin-bottom: 6px;
+    }
+
+    .shortcuts-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .shortcut {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--vscode-descriptionForeground);
+    }
+
+    .shortcut-key {
+      padding: 2px 6px;
+      background: var(--vscode-input-background);
+      border: 1px solid var(--vscode-input-border);
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 9px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="header">
+      <span class="header-title">SpecsMD Command</span>
+      <div class="header-actions">
+        <button type="button" class="icon-btn" title="Refresh">&#8635;</button>
+        <button type="button" class="icon-btn" title="Settings">&#9881;</button>
+      </div>
+    </div>
+
+    <div class="theme-toggle">
+      <button type="button" class="theme-btn active" onclick="setTheme('dark')">Dark</button>
+      <button type="button" class="theme-btn" onclick="setTheme('light')">Light</button>
+    </div>
+
+    <div class="mission-status">
+      <div class="mission-label">Current Mission</div>
+      <div class="mission-title">001-admin-panel</div>
+      <div class="mission-stats">
+        <div class="mission-stat">
+          <div class="mission-stat-dot" style="background: var(--status-active)"></div>
+          <span class="mission-stat-value">1</span>
+          <span class="mission-stat-label">Active</span>
+        </div>
+        <div class="mission-stat">
+          <div class="mission-stat-dot" style="background: var(--status-pending)"></div>
+          <span class="mission-stat-value">4</span>
+          <span class="mission-stat-label">Queued</span>
+        </div>
+        <div class="mission-stat">
+          <div class="mission-stat-dot" style="background: var(--status-complete)"></div>
+          <span class="mission-stat-value">1</span>
+          <span class="mission-stat-label">Done</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="focus-section">
+      <div class="section-label">
+        <span class="section-label-icon">&#127919;</span>
+        Current Focus
+      </div>
+
+      <div class="focus-card">
+        <div class="focus-card-header">
+          <div>
+            <div class="focus-card-title">user-management-service-1</div>
+            <div class="focus-card-subtitle">DDD Bolt | Construction Phase</div>
+          </div>
+          <div class="focus-card-badge">In Progress</div>
+        </div>
+
+        <div class="focus-card-body">
+          <div class="progress-ring-container">
+            <div class="progress-ring">
+              <svg width="64" height="64" viewBox="0 0 64 64">
+                <circle class="progress-ring-bg" cx="32" cy="32" r="25"></circle>
+                <circle class="progress-ring-fill" cx="32" cy="32" r="25"></circle>
+              </svg>
+              <div class="progress-ring-text">40%</div>
+            </div>
+            <div class="progress-details">
+              <div class="progress-stage">Stage: <strong>design</strong></div>
+              <div class="progress-info">2 of 5 stages complete</div>
+              <div class="progress-info">2/4 stories done</div>
+            </div>
+          </div>
+
+          <div class="stage-pipeline">
+            <div class="pipeline-stage" onclick="clickStage('model')">
+              <div class="pipeline-node complete">&#10003;</div>
+              <span class="pipeline-label">Model</span>
+            </div>
+            <div class="pipeline-connector complete"></div>
+            <div class="pipeline-stage" onclick="clickStage('design')">
+              <div class="pipeline-node active">D</div>
+              <span class="pipeline-label">Design</span>
+            </div>
+            <div class="pipeline-connector"></div>
+            <div class="pipeline-stage" onclick="clickStage('adr')">
+              <div class="pipeline-node pending">A</div>
+              <span class="pipeline-label">ADR</span>
+            </div>
+            <div class="pipeline-connector"></div>
+            <div class="pipeline-stage" onclick="clickStage('implement')">
+              <div class="pipeline-node pending">I</div>
+              <span class="pipeline-label">Impl</span>
+            </div>
+            <div class="pipeline-connector"></div>
+            <div class="pipeline-stage" onclick="clickStage('test')">
+              <div class="pipeline-node pending">T</div>
+              <span class="pipeline-label">Test</span>
+            </div>
+          </div>
+
+          <div class="focus-actions">
+            <button type="button" class="action-btn action-btn-primary">
+              <span>&#9654;</span> Continue
+            </button>
+            <button type="button" class="action-btn action-btn-secondary">
+              Files
+            </button>
+            <button type="button" class="action-btn action-btn-secondary">
+              Stories
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="queue-section">
+      <div class="queue-header">
+        <span class="queue-title">Up Next</span>
+        <span class="queue-count">4 bolts</span>
+      </div>
+
+      <div class="queue-list">
+        <div class="queue-item" onclick="toggleQueueItem(this)">
+          <div class="queue-priority p1">1</div>
+          <div class="queue-info">
+            <div class="queue-name">admin-panel-ui-1</div>
+            <div class="queue-meta">Simple | 4 stories</div>
+          </div>
+          <div class="queue-stages">
+            <div class="queue-stage pending">M</div>
+            <div class="queue-stage pending">D</div>
+            <div class="queue-stage pending">A</div>
+            <div class="queue-stage pending">I</div>
+            <div class="queue-stage pending">T</div>
+          </div>
+        </div>
+        <div class="queue-detail">
+          <div class="queue-detail-inner">
+            <div class="queue-detail-stages">
+              <div class="queue-detail-stage pending">Model</div>
+              <div class="queue-detail-stage pending">Design</div>
+              <div class="queue-detail-stage pending">ADR</div>
+              <div class="queue-detail-stage pending">Impl</div>
+              <div class="queue-detail-stage pending">Test</div>
+            </div>
+            <div class="queue-detail-actions">
+              <button type="button" class="queue-detail-btn queue-detail-btn-primary">Start Bolt</button>
+              <button type="button" class="queue-detail-btn queue-detail-btn-secondary">Preview</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="queue-item" onclick="toggleQueueItem(this)">
+          <div class="queue-priority p1">2</div>
+          <div class="queue-info">
+            <div class="queue-name">admin-panel-ui-2</div>
+            <div class="queue-meta">Simple | 4 stories</div>
+          </div>
+          <div class="queue-stages">
+            <div class="queue-stage pending">M</div>
+            <div class="queue-stage pending">D</div>
+            <div class="queue-stage pending">A</div>
+            <div class="queue-stage pending">I</div>
+            <div class="queue-stage pending">T</div>
+          </div>
+        </div>
+        <div class="queue-detail">
+          <div class="queue-detail-inner">
+            <div class="queue-detail-actions">
+              <button type="button" class="queue-detail-btn queue-detail-btn-primary">Start Bolt</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="queue-item" onclick="toggleQueueItem(this)">
+          <div class="queue-priority p2">3</div>
+          <div class="queue-info">
+            <div class="queue-name">audit-service-1</div>
+            <div class="queue-meta">DDD | 2 stories</div>
+          </div>
+          <div class="queue-stages">
+            <div class="queue-stage pending">M</div>
+            <div class="queue-stage pending">D</div>
+            <div class="queue-stage pending">A</div>
+            <div class="queue-stage pending">I</div>
+            <div class="queue-stage pending">T</div>
+          </div>
+        </div>
+        <div class="queue-detail">
+          <div class="queue-detail-inner">
+            <div class="queue-detail-actions">
+              <button type="button" class="queue-detail-btn queue-detail-btn-primary">Start Bolt</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="queue-item" onclick="toggleQueueItem(this)">
+          <div class="queue-priority p2">4</div>
+          <div class="queue-info">
+            <div class="queue-name">user-management-service-2</div>
+            <div class="queue-meta">DDD | 4 stories</div>
+          </div>
+          <div class="queue-stages">
+            <div class="queue-stage pending">M</div>
+            <div class="queue-stage pending">D</div>
+            <div class="queue-stage pending">A</div>
+            <div class="queue-stage pending">I</div>
+            <div class="queue-stage pending">T</div>
+          </div>
+        </div>
+        <div class="queue-detail">
+          <div class="queue-detail-inner">
+            <div class="queue-detail-actions">
+              <button type="button" class="queue-detail-btn queue-detail-btn-primary">Start Bolt</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="system-section">
+      <div class="system-header">System Overview</div>
+      <div class="system-grid">
+        <div class="system-card" onclick="navigateTo('intents')">
+          <div class="system-icon intents">&#128203;</div>
+          <div class="system-info">
+            <div class="system-value">1</div>
+            <div class="system-label">Intent</div>
+          </div>
+        </div>
+        <div class="system-card" onclick="navigateTo('bolts')">
+          <div class="system-icon bolts">&#9889;</div>
+          <div class="system-info">
+            <div class="system-value">6</div>
+            <div class="system-label">Bolts</div>
+          </div>
+        </div>
+        <div class="system-card" onclick="navigateTo('stories')">
+          <div class="system-icon stories">&#128196;</div>
+          <div class="system-info">
+            <div class="system-value">24</div>
+            <div class="system-label">Stories</div>
+          </div>
+        </div>
+        <div class="system-card" onclick="navigateTo('standards')">
+          <div class="system-icon standards">&#128218;</div>
+          <div class="system-info">
+            <div class="system-value">3</div>
+            <div class="system-label">Standards</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shortcuts">
+      <div class="shortcuts-title">Keyboard Shortcuts</div>
+      <div class="shortcuts-list">
+        <div class="shortcut">
+          <span class="shortcut-key">&#8984;B</span>
+          <span>Focus</span>
+        </div>
+        <div class="shortcut">
+          <span class="shortcut-key">&#8984;N</span>
+          <span>Next</span>
+        </div>
+        <div class="shortcut">
+          <span class="shortcut-key">&#8984;F</span>
+          <span>Files</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleQueueItem(item) {
+      const wasExpanded = item.classList.contains('expanded');
+
+      // Collapse all items
+      document.querySelectorAll('.queue-item').forEach(i => i.classList.remove('expanded'));
+
+      // Toggle clicked item
+      if (!wasExpanded) {
+        item.classList.add('expanded');
+      }
+    }
+
+    function clickStage(stage) {
+      alert(`Opening ${stage} stage files...`);
+    }
+
+    function navigateTo(section) {
+      alert(`Navigating to ${section}...`);
+    }
+
+    function setTheme(theme) {
+      const sidebar = document.getElementById('sidebar');
+      const buttons = document.querySelectorAll('.theme-btn');
+
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (theme === 'light') {
+        sidebar.classList.add('theme-light');
+      } else {
+        sidebar.classList.remove('theme-light');
+      }
+    }
+  </script>
+</body>
+</html>
