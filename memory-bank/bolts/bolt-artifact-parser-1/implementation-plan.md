@@ -1,10 +1,10 @@
 ---
-stage: spec
+stage: plan
 bolt: bolt-artifact-parser-1
 created: 2025-12-25T18:45:00Z
 ---
 
-# Spec: artifact-parser
+# Implementation Plan: artifact-parser
 
 ## Objective
 
@@ -206,7 +206,7 @@ For bolts, extract stages based on `type` field:
 
 | Type | Stages |
 |------|--------|
-| simple-construction-bolt | spec, implement, test |
+| simple-construction-bolt | plan, implement, test |
 | ddd-construction-bolt | model, design, implement, test |
 
 ### Performance Considerations

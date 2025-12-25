@@ -1,5 +1,5 @@
 ---
-stage: spec
+stage: plan
 bolt: bolt-file-watcher-1
 created: 2025-12-25T19:30:00Z
 ---

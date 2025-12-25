@@ -135,6 +135,6 @@ export type FrontmatterData = Record<string, unknown>;
  * Bolt type definitions for stage mapping.
  */
 export const BOLT_TYPE_STAGES: Record<string, string[]> = {
-    'simple-construction-bolt': ['spec', 'implement', 'test'],
+    'simple-construction-bolt': ['plan', 'implement', 'test'],
     'ddd-construction-bolt': ['model', 'design', 'implement', 'test']
 };
