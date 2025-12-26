@@ -24,7 +24,7 @@ implemented: false
 - [ ] **Given** activity bar icon, **When** clicked, **Then** sidebar panel opens
 - [ ] **Given** extension activates, **When** checking project state, **Then** shows welcome view OR tree view appropriately
 - [ ] **Given** extension, **When** VS Code closes, **Then** deactivate function cleans up resources
-- [ ] **Given** extension, **When** checking icon, **Then** uses favicon.svg from resources
+- [ ] **Given** extension, **When** checking icon, **Then** uses favicon.png from resources
 
 ## Technical Notes
 

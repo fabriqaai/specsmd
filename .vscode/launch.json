@@ -6,6 +6,7 @@
             "type": "extensionHost",
             "request": "launch",
             "args": [
+                "--disable-extensions",
                 "${workspaceFolder}",
                 "--extensionDevelopmentPath=${workspaceFolder}/vs-code-extension"
             ],
@@ -19,6 +20,7 @@
             "type": "extensionHost",
             "request": "launch",
             "args": [
+                "--disable-extensions",
                 "${workspaceFolder}",
                 "--extensionDevelopmentPath=${workspaceFolder}/vs-code-extension"
             ],
@@ -31,6 +33,7 @@
             "type": "extensionHost",
             "request": "launch",
             "args": [
+                "--disable-extensions",
                 "${workspaceFolder}",
                 "--extensionDevelopmentPath=${workspaceFolder}/vs-code-extension",
                 "--extensionTestsPath=${workspaceFolder}/vs-code-extension/out/test/suite/index"

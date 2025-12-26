@@ -29,7 +29,7 @@ implemented: false
 
 - May require WebviewView for custom rendering
 - Alternative: Use TreeView's `message` property or description
-- Logo file: bundled from `src/specs_md_pixel_logo.png`
+- Logo file: bundled from `src/logo.png`
 - Use vscode.env.openExternal for website link
 - Fadeout effect via CSS gradient or opacity
 

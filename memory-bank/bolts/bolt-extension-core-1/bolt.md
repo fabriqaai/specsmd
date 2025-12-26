@@ -82,7 +82,7 @@ Create the extension entry point that initializes all units, registers commands,
 ## Success Criteria
 
 - [ ] Extension activates without errors
-- [ ] Activity bar icon visible (favicon.svg)
+- [ ] Activity bar icon visible (favicon.png)
 - [ ] Sidebar shows correct view (welcome or tree)
 - [ ] Refresh command works
 - [ ] Double-click opens files

@@ -20,7 +20,7 @@ The extension.ts file is VS Code API dependent (ExtensionContext, commands, view
 #### Story 001: Extension Activation
 
 - [x] Extension activates - activate() function exported and implemented
-- [x] Activity bar icon - favicon.svg in resources folder
+- [x] Activity bar icon - favicon.png in resources folder
 - [x] View registration - TreeView and WebviewView registered
 - [x] Context-based view switching - specsmd.isProject context set
 - [x] Clean deactivation - disposables in context.subscriptions

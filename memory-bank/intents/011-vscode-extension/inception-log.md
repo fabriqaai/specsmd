@@ -56,7 +56,7 @@ status: complete
 | 2025-12-25 | Show ALL bolt stages (not just current) | Better visibility of progress | Yes |
 | 2025-12-25 | Extension name: "specsmd extension" | Consistent branding | Yes |
 | 2025-12-25 | Add installation prompt for new projects | Onboarding experience | Yes |
-| 2025-12-25 | Use favicon.svg for activity bar icon | Consistent branding | Yes |
+| 2025-12-25 | Use favicon.png for activity bar icon | Consistent branding | Yes |
 | 2025-12-25 | Add pixel logo fadeout footer in sidebar | Brand presence | Yes |
 | 2025-12-25 | Add refresh button in sidebar title bar | Manual refresh option | Yes |
 | 2025-12-25 | Real-time updates is Must priority | Core functionality | Yes |

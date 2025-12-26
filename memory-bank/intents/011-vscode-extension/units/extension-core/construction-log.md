@@ -56,4 +56,4 @@ Bolt complete. extension-core unit is fully implemented with:
 - All commands registered (refresh, openFile, revealInExplorer, copyPath)
 - File watcher integration for auto-refresh
 - Installation watcher for post-install detection
-- favicon.svg activity bar icon
+- favicon.png activity bar icon

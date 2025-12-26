@@ -17,7 +17,7 @@ Single extension.ts file that serves as the orchestration layer, importing and c
 ### Completed Work
 
 - [x] `src/extension.ts` - Main entry point with activate/deactivate
-- [x] `resources/favicon.svg` - Activity bar icon (copied from docs)
+- [x] `resources/favicon.png` - Activity bar icon (copied from docs)
 - [x] Fixed WelcomeViewProvider viewType to match package.json
 
 ### Key Decisions

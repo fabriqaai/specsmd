@@ -13,7 +13,7 @@ Create the extension entry point that wires together all units - activation, vie
 ### Deliverables
 
 - `src/extension.ts` - Main entry point with activate/deactivate
-- `resources/favicon.svg` - Activity bar icon (copy from docs)
+- `resources/favicon.png` - Activity bar icon (copy from docs)
 - Update existing modules to export required types
 
 ### Dependencies
@@ -50,7 +50,7 @@ Create the extension entry point that wires together all units - activation, vie
 ```
 vs-code-extension/
 ├── resources/
-│   ├── favicon.svg    # Activity bar icon (copy from docs)
+│   ├── favicon.png    # Activity bar icon (copy from docs)
 │   └── logo.png       # Welcome view logo (already exists)
 └── src/
     └── extension.ts   # Main entry point
@@ -59,7 +59,7 @@ vs-code-extension/
 ### Acceptance Criteria
 
 - [ ] Extension activates without errors
-- [ ] Activity bar icon visible (favicon.svg)
+- [ ] Activity bar icon visible (favicon.png)
 - [ ] Sidebar shows welcome view for non-specsmd workspaces
 - [ ] Sidebar shows tree view for specsmd workspaces
 - [ ] Refresh command works (both button and command palette)

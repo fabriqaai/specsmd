@@ -40,7 +40,7 @@ Extension entry point, lifecycle management, command registration, and orchestra
 | FR | Requirement | Priority |
 |----|-------------|----------|
 | FR-1.1 | Provide sidebar view in VS Code activity bar | Must |
-| FR-1.3 | Sidebar titled "specsmd" with favicon.svg icon | Must |
+| FR-1.3 | Sidebar titled "specsmd" with favicon.png icon | Must |
 | FR-1.6 | Refresh icon button in title bar | Must |
 | FR-4.1 | Single-click selects item in tree | Must |
 | FR-4.2 | Double-click opens in default editor | Must |
@@ -203,7 +203,7 @@ Extension entry point, lifecycle management, command registration, and orchestra
       "activitybar": [{
         "id": "specsmd",
         "title": "specsmd",
-        "icon": "resources/favicon.svg"
+        "icon": "resources/favicon.png"
       }]
     },
     "views": {

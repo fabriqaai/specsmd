@@ -35,9 +35,9 @@ Create a VS Code extension ("specsmd extension") that provides a dashboard sideb
 
 - FR-1.1: Extension SHALL provide a sidebar view in VS Code activity bar
 - FR-1.2: Sidebar SHALL display memory-bank artifacts in a tree structure
-- FR-1.3: Sidebar SHALL be titled "specsmd" with icon from `docs.specs.md/images/favicon.svg`
+- FR-1.3: Sidebar SHALL be titled "specsmd" with icon from `docs.specs.md/images/favicon.png`
 - FR-1.4: Sidebar SHALL auto-detect specsmd projects (presence of `memory-bank/` or `.specsmd/`)
-- FR-1.5: Sidebar SHALL display specs.md pixel logo (`src/specs_md_pixel_logo.png`) as fadeout footer at bottom
+- FR-1.5: Sidebar SHALL display specs.md pixel logo (`src/logo.png`) as fadeout footer at bottom
 - FR-1.6: Sidebar SHALL have a refresh icon button in the title bar actions
 
 ### FR-2: Artifact Tree Structure
@@ -106,7 +106,7 @@ Create a VS Code extension ("specsmd extension") that provides a dashboard sideb
 
 - FR-7.1: Extension SHALL detect if workspace lacks specsmd (no `memory-bank/` AND no `.specsmd/`)
 - FR-7.2: When no specsmd detected, sidebar SHALL show welcome view with:
-  - specs.md pixel logo (`src/specs_md_pixel_logo.png`) - clickable, links to https://specs.md
+  - specs.md pixel logo (`src/logo.png`) - clickable, links to https://specs.md
   - Brief explanation of what specsmd is
   - Embedded quickstart video (https://asciinema.org/a/763995)
   - "Quickstart Guide" link to specs.md quickstart page
