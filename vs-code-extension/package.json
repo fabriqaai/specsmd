@@ -26,16 +26,17 @@
                 {
                     "id": "specsmd",
                     "title": "specsmd",
-                    "icon": "resources/favicon.svg"
+                    "icon": "resources/favicon.png"
                 }
             ]
         },
         "views": {
             "specsmd": [
                 {
-                    "id": "specsmdTree",
-                    "name": "Memory Bank",
-                    "when": "specsmd.isProject"
+                    "id": "specsmdExplorer",
+                    "name": "Explorer",
+                    "when": "specsmd.isProject",
+                    "type": "webview"
                 },
                 {
                     "id": "specsmdWelcome",
@@ -68,24 +69,7 @@
             "view/title": [
                 {
                     "command": "specsmd.refresh",
-                    "when": "view == specsmdTree",
-                    "group": "navigation"
-                }
-            ],
-            "view/item/context": [
-                {
-                    "command": "specsmd.openFile",
-                    "when": "view == specsmdTree && viewItem =~ /file/",
-                    "group": "navigation"
-                },
-                {
-                    "command": "specsmd.revealInExplorer",
-                    "when": "view == specsmdTree",
-                    "group": "navigation"
-                },
-                {
-                    "command": "specsmd.copyPath",
-                    "when": "view == specsmdTree",
+                    "when": "view == specsmdExplorer",
                     "group": "navigation"
                 }
             ]

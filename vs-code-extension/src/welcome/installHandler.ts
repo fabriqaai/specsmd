@@ -39,6 +39,9 @@ export async function handleInstallCommand(): Promise<void> {
     // Show the terminal
     terminal.show();
 
+    // Wait for terminal to be ready (zsh needs time to initialize)
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     // Send the command without executing (false = don't add newline)
     terminal.sendText(INSTALL_COMMAND, false);
 }
