@@ -2,9 +2,11 @@
 id: vscode-extension-story-wlm-028
 unit: webview-lit-migration
 intent: 011-vscode-extension
-status: draft
+status: complete
 priority: must
 created: 2025-12-26
+completed: 2025-12-27
+implementation_note: Simplified - @lit/context deferred; current 3-level prop drilling is manageable with Lit @state decorators
 ---
 
 # Story: Implement Lit Context for State Management

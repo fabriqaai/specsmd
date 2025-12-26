@@ -15,7 +15,12 @@ import * as vscode from 'vscode';
 import { Bolt, ArtifactStatus } from '../parser/types';
 import { scanMemoryBank } from '../parser/artifactParser';
 import { formatRelativeTime } from '../parser/activityFeed';
-import { getWebviewContent } from '../webview';
+import {
+    getWebviewContent,
+    getLitWebviewContent,
+    getSpecsViewHtml,
+    getOverviewViewHtml
+} from '../webview';
 import {
     StateStore,
     createStateStore,
@@ -58,6 +63,13 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
     private _workspacePath: string | undefined;
     private _context: vscode.ExtensionContext;
     private _unsubscribe?: () => void;
+
+    // Re-render loop prevention flags
+    private _initialLoadComplete = false;
+    private _isUpdating = false;
+
+    // Feature flag for Lit mode (can be configured via settings later)
+    private _useLitMode = true;
 
     constructor(context: vscode.ExtensionContext, workspacePath?: string) {
         this._context = context;
@@ -111,7 +123,9 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
         // Configure webview options
         webviewView.webview.options = {
             enableScripts: true,
-            localResourceRoots: []
+            localResourceRoots: this._useLitMode
+                ? [vscode.Uri.joinPath(this._context.extensionUri, 'dist', 'webview')]
+                : []
         };
 
         // Set up message handling
@@ -129,7 +143,16 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
         });
 
         // Initial render
-        this._updateWebview();
+        if (this._useLitMode) {
+            // Lit mode: Set the scaffold HTML, data sent via postMessage on 'ready'
+            webviewView.webview.html = getLitWebviewContent(
+                webviewView.webview,
+                this._context.extensionUri
+            );
+        } else {
+            // Legacy mode: Set full HTML immediately
+            this._updateWebview();
+        }
     }
 
     /**
@@ -179,7 +202,17 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
     public setActiveTab(tab: TabId): void {
         this._store.setUIState({ activeTab: tab as StateTabId });
         this._context.workspaceState.update(TAB_STATE_KEY, tab);
-        this._updateWebview();
+
+        if (this._useLitMode && this._view) {
+            // Lit mode: Just send tab change, no full re-render needed
+            this._view.webview.postMessage({
+                type: 'setTab',
+                activeTab: tab
+            });
+        } else {
+            // Legacy mode: Full re-render
+            this._updateWebview();
+        }
     }
 
     /**
@@ -195,18 +228,71 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
 
     /**
      * Updates the webview content.
+     * Protected against re-entrancy to prevent infinite render loops.
+     *
+     * In Lit mode, sends data via postMessage.
+     * In legacy mode, replaces the entire HTML.
      */
     private _updateWebview(): void {
+        if (!this._view || this._isUpdating) {
+            return;
+        }
+
+        this._isUpdating = true;
+        try {
+            const data = this._buildWebviewData();
+            const activeTab = this._store.getState().ui.activeTab;
+
+            if (this._useLitMode) {
+                // Lit mode: Send data via postMessage
+                this._sendDataToWebview(data, activeTab);
+            } else {
+                // Legacy mode: Replace entire HTML
+                this._view.webview.html = getWebviewContent(
+                    this._view.webview,
+                    data,
+                    activeTab
+                );
+            }
+        } finally {
+            this._isUpdating = false;
+        }
+    }
+
+    /**
+     * Sends data to the Lit webview via postMessage.
+     * Bolts view uses structured data for Lit components.
+     * Specs and Overview views use server-rendered HTML (hybrid approach).
+     */
+    private _sendDataToWebview(data: WebviewData, activeTab: TabId): void {
         if (!this._view) {
             return;
         }
 
-        const data = this._buildWebviewData();
-        this._view.webview.html = getWebviewContent(
-            this._view.webview,
-            data,
-            this._store.getState().ui.activeTab
-        );
+        // Build structured data for Bolts view (Lit components)
+        const boltsData = {
+            currentIntent: data.currentIntent,
+            stats: data.stats,
+            activeBolt: data.activeBolt,
+            upNextQueue: data.upNextQueue,
+            activityEvents: data.activityEvents,
+            focusCardExpanded: data.focusCardExpanded,
+            activityFilter: data.activityFilter,
+            activityHeight: data.activityHeight
+        };
+
+        // Generate HTML for specs/overview views (hybrid approach)
+        const specsHtml = getSpecsViewHtml(data);
+        const overviewHtml = getOverviewViewHtml(data);
+
+        // Send to webview
+        this._view.webview.postMessage({
+            type: 'setData',
+            activeTab,
+            boltsData,
+            specsHtml,
+            overviewHtml
+        });
     }
 
     /**
@@ -340,6 +426,11 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
             stages: bolt.stages.map(s => ({
                 name: s.name,
                 status: this._mapStatus(s.status)
+            })),
+            stories: bolt.stories.map(id => ({
+                id,
+                name: id,
+                status: 'pending' as const
             }))
         };
     }
@@ -438,7 +529,21 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
         switch (message.type) {
             case 'ready':
                 // Webview is ready, trigger initial data load
-                await this.refresh();
+                // Guard against re-processing to prevent infinite render loop
+                if (!this._initialLoadComplete) {
+                    this._initialLoadComplete = true;
+                    if (this._useLitMode) {
+                        // Lit mode: First refresh data, then send via postMessage
+                        await this.refresh();
+                        this._sendDataToWebview(
+                            this._buildWebviewData(),
+                            this._store.getState().ui.activeTab
+                        );
+                    } else {
+                        // Legacy mode: Refresh will update HTML
+                        await this.refresh();
+                    }
+                }
                 break;
 
             case 'tabChange':
@@ -477,6 +582,14 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
                 await this._showStartBoltCommand(message.boltId);
                 break;
 
+            case 'continueBolt':
+                await this._showContinueBoltCommand(message.boltId, message.boltName);
+                break;
+
+            case 'viewBoltFiles':
+                await this._openBoltFile(message.boltId);
+                break;
+
             case 'openExternal':
                 if (message.url) {
                     vscode.env.openExternal(vscode.Uri.parse(message.url));
@@ -513,6 +626,45 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
         if (result === 'Copy to Clipboard') {
             await vscode.env.clipboard.writeText(command);
             vscode.window.showInformationMessage('Command copied to clipboard!');
+        }
+    }
+
+    /**
+     * Shows a popup with the command to continue working on a bolt.
+     */
+    private async _showContinueBoltCommand(boltId: string, boltName?: string): Promise<void> {
+        const displayName = boltName || boltId;
+        const command = `/specsmd-construction-agent --bolt-id="${boltId}"`;
+
+        const result = await vscode.window.showInformationMessage(
+            `Continue working on "${displayName}":\n\nRun this command in Claude Code:\n\n${command}`,
+            { modal: true },
+            'Copy to Clipboard'
+        );
+
+        if (result === 'Copy to Clipboard') {
+            await vscode.env.clipboard.writeText(command);
+            vscode.window.showInformationMessage('Command copied to clipboard!');
+        }
+    }
+
+    /**
+     * Opens the bolt file in the editor.
+     */
+    private async _openBoltFile(boltId: string): Promise<void> {
+        const state = this._store.getState();
+        const bolt = state.bolts.get(boltId);
+
+        if (bolt?.path) {
+            try {
+                const uri = vscode.Uri.file(bolt.path);
+                const doc = await vscode.workspace.openTextDocument(uri);
+                await vscode.window.showTextDocument(doc);
+            } catch (error) {
+                vscode.window.showErrorMessage(`Failed to open bolt file: ${bolt.path}`);
+            }
+        } else {
+            vscode.window.showWarningMessage(`Bolt file not found: ${boltId}`);
         }
     }
 

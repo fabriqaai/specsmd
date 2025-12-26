@@ -1,7 +1,7 @@
 ---
 id: webview-lit-migration
 intent: 011-vscode-extension
-status: draft
+status: in-progress
 created: 2025-12-26
 ---
 

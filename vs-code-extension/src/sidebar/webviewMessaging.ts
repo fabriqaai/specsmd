@@ -14,6 +14,8 @@ export type WebviewToExtensionMessage =
     | { type: 'activityFilter'; filter: ActivityFilter }
     | { type: 'activityResize'; height: number }
     | { type: 'startBolt'; boltId: string }
+    | { type: 'continueBolt'; boltId: string; boltName?: string }
+    | { type: 'viewBoltFiles'; boltId: string }
     | { type: 'openExternal'; url: string };
 
 /**
@@ -114,6 +116,11 @@ export interface QueuedBoltData {
     blockedBy: string[];
     unblocksCount: number;
     stages: {
+        name: string;
+        status: 'complete' | 'active' | 'pending';
+    }[];
+    stories: {
+        id: string;
         name: string;
         status: 'complete' | 'active' | 'pending';
     }[];

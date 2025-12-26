@@ -16,5 +16,15 @@
         "resolveJsonModule": true
     },
     "include": ["src/**/*"],
-    "exclude": ["node_modules", "out", "test"]
+    "exclude": [
+        "node_modules",
+        "out",
+        "test",
+        "src/webview/components/**/*",
+        "src/webview/styles/**/*",
+        "src/webview/types/**/*",
+        "src/webview/utils/**/*",
+        "src/webview/lit/**/*",
+        "src/webview/vscode-api.ts"
+    ]
 }

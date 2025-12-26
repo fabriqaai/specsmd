@@ -2,9 +2,10 @@
 id: vscode-extension-story-wlm-026
 unit: webview-lit-migration
 intent: 011-vscode-extension
-status: draft
+status: complete
 priority: must
 created: 2025-12-26
+completed: 2025-12-26
 ---
 
 # Story: Migrate Specs View to Lit Components

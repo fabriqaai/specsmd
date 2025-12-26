@@ -170,7 +170,8 @@ suite('Webview Messaging Test Suite', () => {
                         isBlocked: false,
                         blockedBy: [],
                         unblocksCount: 1,
-                        stages: []
+                        stages: [],
+                        stories: []
                     }
                 ],
                 activityEvents: [
@@ -268,7 +269,8 @@ suite('Webview Messaging Test Suite', () => {
                 isBlocked: true,
                 blockedBy: ['bolt-dep-1', 'bolt-dep-2'],
                 unblocksCount: 0,
-                stages: []
+                stages: [],
+                stories: []
             };
 
             assert.strictEqual(bolt.isBlocked, true);
@@ -285,7 +287,8 @@ suite('Webview Messaging Test Suite', () => {
                 isBlocked: false,
                 blockedBy: [],
                 unblocksCount: 5,
-                stages: []
+                stages: [],
+                stories: []
             };
 
             assert.strictEqual(bolt.unblocksCount, 5);

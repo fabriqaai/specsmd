@@ -82,4 +82,4 @@ export {
 export {
     getWebviewContent,
     getNonce
-} from './webviewContent';
+} from '../webview';

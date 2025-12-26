@@ -2,7 +2,8 @@
 id: vscode-extension-story-wlm-023
 unit: webview-lit-migration
 intent: 011-vscode-extension
-status: draft
+status: complete
+implemented: true
 priority: must
 created: 2025-12-26
 ---

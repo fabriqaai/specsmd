@@ -26,7 +26,7 @@
                 {
                     "id": "specsmd",
                     "title": "specsmd",
-                    "icon": "resources/favicon.png"
+                    "icon": "resources/extension_icon.svg"
                 }
             ]
         },
@@ -76,9 +76,13 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
+        "vscode:prepublish": "npm run compile -- --production",
+        "compile": "tsc -p ./ && tsc -p ./tsconfig.webview.json && node esbuild.webview.mjs",
+        "compile:ext": "tsc -p ./",
+        "compile:webview": "tsc -p ./tsconfig.webview.json && node esbuild.webview.mjs",
+        "typecheck:webview": "tsc -p ./tsconfig.webview.json",
         "watch": "tsc -watch -p ./",
+        "watch:webview": "node esbuild.webview.mjs --watch",
         "pretest": "npm run compile && npm run compile:test",
         "compile:test": "tsc -p ./tsconfig.test.json",
         "test": "mocha ./out-test/**/*.test.js",
@@ -96,12 +100,15 @@
         "@typescript-eslint/parser": "^6.13.0",
         "@vscode/test-electron": "^2.3.8",
         "@vscode/vsce": "^2.22.0",
+        "esbuild": "^0.24.0",
         "eslint": "^8.54.0",
         "glob": "^10.3.10",
         "mocha": "^10.2.0",
         "typescript": "^5.3.2"
     },
     "dependencies": {
-        "js-yaml": "^4.1.0"
+        "@lit/context": "^1.1.6",
+        "js-yaml": "^4.1.0",
+        "lit": "^3.3.2"
     }
 }

@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { getNonce } from '../../sidebar/webviewContent';
+import { getNonce } from '../../webview/utils';
 
 suite('Webview Content Test Suite', () => {
 

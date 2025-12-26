@@ -3,14 +3,17 @@ id: bolt-webview-lit-migration-3
 unit: webview-lit-migration
 intent: 011-vscode-extension
 type: simple-construction-bolt
-status: planned
+status: complete
 stories:
   - 025-bolts-view-components
 created: 2025-12-26T19:00:00Z
-started: null
-completed: null
+started: 2025-12-26T21:20:00Z
+completed: 2025-12-26T22:30:00Z
 current_stage: null
-stages_completed: []
+stages_completed:
+  - plan: 2025-12-26T21:30:00Z
+  - implement: 2025-12-26T22:20:00Z
+  - test: 2025-12-26T22:30:00Z
 
 requires_bolts:
   - bolt-webview-lit-migration-2
@@ -47,9 +50,9 @@ Create a complete set of Lit components for the Bolts view that replaces the cur
 
 ## Stages
 
-- [ ] **1. Plan**: Pending → implementation-plan.md
-- [ ] **2. Implement**: Pending → implementation-walkthrough.md
-- [ ] **3. Test**: Pending → test-walkthrough.md
+- [x] **1. Plan**: Complete → implementation-plan.md
+- [x] **2. Implement**: Complete → implementation-walkthrough.md
+- [x] **3. Test**: Complete → test-walkthrough.md
 
 ## Dependencies
 
@@ -61,16 +64,16 @@ Create a complete set of Lit components for the Bolts view that replaces the cur
 
 ## Success Criteria
 
-- [ ] `<bolts-view>` container component renders all sections
-- [ ] `<mission-status>` shows current intent with statistics
-- [ ] `<focus-card>` expands/collapses with animation
-- [ ] `<progress-ring>` SVG renders progress correctly
-- [ ] `<stage-pipeline>` shows stage status indicators
-- [ ] `<queue-section>` lists pending bolts with priority
-- [ ] `<queue-item>` shows Start button with command popup
-- [ ] `<activity-feed>` displays events with filtering
-- [ ] `<activity-item>` clickable to open files
-- [ ] All components use VS Code theme colors
+- [x] `<bolts-view>` container component renders all sections
+- [x] `<mission-status>` shows current intent with statistics
+- [x] `<focus-card>` expands/collapses with animation
+- [x] `<progress-ring>` SVG renders progress correctly
+- [x] `<stage-pipeline>` shows stage status indicators
+- [x] `<queue-section>` lists pending bolts with priority
+- [x] `<queue-item>` shows Start button with command popup
+- [x] `<activity-feed>` displays events with filtering
+- [x] `<activity-item>` clickable to open files
+- [x] All components use VS Code theme colors
 
 ## Notes
 

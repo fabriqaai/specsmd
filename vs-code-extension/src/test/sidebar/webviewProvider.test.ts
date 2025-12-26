@@ -80,7 +80,8 @@ suite('Webview Provider Test Suite', () => {
                 isBlocked: true,
                 blockedBy: ['bolt-dep-1', 'bolt-dep-2'],
                 unblocksCount: 0,
-                stages: []
+                stages: [],
+                stories: []
             };
 
             assert.strictEqual(blockedBolt.isBlocked, true);
@@ -94,7 +95,8 @@ suite('Webview Provider Test Suite', () => {
                 isBlocked: false,
                 blockedBy: [],
                 unblocksCount: 5,
-                stages: []
+                stages: [],
+                stories: []
             };
 
             assert.strictEqual(unblockedBolt.isBlocked, false);
@@ -106,9 +108,9 @@ suite('Webview Provider Test Suite', () => {
          */
         test('queue should prioritize unblocked bolts', () => {
             const queue: QueuedBoltData[] = [
-                { id: 'b1', name: 'B1', type: 'DDD', storiesCount: 1, isBlocked: true, blockedBy: ['dep'], unblocksCount: 0, stages: [] },
-                { id: 'b2', name: 'B2', type: 'DDD', storiesCount: 1, isBlocked: false, blockedBy: [], unblocksCount: 3, stages: [] },
-                { id: 'b3', name: 'B3', type: 'DDD', storiesCount: 1, isBlocked: false, blockedBy: [], unblocksCount: 1, stages: [] }
+                { id: 'b1', name: 'B1', type: 'DDD', storiesCount: 1, isBlocked: true, blockedBy: ['dep'], unblocksCount: 0, stages: [], stories: [] },
+                { id: 'b2', name: 'B2', type: 'DDD', storiesCount: 1, isBlocked: false, blockedBy: [], unblocksCount: 3, stages: [], stories: [] },
+                { id: 'b3', name: 'B3', type: 'DDD', storiesCount: 1, isBlocked: false, blockedBy: [], unblocksCount: 1, stages: [], stories: [] }
             ];
 
             // Sort: unblocked first, then by unblocksCount descending
