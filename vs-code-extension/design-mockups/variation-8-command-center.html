@@ -1557,7 +1557,7 @@
               </div>
               <div class="stories-list">
                 ${activeBolt.stories.map(story => `
-                  <div class="story-item ${story.status === 'complete' ? 'completed' : ''}" onclick="toggleStory('${activeBolt.id}', '${story.id}')">
+                  <div class="story-item ${story.status === 'complete' ? 'completed' : ''}">
                     <div class="story-checkbox ${story.status === 'complete' ? 'checked' : ''}">
                       ${story.status === 'complete' ? '&#10003;' : ''}
                     </div>
@@ -1852,18 +1852,7 @@
       render();
     }
 
-    function toggleStory(boltId, storyId) {
-      const bolt = bolts.find(b => b.id === boltId);
-      if (!bolt) return;
-
-      const story = bolt.stories.find(s => s.id === storyId);
-      if (!story) return;
-
-      story.status = story.status === 'complete' ? 'pending' : 'complete';
-      showToast(story.status === 'complete' ? `Completed: ${story.name}` : `Reopened: ${story.name}`,
-                story.status === 'complete' ? 'success' : 'info');
-      render();
-    }
+    // Story toggle removed - stories are read-only
 
     function startBolt(boltId) {
       // Complete current active bolt if any

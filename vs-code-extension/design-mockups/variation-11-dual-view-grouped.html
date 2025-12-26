@@ -818,6 +818,16 @@
       display: none;
     }
 
+    .story-expand {
+      font-size: 8px;
+      color: var(--vscode-descriptionForeground);
+      transition: transform 0.2s;
+    }
+
+    .story-item.expanded .story-expand {
+      transform: rotate(90deg);
+    }
+
     .story-status {
       width: 12px;
       height: 12px;
@@ -827,12 +837,17 @@
       align-items: center;
       justify-content: center;
       font-size: 8px;
-      cursor: pointer;
     }
 
     .story-status.complete {
       background: var(--status-complete);
       border-color: var(--status-complete);
+      color: white;
+    }
+
+    .story-status.active {
+      background: var(--status-active);
+      border-color: var(--status-active);
       color: white;
     }
 
@@ -843,6 +858,69 @@
 
     .story-name.complete {
       color: var(--vscode-descriptionForeground);
+    }
+
+    .story-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease;
+      background: var(--vscode-sideBar-background);
+      margin-left: 44px;
+      border-radius: 4px;
+    }
+
+    .story-details.visible {
+      max-height: 150px;
+      padding: 8px 10px;
+      margin-bottom: 4px;
+    }
+
+    .story-detail-row {
+      display: flex;
+      gap: 8px;
+      font-size: 10px;
+      margin-bottom: 4px;
+    }
+
+    .detail-label {
+      color: var(--vscode-descriptionForeground);
+      min-width: 50px;
+    }
+
+    .detail-value {
+      color: var(--vscode-editor-foreground);
+    }
+
+    .detail-value.status-complete {
+      color: var(--status-complete);
+    }
+
+    .detail-value.status-active {
+      color: var(--status-active);
+    }
+
+    .detail-value.status-pending {
+      color: var(--vscode-descriptionForeground);
+    }
+
+    .story-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .story-btn {
+      padding: 4px 8px;
+      font-size: 9px;
+      background: var(--vscode-input-background);
+      border: 1px solid var(--vscode-input-border);
+      color: var(--vscode-editor-foreground);
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .story-btn:hover {
+      background: var(--vscode-list-hoverBackground);
     }
 
     /* Theme Toggle */
@@ -881,6 +959,113 @@
       text-align: center;
       color: var(--vscode-descriptionForeground);
       font-size: 11px;
+    }
+
+    /* File List Styles */
+    .files-section {
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+
+    .files-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .files-label {
+      font-size: 10px;
+      color: var(--vscode-descriptionForeground);
+    }
+
+    .files-toggle {
+      font-size: 9px;
+      color: var(--accent-primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .files-toggle:hover {
+      text-decoration: underline;
+    }
+
+    .files-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease;
+    }
+
+    .files-list.visible {
+      max-height: 200px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      background: var(--vscode-sideBar-background);
+      border-radius: 3px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .file-item:hover {
+      background: var(--vscode-list-hoverBackground);
+    }
+
+    .file-item.missing {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .file-icon {
+      font-size: 12px;
+    }
+
+    .file-icon.md { color: #519aba; }
+    .file-icon.missing { color: var(--vscode-descriptionForeground); }
+
+    .file-name {
+      flex: 1;
+    }
+
+    .file-status {
+      font-size: 8px;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    .file-status.exists {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--status-complete);
+    }
+
+    .file-status.pending {
+      background: var(--vscode-input-background);
+      color: var(--vscode-descriptionForeground);
+    }
+
+    /* Intent/Unit File Icons */
+    .spec-files-btn {
+      font-size: 10px;
+      color: var(--vscode-descriptionForeground);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+
+    .spec-files-btn:hover {
+      background: var(--vscode-list-hoverBackground);
+      color: var(--accent-primary);
     }
   </style>
 </head>
@@ -966,13 +1151,17 @@
   <script>
     // ==================== DATA MODEL ====================
     const intents = [
-      { id: 'intent-1', name: '001-admin-panel', units: ['unit-1', 'unit-2', 'unit-3'] }
+      { id: 'intent-1', name: '001-admin-panel', units: ['unit-1', 'unit-2', 'unit-3'] },
+      { id: 'intent-2', name: '002-api-gateway', units: ['unit-4', 'unit-5', 'unit-6'] }
     ];
 
     const units = [
       { id: 'unit-1', name: 'user-management', intentId: 'intent-1', stories: ['story-1', 'story-2', 'story-3', 'story-4'] },
       { id: 'unit-2', name: 'role-permissions', intentId: 'intent-1', stories: ['story-5', 'story-6', 'story-7', 'story-8', 'story-9', 'story-10'] },
-      { id: 'unit-3', name: 'audit-logging', intentId: 'intent-1', stories: ['story-11', 'story-12', 'story-13', 'story-14'] }
+      { id: 'unit-3', name: 'audit-logging', intentId: 'intent-1', stories: ['story-11', 'story-12', 'story-13', 'story-14'] },
+      { id: 'unit-4', name: 'rate-limiting', intentId: 'intent-2', stories: ['story-15', 'story-16', 'story-17'] },
+      { id: 'unit-5', name: 'authentication', intentId: 'intent-2', stories: ['story-18', 'story-19', 'story-20', 'story-21'] },
+      { id: 'unit-6', name: 'request-routing', intentId: 'intent-2', stories: ['story-22', 'story-23', 'story-24'] }
     ];
 
     const stories = [
@@ -989,8 +1178,52 @@
       { id: 'story-11', name: '001-log-actions', unitId: 'unit-3', status: 'pending' },
       { id: 'story-12', name: '002-view-audit-log', unitId: 'unit-3', status: 'pending' },
       { id: 'story-13', name: '003-filter-logs', unitId: 'unit-3', status: 'pending' },
-      { id: 'story-14', name: '004-export-logs', unitId: 'unit-3', status: 'pending' }
+      { id: 'story-14', name: '004-export-logs', unitId: 'unit-3', status: 'pending' },
+      { id: 'story-15', name: '001-configure-limits', unitId: 'unit-4', status: 'complete' },
+      { id: 'story-16', name: '002-throttle-requests', unitId: 'unit-4', status: 'active' },
+      { id: 'story-17', name: '003-burst-handling', unitId: 'unit-4', status: 'pending' },
+      { id: 'story-18', name: '001-jwt-validation', unitId: 'unit-5', status: 'complete' },
+      { id: 'story-19', name: '002-api-key-auth', unitId: 'unit-5', status: 'complete' },
+      { id: 'story-20', name: '003-oauth-integration', unitId: 'unit-5', status: 'active' },
+      { id: 'story-21', name: '004-token-refresh', unitId: 'unit-5', status: 'pending' },
+      { id: 'story-22', name: '001-path-routing', unitId: 'unit-6', status: 'pending' },
+      { id: 'story-23', name: '002-load-balancing', unitId: 'unit-6', status: 'pending' },
+      { id: 'story-24', name: '003-service-discovery', unitId: 'unit-6', status: 'pending' }
     ];
+
+    // File templates by artifact type
+    const fileTemplates = {
+      intent: ['requirements.md', 'system-context.md', 'units.md', 'inception-log.md'],
+      unit: ['unit-brief.md', 'construction-log.md'],
+      story: (storyName) => [`${storyName}.md`],
+      bolt: {
+        'DDD': ['bolt.md', 'ddd-01-domain-model.md', 'ddd-02-technical-design.md', 'ddd-03-test-report.md'],
+        'Simple': ['bolt.md', 'implementation-plan.md', 'implementation-walkthrough.md', 'test-walkthrough.md']
+      }
+    };
+
+    // Function to get files for a bolt based on its type and stage completion
+    function getBoltFiles(bolt) {
+      const baseFiles = fileTemplates.bolt[bolt.type] || fileTemplates.bolt['Simple'];
+      const stageToFile = {
+        'DDD': { model: 'ddd-01-domain-model.md', design: 'ddd-02-technical-design.md', test: 'ddd-03-test-report.md' },
+        'Simple': { model: 'implementation-plan.md', implement: 'implementation-walkthrough.md', test: 'test-walkthrough.md' }
+      };
+
+      return baseFiles.map(file => {
+        const mapping = stageToFile[bolt.type];
+        let exists = file === 'bolt.md'; // bolt.md always exists
+
+        for (const [stage, stageFile] of Object.entries(mapping || {})) {
+          if (file === stageFile && (bolt.stages[stage] === 'complete' || bolt.stages[stage] === 'active')) {
+            exists = true;
+            break;
+          }
+        }
+
+        return { name: file, exists };
+      });
+    }
 
     const bolts = [
       {
@@ -1076,6 +1309,60 @@
           { name: '003-import-export', done: false },
           { name: '004-user-search', done: false }
         ]
+      },
+      // Intent 2: API Gateway Bolts
+      {
+        id: 'bolt-7',
+        name: 'rate-limiter-service-1',
+        type: 'DDD',
+        intentId: 'intent-2',
+        status: 'complete',
+        stages: { model: 'complete', design: 'complete', adr: 'complete', implement: 'complete', test: 'complete' },
+        stories: [
+          { name: '001-configure-limits', done: true },
+          { name: '002-throttle-requests', done: true },
+          { name: '003-burst-handling', done: true }
+        ]
+      },
+      {
+        id: 'bolt-8',
+        name: 'auth-gateway-1',
+        type: 'DDD',
+        intentId: 'intent-2',
+        status: 'active',
+        stages: { model: 'complete', design: 'complete', adr: 'active', implement: 'pending', test: 'pending' },
+        stories: [
+          { name: '001-jwt-validation', done: true },
+          { name: '002-api-key-auth', done: true },
+          { name: '003-oauth-integration', done: false },
+          { name: '004-token-refresh', done: false }
+        ]
+      },
+      {
+        id: 'bolt-9',
+        name: 'router-service-1',
+        type: 'Simple',
+        intentId: 'intent-2',
+        status: 'pending',
+        stages: { model: 'pending', design: 'pending', adr: 'pending', implement: 'pending', test: 'pending' },
+        stories: [
+          { name: '001-path-routing', done: false },
+          { name: '002-load-balancing', done: false },
+          { name: '003-service-discovery', done: false }
+        ]
+      },
+      {
+        id: 'bolt-10',
+        name: 'gateway-ui-1',
+        type: 'Simple',
+        intentId: 'intent-2',
+        status: 'pending',
+        stages: { model: 'pending', design: 'pending', adr: 'pending', implement: 'pending', test: 'pending' },
+        stories: [
+          { name: '001-dashboard', done: false },
+          { name: '002-route-editor', done: false },
+          { name: '003-metrics-view', done: false }
+        ]
       }
     ];
 
@@ -1087,6 +1374,7 @@
     let expandedBoltId = 'bolt-1';
     let expandedIntentId = 'intent-1';
     let expandedUnitIds = ['unit-1'];
+    let expandedStoryId = null;
     let collapsedGroups = [];
 
     // ==================== RENDER FUNCTIONS ====================
@@ -1329,9 +1617,19 @@
             </div>
             <div class="unit-content">
               ${filteredStories.map(story => `
-                <div class="story-item" data-status="${story.status}">
-                  <div class="story-status ${story.status}" onclick="toggleStoryStatus('${story.id}')">${story.status === 'complete' ? '&#10003;' : ''}</div>
+                <div class="story-item ${story.id === expandedStoryId ? 'expanded' : ''}" data-status="${story.status}" onclick="toggleStory('${story.id}')">
+                  <span class="story-expand">&#9654;</span>
+                  <div class="story-status ${story.status}">${story.status === 'complete' ? '&#10003;' : story.status === 'active' ? '&#9679;' : ''}</div>
                   <span class="story-name ${story.status}">${story.name}</span>
+                </div>
+                <div class="story-details ${story.id === expandedStoryId ? 'visible' : ''}" id="story-details-${story.id}">
+                  <div class="story-detail-row"><span class="detail-label">Status:</span><span class="detail-value status-${story.status}">${story.status}</span></div>
+                  <div class="story-detail-row"><span class="detail-label">Unit:</span><span class="detail-value">${unit.name}</span></div>
+                  <div class="story-detail-row"><span class="detail-label">Type:</span><span class="detail-value">User Story</span></div>
+                  <div class="story-actions">
+                    <button type="button" class="story-btn" onclick="event.stopPropagation()">View Spec</button>
+                    <button type="button" class="story-btn" onclick="event.stopPropagation()">Open File</button>
+                  </div>
                 </div>
               `).join('')}
             </div>
@@ -1417,12 +1715,13 @@
       renderSpecs();
     }
 
-    function toggleStoryStatus(storyId) {
-      const story = stories.find(s => s.id === storyId);
-      if (story) {
-        story.status = story.status === 'complete' ? 'pending' : 'complete';
-        renderSpecs();
+    function toggleStory(storyId) {
+      if (expandedStoryId === storyId) {
+        expandedStoryId = null;
+      } else {
+        expandedStoryId = storyId;
       }
+      renderSpecs();
     }
 
     function filterBolts() {
