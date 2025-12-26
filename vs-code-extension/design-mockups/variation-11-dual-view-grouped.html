@@ -2010,13 +2010,7 @@
         const statusText = intentStatus === 'complete' ? 'Complete' : intentStatus === 'active' ? 'In Progress' : 'Not Started';
 
         // Action buttons
-        const actionButtons = intentStatus === 'complete'
-          ? '<button type="button" class="intent-btn intent-btn-success">&#10003; Done</button>'
-          : intentStatus === 'active'
-            ? `<button type="button" class="intent-btn intent-btn-primary">&#9654; Continue</button>
-               <button type="button" class="intent-btn intent-btn-secondary">Files</button>
-               <button type="button" class="intent-btn intent-btn-success">Done</button>`
-            : '<button type="button" class="intent-btn intent-btn-primary">Start</button>';
+        const actionButtons = '<button type="button" class="intent-btn intent-btn-secondary">Files</button>';
 
         html += `
           <div class="intent-item ${isExpanded ? '' : 'collapsed'}" id="${intent.id}">
@@ -2054,10 +2048,6 @@
                   <span class="intent-status-badge ${intentStatus}">${statusText}</span>
                 </div>
 
-                <div class="unit-pipeline">
-                  ${boltPipelineHtml}
-                </div>
-
                 <div class="intent-stories-section">
                   <div class="intent-stories-header">
                     <span class="intent-stories-title">Bolts</span>
@@ -2065,6 +2055,31 @@
                   </div>
                   <div class="intent-stories-list">
                     ${boltsHtml}
+                  </div>
+                </div>
+
+                <div class="intent-stories-section">
+                  <div class="intent-stories-header">
+                    <span class="intent-stories-title">Units</span>
+                    <span class="intent-stories-count">${intentUnits.filter(u => stories.filter(s => s.unitId === u.id).every(s => s.status === 'complete')).length}/${intentUnits.length}</span>
+                  </div>
+                  <div class="intent-stories-list">
+                    ${intentUnits.map(unit => {
+                      const unitStories = stories.filter(s => s.unitId === unit.id);
+                      const unitDone = unitStories.filter(s => s.status === 'complete').length;
+                      const unitComplete = unitDone === unitStories.length;
+                      const unitActive = unitStories.some(s => s.status === 'active');
+                      let unitStatus = 'pending';
+                      if (unitComplete) unitStatus = 'complete';
+                      else if (unitActive || unitDone > 0) unitStatus = 'active';
+                      return \`
+                        <div class="intent-story-item">
+                          <div class="intent-story-checkbox \${unitStatus}">\${unitStatus === 'complete' ? '&#10003;' : ''}</div>
+                          <span class="intent-story-name \${unitStatus}">\${unit.name}</span>
+                          <span style="font-size: 10px; color: var(--vscode-descriptionForeground);">\${unitDone}/\${unitStories.length}</span>
+                        </div>
+                      \`;
+                    }).join('')}
                   </div>
                 </div>
 
