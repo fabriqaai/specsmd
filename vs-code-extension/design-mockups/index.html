@@ -250,10 +250,12 @@
     .iframe-wrapper {
       flex: 1;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: stretch;
+      justify-content: flex-start;
       padding: 20px;
+      padding-left: 100px;
       background: #0a0a0a;
+      overflow: auto;
     }
 
     .iframe-frame {
@@ -262,8 +264,7 @@
       overflow: hidden;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       height: 100%;
-      width: 100%;
-      max-width: 500px;
+      flex-shrink: 0;
       display: flex;
       flex-direction: column;
     }
@@ -297,7 +298,8 @@
     iframe {
       flex: 1;
       border: none;
-      width: 100%;
+      width: 420px;
+      min-width: 420px;
       background: #252526;
     }
 
