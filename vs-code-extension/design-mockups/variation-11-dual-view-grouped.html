@@ -2057,8 +2057,8 @@
                     <span class="intent-progress-text">${progress}%</span>
                   </div>
                   <div class="intent-stage-info">
-                    <div class="intent-stage-title">Unit: <span>${currentUnit ? currentUnit.name : 'None'}</span></div>
-                    <div class="intent-stage-subtitle">${doneStories} of ${allStories.length} stories complete</div>
+                    <div class="intent-stage-title">Stories: <span>${doneStories}/${allStories.length}</span></div>
+                    <div class="intent-stage-subtitle">${intentUnits.filter(u => stories.filter(s => s.unitId === u.id).every(s => s.status === 'complete')).length} of ${intentUnits.length} units complete</div>
                   </div>
                   <span class="intent-status-badge ${intentStatus}">${statusText}</span>
                 </div>
