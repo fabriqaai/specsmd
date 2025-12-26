@@ -99,12 +99,34 @@ agents:
 
 Based on bolt state:
 
-- **planned** → Start with first stage, set status to `in-progress`
+- **planned** → Start with first stage, update bolt file immediately (see Step 6)
 - **in-progress** → Continue from `current_stage`
 - **completed** → Inform user bolt is done
 - **blocked** → Show blocker, ask how to resolve
 
-### 6. Execute Stage
+### 6. Update Bolt File on Start (CRITICAL - DO FIRST)
+
+**⚠️ BEFORE any stage work begins, update the bolt file IMMEDIATELY.**
+
+When transitioning from `planned` to `in-progress`:
+
+```yaml
+---
+status: in-progress          # was: planned
+started: {ISO-8601-timestamp} # was: null
+current_stage: {first-stage}  # was: null (e.g., "domain-model")
+---
+```
+
+**This is NON-NEGOTIABLE.** The bolt file must reflect that work has begun before any stage activities start. This ensures:
+
+1. Progress is tracked even if execution is interrupted
+2. Other tools/agents see accurate status
+3. Resumption works correctly
+
+**Also update construction log** (see "Update Construction Log" section below).
+
+### 7. Execute Stage
 
 For the current stage, follow the bolt type definition:
 
@@ -136,7 +158,7 @@ For the current stage, follow the bolt type definition:
    - Use templates if specified by bolt type
    - Place in correct paths per schema
 
-### 7. Handle Checkpoints (As Defined by Bolt Type)
+### 8. Handle Checkpoints (As Defined by Bolt Type)
 
 The bolt type definition specifies:
 
@@ -160,9 +182,9 @@ Ready to proceed?
 
 If the bolt type specifies automatic validation criteria, follow those rules.
 
-### 8. Update Bolt File
+### 9. Update Bolt File on Stage Completion
 
-After stage completion:
+After each stage completion:
 
 - Add stage to `stages_completed` with timestamp
 - Update `current_stage` to next stage
@@ -274,7 +296,7 @@ Story:   draft → in-progress → complete
    → Intent stays construction (not all units complete)
 ```
 
-### 9. Continue or Complete
+### 10. Continue or Complete
 
 Based on condition:
 
