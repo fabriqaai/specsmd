@@ -182,7 +182,7 @@ export class WelcomeViewProvider implements vscode.WebviewViewProvider {
     </style>
 </head>
 <body>
-    <div class="logo-container" onclick="openWebsite()" title="Visit specs.md">
+    <div class="logo-container" title="Visit specs.md">
         <img src="${logoUri}" alt="specsmd logo" class="logo" />
     </div>
 
@@ -197,27 +197,28 @@ export class WelcomeViewProvider implements vscode.WebviewViewProvider {
 
     <div class="command-box">
         <code class="command-text">npx specsmd@latest install</code>
-        <button class="copy-button" onclick="copyCommand()" title="Copy to clipboard" aria-label="Copy command">
+        <button class="copy-button" title="Copy to clipboard" aria-label="Copy command">
             <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                 <path d="M4 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2z"/>
             </svg>
         </button>
     </div>
 
-    <button class="install-button" onclick="install()">
+    <button class="install-button">
         Install specsmd
     </button>
 
     <div class="divider"></div>
 
     <div class="footer">
-        <a href="#" onclick="openWebsite()">Learn more at specs.md</a>
+        <a href="#" id="learnMoreLink">Learn more at specs.md</a>
     </div>
 
     <script nonce="${nonce}">
         const vscode = acquireVsCodeApi();
 
-        function openWebsite() {
+        function openWebsite(e) {
+            if (e) e.preventDefault();
             vscode.postMessage({ command: 'openWebsite' });
         }
 
@@ -228,6 +229,12 @@ export class WelcomeViewProvider implements vscode.WebviewViewProvider {
         function install() {
             vscode.postMessage({ command: 'install' });
         }
+
+        // Set up event listeners after DOM is ready
+        document.getElementById('learnMoreLink').addEventListener('click', openWebsite);
+        document.querySelector('.logo-container').addEventListener('click', openWebsite);
+        document.querySelector('.copy-button').addEventListener('click', copyCommand);
+        document.querySelector('.install-button').addEventListener('click', install);
     </script>
 </body>
 </html>`;

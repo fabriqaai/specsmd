@@ -56,3 +56,30 @@ export {
     getNodeIcon,
     getBoltTypeBadge
 } from './iconHelper';
+
+// Webview Provider (new tabbed interface)
+export {
+    SpecsmdWebviewProvider,
+    createWebviewProvider
+} from './webviewProvider';
+
+export {
+    WebviewData,
+    TabId,
+    DEFAULT_TAB,
+    TAB_STATE_KEY,
+    WebviewToExtensionMessage,
+    ExtensionToWebviewMessage,
+    ActiveBoltData,
+    QueuedBoltData,
+    ActivityEventData,
+    IntentData,
+    UnitData,
+    StoryData,
+    StandardData
+} from './webviewMessaging';
+
+export {
+    getWebviewContent,
+    getNonce
+} from './webviewContent';

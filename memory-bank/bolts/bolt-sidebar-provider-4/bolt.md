@@ -3,16 +3,25 @@ id: bolt-sidebar-provider-4
 unit: sidebar-provider
 intent: 011-vscode-extension
 type: simple-construction-bolt
-status: planned
+status: complete
 stories:
   - 008-current-focus-card
   - 009-up-next-queue
   - 010-activity-feed-ui
 created: 2025-12-26T10:00:00Z
-started: null
-completed: null
+started: 2025-12-26T15:30:00Z
+completed: 2025-12-26T16:30:00Z
 current_stage: null
-stages_completed: []
+stages_completed:
+  - name: plan
+    completed: 2025-12-26T15:30:00Z
+    artifact: implementation-plan.md
+  - name: implement
+    completed: 2025-12-26T16:00:00Z
+    artifact: implementation-walkthrough.md
+  - name: test
+    completed: 2025-12-26T16:30:00Z
+    artifact: test-walkthrough.md
 
 requires_bolts:
   - bolt-sidebar-provider-3
@@ -51,9 +60,9 @@ Implement the Current Focus card with progress visualization, Up Next queue with
 
 ## Stages
 
-- [ ] **1. Spec**: Pending → implementation-plan.md
-- [ ] **2. Implement**: Pending → implementation-walkthrough.md
-- [ ] **3. Test**: Pending → test-walkthrough.md
+- [x] **1. Plan**: Complete → implementation-plan.md
+- [x] **2. Implement**: Complete → implementation-walkthrough.md
+- [x] **3. Test**: Complete → test-walkthrough.md
 
 ## Dependencies
 
@@ -66,15 +75,15 @@ Implement the Current Focus card with progress visualization, Up Next queue with
 
 ## Success Criteria
 
-- [ ] Focus card displays active bolt with progress ring
-- [ ] Stage pipeline shows correct status indicators
-- [ ] Stories checklist with completion status
-- [ ] Queue shows dependency-ordered pending bolts
-- [ ] Blocked bolts show lock icon and blocker names
-- [ ] Activity feed displays events with icons and times
-- [ ] Activity filter works (All/Stages/Bolts)
-- [ ] Activity section resizable with drag handle
-- [ ] Activity height persists
+- [x] Focus card displays active bolt with progress ring
+- [x] Stage pipeline shows correct status indicators
+- [x] Stories checklist with completion status
+- [x] Queue shows dependency-ordered pending bolts
+- [x] Blocked bolts show lock icon and blocker names
+- [x] Activity feed displays events with icons and times
+- [x] Activity filter works (All/Stages/Bolts)
+- [x] Activity section resizable with drag handle
+- [x] Activity height persists
 
 ## Notes
 

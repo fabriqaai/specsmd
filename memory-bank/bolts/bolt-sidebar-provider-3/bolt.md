@@ -3,15 +3,24 @@ id: bolt-sidebar-provider-3
 unit: sidebar-provider
 intent: 011-vscode-extension
 type: simple-construction-bolt
-status: planned
+status: complete
 stories:
   - 006-webview-tab-architecture
   - 007-command-center-bolts-tab
 created: 2025-12-26T10:00:00Z
-started: null
-completed: null
+started: 2025-12-26T13:00:00Z
+completed: 2025-12-26T15:00:00Z
 current_stage: null
-stages_completed: []
+stages_completed:
+  - name: plan
+    completed: 2025-12-26T13:15:00Z
+    artifact: implementation-plan.md
+  - name: implement
+    completed: 2025-12-26T14:30:00Z
+    artifact: implementation-walkthrough.md
+  - name: test
+    completed: 2025-12-26T15:00:00Z
+    artifact: test-walkthrough.md
 
 requires_bolts:
   - bolt-sidebar-provider-2
@@ -50,9 +59,9 @@ Implement WebviewViewProvider with three tabs (Bolts, Specs, Overview) and the c
 
 ## Stages
 
-- [ ] **1. Spec**: Pending → implementation-plan.md
-- [ ] **2. Implement**: Pending → implementation-walkthrough.md
-- [ ] **3. Test**: Pending → test-walkthrough.md
+- [x] **1. Plan**: Complete → implementation-plan.md
+- [x] **2. Implement**: Complete → implementation-walkthrough.md
+- [x] **3. Test**: Complete → test-walkthrough.md
 
 ## Dependencies
 
@@ -65,13 +74,13 @@ Implement WebviewViewProvider with three tabs (Bolts, Specs, Overview) and the c
 
 ## Success Criteria
 
-- [ ] WebviewViewProvider registered and working
-- [ ] Three tabs display and switch correctly
-- [ ] Tab state persists across sessions
-- [ ] Theme support (dark/light)
-- [ ] Command center layout renders
-- [ ] Current Intent header with statistics
-- [ ] Section placeholders for Focus, Queue, Activity
+- [x] WebviewViewProvider registered and working
+- [x] Three tabs display and switch correctly
+- [x] Tab state persists across sessions
+- [x] Theme support (dark/light)
+- [x] Command center layout renders
+- [x] Current Intent header with statistics
+- [x] Section placeholders for Focus, Queue, Activity
 
 ## Notes
 
