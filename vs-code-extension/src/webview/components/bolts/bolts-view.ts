@@ -5,11 +5,11 @@
 import { html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { BaseElement } from '../shared/base-element.js';
-import './mission-status.js';
+import './current-bolts.js';
 import './focus-section.js';
 import './queue-section.js';
 import './activity-feed.js';
-import type { IntentInfo, BoltStats } from './mission-status.js';
+import type { IntentInfo, BoltStats } from './current-bolts.js';
 import type { ActiveBoltData } from './focus-card.js';
 import type { QueuedBoltData } from './queue-item.js';
 import type { ActivityEventData } from './activity-item.js';
@@ -80,10 +80,10 @@ export class BoltsView extends BaseElement {
         }
 
         return html`
-            <mission-status
+            <current-intent
                 .intent=${this.data.currentIntent}
                 .stats=${this.data.stats}>
-            </mission-status>
+            </current-intent>
 
             <div class="content">
                 <focus-section

@@ -19,27 +19,11 @@ export function escapeHtml(text: string): string {
 }
 
 /**
- * Stage label mappings.
+ * Capitalize first letter of a string.
  */
-const STAGE_LABELS: Record<string, string> = {
-    'model': 'Model',
-    'design': 'Design',
-    'architecture': 'ADR',
-    'adr': 'ADR',
-    'implement': 'Impl',
-    'test': 'Test',
-    'plan': 'Plan'
-};
-
-const STAGE_ABBREV: Record<string, string> = {
-    'model': 'M',
-    'design': 'D',
-    'architecture': 'A',
-    'adr': 'A',
-    'implement': 'I',
-    'test': 'T',
-    'plan': 'P'
-};
+function capitalize(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 /**
  * Generate mission status section HTML.
@@ -93,18 +77,18 @@ function getFocusCardBodyHtml(bolt: ActiveBoltData): string {
 
     // Find current stage name
     const currentStage = bolt.stages.find(s => s.status === 'active');
-    const currentStageName = currentStage
-        ? (STAGE_LABELS[currentStage.name.toLowerCase()] || currentStage.name)
-        : (bolt.stages[0]?.name || 'Not started');
+    const currentStageName = currentStage?.name
+        ? capitalize(currentStage.name)
+        : (bolt.stages[0]?.name ? capitalize(bolt.stages[0].name) : 'Not started');
 
     // Build pipeline HTML
     const pipelineHtml = bolt.stages.map((stage, idx) => {
-        const label = STAGE_LABELS[stage.name.toLowerCase()] || stage.name;
-        const abbrev = STAGE_ABBREV[stage.name.toLowerCase()] || stage.name.charAt(0).toUpperCase();
+        const stageName = stage.name || 'Unknown';
+        const label = capitalize(stageName);
         const nodeHtml = `
             <div class="pipeline-stage">
                 <div class="pipeline-node ${stage.status}">
-                    ${stage.status === 'complete' ? '&#10003;' : abbrev}
+                    ${stage.status === 'complete' ? '&#10003;' : label.charAt(0)}
                 </div>
                 <span class="pipeline-label">${escapeHtml(label)}</span>
             </div>`;
@@ -185,7 +169,7 @@ export function getFocusSectionHtml(data: WebviewData): string {
 
     const bolt = data.activeBolt;
     const stageLabel = bolt.currentStage
-        ? (STAGE_LABELS[bolt.currentStage.toLowerCase()] || bolt.currentStage)
+        ? capitalize(bolt.currentStage)
         : 'Not started';
 
     return `
@@ -216,8 +200,8 @@ export function getQueueSectionHtml(data: WebviewData): string {
     const queueHtml = data.upNextQueue.length > 0
         ? data.upNextQueue.slice(0, 5).map((bolt, idx) => {
             const stagesHtml = bolt.stages.map(stage => {
-                const abbrev = STAGE_ABBREV[stage.name.toLowerCase()] || stage.name.charAt(0).toUpperCase();
-                return `<div class="queue-stage ${stage.status}">${abbrev}</div>`;
+                const stageName = stage.name || 'Unknown';
+                return `<div class="queue-stage ${stage.status}">${capitalize(stageName).charAt(0)}</div>`;
             }).join('');
 
             return `
