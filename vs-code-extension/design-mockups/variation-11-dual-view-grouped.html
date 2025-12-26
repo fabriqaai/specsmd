@@ -54,7 +54,7 @@
       background: var(--vscode-sideBar-background);
       border-right: 1px solid var(--vscode-input-border);
       position: relative;
-      padding-bottom: 130px;
+      padding-bottom: 42px;
     }
 
     .header {
@@ -1230,15 +1230,9 @@
       background: var(--vscode-list-hoverBackground);
     }
 
-    /* Metrics Stats Bar */
-    .metrics-bar {
-      position: absolute;
-      bottom: 42px;
-      left: 0;
-      right: 0;
-      padding: 12px;
-      background: var(--vscode-sideBarSectionHeader-background);
-      border-top: 1px solid var(--vscode-input-border);
+    /* Dashboard Content */
+    .dashboard-content {
+      padding: 16px 12px;
     }
 
     .metrics-title {
@@ -1450,6 +1444,9 @@
       <button type="button" class="view-tab active" id="bolts-tab" onclick="switchView('bolts')">
         &#9889; Bolts
       </button>
+      <button type="button" class="view-tab" id="dashboard-tab" onclick="switchView('dashboard')">
+        &#128202; Dashboard
+      </button>
     </div>
 
     <!-- =========== SPECS VIEW =========== -->
@@ -1505,21 +1502,23 @@
       </div>
     </div>
 
-    <!-- Metrics Stats Bar -->
-    <div class="metrics-bar" id="metrics-bar">
-      <div class="metrics-title">Overall Progress</div>
-      <div class="metrics-grid">
-        <div class="metric-item">
-          <div class="metric-value green" id="metric-intents">1/2</div>
-          <div class="metric-label">Intents</div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-value blue" id="metric-bolts">3/10</div>
-          <div class="metric-label">Bolts</div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-value highlight" id="metric-complete">27%</div>
-          <div class="metric-label">Complete</div>
+    <!-- =========== DASHBOARD VIEW =========== -->
+    <div class="view-container" id="dashboard-view">
+      <div class="dashboard-content">
+        <div class="metrics-title">Overall Progress</div>
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <div class="metric-value green" id="metric-intents">1/2</div>
+            <div class="metric-label">Intents</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-value blue" id="metric-bolts">3/10</div>
+            <div class="metric-label">Bolts</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-value highlight" id="metric-complete">27%</div>
+            <div class="metric-label">Complete</div>
+          </div>
         </div>
       </div>
     </div>
@@ -1962,6 +1961,11 @@
         if (progress === 100) intentStatus = 'complete';
         else if (activeStories > 0 || doneStories > 0) intentStatus = 'active';
 
+        // Apply filter - skip intents that don't match the current filter
+        if (currentSpecsFilter !== 'all' && intentStatus !== currentSpecsFilter) {
+          return; // Skip this intent
+        }
+
         // Find current unit (first with active stories, or first incomplete)
         let currentUnit = intentUnits.find(u => {
           const unitStories = stories.filter(s => s.unitId === u.id);
@@ -2146,11 +2150,15 @@
     function switchView(view) {
       document.getElementById('specs-tab').classList.toggle('active', view === 'specs');
       document.getElementById('bolts-tab').classList.toggle('active', view === 'bolts');
+      document.getElementById('dashboard-tab').classList.toggle('active', view === 'dashboard');
       document.getElementById('specs-view').classList.toggle('active', view === 'specs');
       document.getElementById('bolts-view').classList.toggle('active', view === 'bolts');
+      document.getElementById('dashboard-view').classList.toggle('active', view === 'dashboard');
 
       if (view === 'specs') {
         renderSpecs();
+      } else if (view === 'dashboard') {
+        renderMetrics();
       }
     }
 
