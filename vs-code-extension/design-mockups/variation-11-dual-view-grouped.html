@@ -1074,7 +1074,7 @@
     <div class="header">
       <span class="header-title">SpecsMD</span>
       <div class="header-actions">
-        <button type="button" class="icon-btn" title="Refresh" onclick="renderBolts()">&#8635;</button>
+        <button type="button" class="icon-btn" title="Refresh" onclick="refresh()">&#8635;</button>
         <button type="button" class="icon-btn" title="Settings">&#9881;</button>
       </div>
     </div>
@@ -1089,19 +1089,33 @@
       </button>
     </div>
 
-    <!-- =========== SPECS VIEW =========== -->
-    <div class="view-container" id="specs-view">
-      <div class="toolbar">
-        <div class="toolbar-row">
-          <span class="toolbar-label">Filter</span>
-          <select class="toolbar-select" id="specs-filter" aria-label="Filter status" onchange="filterSpecs()">
-            <option value="all">All Status</option>
-            <option value="active">In Progress</option>
-            <option value="complete">Completed</option>
-            <option value="pending">Not Started</option>
-          </select>
+    <!-- Shared Toolbar (applies to both views) -->
+    <div class="toolbar">
+      <div class="toolbar-row">
+        <span class="toolbar-label">Filter</span>
+        <select class="toolbar-select" id="intent-filter" aria-label="Filter intent" onchange="applyFilters()">
+          <option value="all">All Intents</option>
+        </select>
+        <select class="toolbar-select" id="status-filter" aria-label="Filter status" onchange="applyFilters()">
+          <option value="all">All Status</option>
+          <option value="active">In Progress</option>
+          <option value="complete">Completed</option>
+          <option value="pending">Not Started</option>
+        </select>
+      </div>
+      <div class="toolbar-row">
+        <span class="toolbar-label">Group</span>
+        <div class="group-by-buttons">
+          <button type="button" class="group-btn active" data-group="state" onclick="setGroupBy('state')">State</button>
+          <button type="button" class="group-btn" data-group="intent" onclick="setGroupBy('intent')">Intent</button>
+          <button type="button" class="group-btn" data-group="type" onclick="setGroupBy('type')">Type</button>
+          <button type="button" class="group-btn" data-group="none" onclick="setGroupBy('none')">None</button>
         </div>
       </div>
+    </div>
+
+    <!-- =========== SPECS VIEW =========== -->
+    <div class="view-container" id="specs-view">
       <div class="specs-content" id="specs-content">
         <!-- Will be rendered by JS -->
       </div>
@@ -1109,30 +1123,6 @@
 
     <!-- =========== BOLTS VIEW =========== -->
     <div class="view-container active" id="bolts-view">
-      <div class="toolbar">
-        <div class="toolbar-row">
-          <span class="toolbar-label">Filter</span>
-          <select class="toolbar-select" id="intent-filter" aria-label="Filter intent" onchange="filterBolts()">
-            <option value="all">All Intents</option>
-          </select>
-          <select class="toolbar-select" id="status-filter" aria-label="Filter status" onchange="filterBolts()">
-            <option value="all">All Status</option>
-            <option value="active">In Progress</option>
-            <option value="complete">Completed</option>
-            <option value="pending">Backlog</option>
-          </select>
-        </div>
-        <div class="toolbar-row">
-          <span class="toolbar-label">Group</span>
-          <div class="group-by-buttons">
-            <button type="button" class="group-btn active" data-group="state" onclick="setGroupBy('state')">State</button>
-            <button type="button" class="group-btn" data-group="intent" onclick="setGroupBy('intent')">Intent</button>
-            <button type="button" class="group-btn" data-group="type" onclick="setGroupBy('type')">Type</button>
-            <button type="button" class="group-btn" data-group="none" onclick="setGroupBy('none')">None</button>
-          </div>
-        </div>
-      </div>
-
       <div class="summary-bar" id="summary-bar">
         <!-- Will be rendered by JS -->
       </div>
@@ -1370,12 +1360,12 @@
     let currentGroupBy = 'state';
     let currentIntentFilter = 'all';
     let currentStatusFilter = 'all';
-    let currentSpecsFilter = 'all';
     let expandedBoltId = 'bolt-1';
     let expandedIntentId = 'intent-1';
     let expandedUnitIds = ['unit-1'];
     let expandedStoryId = null;
     let collapsedGroups = [];
+    let currentView = 'bolts';
 
     // ==================== RENDER FUNCTIONS ====================
 
@@ -1576,11 +1566,17 @@
       const container = document.getElementById('specs-content');
       let html = '';
 
-      intents.forEach(intent => {
+      // Filter intents based on intentFilter
+      let filteredIntents = intents;
+      if (currentIntentFilter !== 'all') {
+        filteredIntents = intents.filter(i => i.id === currentIntentFilter);
+      }
+
+      filteredIntents.forEach(intent => {
         const intentUnits = units.filter(u => u.unitId !== 'x' && intent.units.includes(u.id));
         const allStories = intentUnits.flatMap(u => stories.filter(s => s.unitId === u.id));
         const doneStories = allStories.filter(s => s.status === 'complete').length;
-        const progress = Math.round((doneStories / allStories.length) * 100);
+        const progress = allStories.length > 0 ? Math.round((doneStories / allStories.length) * 100) : 0;
         const dashOffset = 69.115 - (69.115 * progress / 100);
 
         const isExpanded = expandedIntentId === intent.id;
@@ -1611,7 +1607,7 @@
         `;
       });
 
-      container.innerHTML = html;
+      container.innerHTML = html || '<div class="empty-state">No intents match your filters</div>';
     }
 
     function renderUnits(unitList) {
@@ -1620,10 +1616,10 @@
         const doneStories = unitStories.filter(s => s.status === 'complete').length;
         const isExpanded = expandedUnitIds.includes(unit.id);
 
-        // Apply filter
+        // Apply status filter (shared with bolts view)
         let filteredStories = unitStories;
-        if (currentSpecsFilter !== 'all') {
-          filteredStories = unitStories.filter(s => s.status === currentSpecsFilter);
+        if (currentStatusFilter !== 'all') {
+          filteredStories = unitStories.filter(s => s.status === currentStatusFilter);
         }
 
         return `
@@ -1666,6 +1662,7 @@
     // ==================== EVENT HANDLERS ====================
 
     function switchView(view) {
+      currentView = view;
       document.getElementById('specs-tab').classList.toggle('active', view === 'specs');
       document.getElementById('bolts-tab').classList.toggle('active', view === 'bolts');
       document.getElementById('specs-view').classList.toggle('active', view === 'specs');
@@ -1673,7 +1670,24 @@
 
       if (view === 'specs') {
         renderSpecs();
+      } else {
+        renderBolts();
       }
+    }
+
+    function applyFilters() {
+      currentIntentFilter = document.getElementById('intent-filter').value;
+      currentStatusFilter = document.getElementById('status-filter').value;
+      if (currentView === 'specs') {
+        renderSpecs();
+      } else {
+        renderBolts();
+      }
+    }
+
+    function refresh() {
+      renderBolts();
+      renderSpecs();
     }
 
     function setGroupBy(type) {
@@ -1682,7 +1696,11 @@
         btn.classList.toggle('active', btn.dataset.group === type);
       });
       collapsedGroups = [];
-      renderBolts();
+      if (currentView === 'specs') {
+        renderSpecs();
+      } else {
+        renderBolts();
+      }
     }
 
     function toggleGroup(key) {
