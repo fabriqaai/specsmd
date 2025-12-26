@@ -141,6 +141,10 @@ interface Bolt {
   unitId?: string;
   storyIds: string[];
 
+  // Dependencies (from frontmatter)
+  requiresBolts: string[];   // Bolt IDs this bolt depends on
+  enablesBolts: string[];    // Bolt IDs that depend on this bolt
+
   // Stage tracking
   stages: BoltStages;
   stagesCompleted: StageCompletion[];
@@ -156,6 +160,9 @@ interface Bolt {
   // Computed
   progress: number;
   currentStage: string;
+  isBlocked: boolean;        // true if any requiresBolts are not complete
+  blockedBy: string[];       // IDs of incomplete required bolts
+  unblocksCount: number;     // Number of bolts this enables (for prioritization)
 }
 
 interface BoltStages {
@@ -411,20 +418,94 @@ function buildActivityFeed(bolts: Map<string, Bolt>): ActivityEvent[] {
 
 ### Up Next Queue
 
-Pending bolts ordered by creation date:
+Pending bolts ordered by dependency graph - unblocked bolts first, prioritized by how many downstream bolts they enable:
 
 ```typescript
-function getPendingBolts(bolts: Map<string, Bolt>): Bolt[] {
-  return Array.from(bolts.values())
-    .filter(b => b.status === 'pending')
-    .sort((a, b) => {
-      // Sort by created date (earliest first)
-      if (a.created && b.created) {
-        return a.created.getTime() - b.created.getTime();
-      }
-      return 0;
-    });
+/**
+ * Determines if a bolt is blocked by checking if all required bolts are complete
+ */
+function isBoltBlocked(bolt: Bolt, bolts: Map<string, Bolt>): boolean {
+  if (!bolt.requiresBolts || bolt.requiresBolts.length === 0) {
+    return false; // No dependencies = not blocked
+  }
+
+  return bolt.requiresBolts.some(requiredId => {
+    const requiredBolt = bolts.get(requiredId);
+    return !requiredBolt || requiredBolt.status !== 'complete';
+  });
 }
+
+/**
+ * Gets the list of bolt IDs that are blocking this bolt
+ */
+function getBlockingBolts(bolt: Bolt, bolts: Map<string, Bolt>): string[] {
+  if (!bolt.requiresBolts) return [];
+
+  return bolt.requiresBolts.filter(requiredId => {
+    const requiredBolt = bolts.get(requiredId);
+    return !requiredBolt || requiredBolt.status !== 'complete';
+  });
+}
+
+/**
+ * Counts how many pending bolts this bolt would unblock when completed
+ */
+function countUnblocks(boltId: string, bolts: Map<string, Bolt>): number {
+  return Array.from(bolts.values()).filter(b =>
+    b.status === 'pending' &&
+    b.requiresBolts?.includes(boltId)
+  ).length;
+}
+
+/**
+ * Gets pending bolts ordered by dependency priority:
+ * 1. Unblocked bolts come first (all requiresBolts are complete)
+ * 2. Among unblocked, prioritize by unblocksCount (enables more work)
+ * 3. Blocked bolts come last, showing what's blocking them
+ */
+function getUpNextBolts(bolts: Map<string, Bolt>): Bolt[] {
+  const pendingBolts = Array.from(bolts.values())
+    .filter(b => b.status === 'pending')
+    .map(bolt => ({
+      ...bolt,
+      isBlocked: isBoltBlocked(bolt, bolts),
+      blockedBy: getBlockingBolts(bolt, bolts),
+      unblocksCount: countUnblocks(bolt.id, bolts)
+    }));
+
+  return pendingBolts.sort((a, b) => {
+    // Unblocked bolts come first
+    if (a.isBlocked !== b.isBlocked) {
+      return a.isBlocked ? 1 : -1;
+    }
+
+    // Among unblocked, prioritize by how many bolts they enable
+    if (!a.isBlocked && !b.isBlocked) {
+      return b.unblocksCount - a.unblocksCount;
+    }
+
+    // Among blocked, sort by fewest blockers (closest to being unblocked)
+    return a.blockedBy.length - b.blockedBy.length;
+  });
+}
+```
+
+### Dependency Visualization
+
+In the UI, blocked bolts show their blockers:
+
+```
+UP NEXT                              3 bolts
+┌─────────────────────────────────────────────┐
+│ 1 │ bolt-webview-panel-1      [M][D][A][I][T]│  Ready (unblocked)
+│   │ Enables: 2 bolts                         │
+├─────────────────────────────────────────────┤
+│ 2 │ bolt-command-palette      [P][I][T]     │  Ready (unblocked)
+│   │ No dependencies                          │
+├─────────────────────────────────────────────┤
+│ 🔒│ bolt-sidebar-provider     [M][D][A][I][T]│  Blocked
+│   │ Waiting: bolt-artifact-parser-1          │
+└─────────────────────────────────────────────┘
 ```
 
 ### Progress Calculation
@@ -462,6 +543,12 @@ type: DDD
 intent: 011-vscode-extension
 unit: sidebar-provider
 status: active
+
+# Dependencies
+requires_bolts:
+  - bolt-artifact-parser-1    # Must be complete before this bolt can start
+enables_bolts:
+  - bolt-sidebar-provider-1   # Will be unblocked when this bolt completes
 
 # Timestamps (ISO 8601)
 created: 2025-12-26T09:00:00Z
@@ -568,4 +655,3 @@ Simple: P (Plan) → I (Implement) → T (Test)
 
 - **HTML Mockup**: `variation-8-2.html`
 - **Activity Timeline Variant**: `variation-8a-command-center-timeline.html`
-- **Specs Tab Variant**: `variation-8d-command-center-specs.html`
