@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - 'src/**'
-      - '.github/workflows/publish.yml'
+      - '.github/workflows/npm-package-release.yml'
 
 jobs:
   npm-package-test:
