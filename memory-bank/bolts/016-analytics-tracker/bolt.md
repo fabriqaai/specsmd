@@ -1,5 +1,5 @@
 ---
-id: bolt-analytics-tracker-1
+id: 016-analytics-tracker
 unit: analytics-tracker
 intent: 007-installer-analytics
 type: simple-construction-bolt
@@ -25,7 +25,7 @@ stages_completed: []
 
 requires_bolts: []
 enables_bolts:
-  - bolt-privacy-documentation-1
+  - 017-privacy-documentation
 requires_units: []
 blocks: false
 
@@ -36,7 +36,7 @@ complexity:
   testing_scope: 2
 ---
 
-# Bolt: bolt-analytics-tracker-1
+# Bolt: 016-analytics-tracker
 
 ## Overview
 
@@ -83,7 +83,7 @@ Create an AnalyticsTracker module that:
 - None (standalone module)
 
 ### Enables
-- bolt-privacy-documentation-1
+- 017-privacy-documentation
 
 ## Files to Create/Modify
 

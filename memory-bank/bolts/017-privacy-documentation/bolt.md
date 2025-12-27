@@ -1,5 +1,5 @@
 ---
-id: bolt-privacy-documentation-1
+id: 017-privacy-documentation
 unit: privacy-documentation
 intent: 007-installer-analytics
 type: simple-construction-bolt
@@ -29,7 +29,7 @@ complexity:
   testing_scope: 0
 ---
 
-# Bolt: bolt-privacy-documentation-1
+# Bolt: 017-privacy-documentation
 
 ## Overview
 
