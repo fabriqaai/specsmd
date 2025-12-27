@@ -4,6 +4,8 @@
 
 A VS Code extension for managing AI-DLC (AI Development Life Cycle) artifacts including intents, units, stories, and bolts.
 
+![Extension Preview](images/extension-preview.png)
+
 ## Sidebar Views
 
 The extension provides a sidebar panel with three tabs:
