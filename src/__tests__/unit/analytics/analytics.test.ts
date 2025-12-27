@@ -168,6 +168,14 @@ describe('Analytics Module', () => {
             });
 
             it('should NOT disable when SPECSMD_TELEMETRY_DISABLED=0', async () => {
+                // Clear all CI env vars first (these are set in GitHub Actions)
+                delete process.env.CI;
+                delete process.env.GITHUB_ACTIONS;
+                delete process.env.GITLAB_CI;
+                delete process.env.CIRCLECI;
+                delete process.env.JENKINS_URL;
+                delete process.env.DO_NOT_TRACK;
+
                 process.env.SPECSMD_TELEMETRY_DISABLED = '0';
                 vi.resetModules();
                 const { isTelemetryDisabled } = await import('../../../lib/analytics/env-detector');
