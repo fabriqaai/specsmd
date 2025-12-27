@@ -57,7 +57,7 @@
     "@types/node": "^24.10.2",
     "glob": "^13.0.0",
     "markdownlint": "^0.40.0",
-    "markdownlint-cli": "^0.46.0",
+    "markdownlint-cli": "^0.47.0",
     "remark-parse": "^11.0.0",
     "semantic-release": "^24.2.0",
     "typescript": "^5.9.3",
