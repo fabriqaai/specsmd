@@ -103,7 +103,7 @@ jobs:
 
       - name: Upload VSIX artifact
         if: steps.tag_check.outputs.exists == 'false'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: specsmd-${{ steps.version.outputs.version }}.vsix
           path: vs-code-extension/*.vsix
