@@ -5,9 +5,10 @@
     "version": "0.0.4",
     "publisher": "fabriqaai",
     "icon": "resources/favicon.png",
+    "homepage": "https://specs.md",
     "repository": {
         "type": "git",
-        "url": "https://github.com/fabriqaai/specsmd.git"
+        "url": "https://github.com/fabriqaai/specs.md.git"
     },
     "license": "MIT",
     "engines": {

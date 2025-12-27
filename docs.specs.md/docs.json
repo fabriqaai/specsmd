@@ -16,12 +16,16 @@
   "navbar": {
     "links": [
       {
-        "label": "GitHub",
+        "label": "github",
         "href": "https://github.com/fabriqaai/specs.md"
       },
       {
         "label": "npm",
         "href": "https://www.npmjs.com/package/specsmd"
+      },
+      {
+        "label": "vscode extension",
+        "href": "https://marketplace.visualstudio.com/items?itemName=fabriqaai.specsmd"
       }
     ],
     "primary": {
@@ -40,6 +44,7 @@
             "pages": [
               "index",
               "getting-started/installation",
+              "getting-started/vscode-extension",
               "getting-started/quick-start"
             ]
           },
