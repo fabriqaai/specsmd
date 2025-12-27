@@ -1,0 +1,164 @@
+---
+title: VS Code Extension
+description: Track your AI-DLC progress with the specsmd sidebar extension
+---
+
+## Overview
+
+The specsmd VS Code extension provides a visual dashboard for tracking your AI-DLC development progress. Monitor bolts, browse specs, and see project metrics—all from your IDE sidebar.
+
+<img
+  src="/images/extension-preview.png"
+  alt="VS Code Extension Preview"
+  style={{ borderRadius: '8px', marginBottom: '16px' }}
+/>
+
+<Info>
+  Works with any VS Code-based IDE including [Cursor](https://cursor.sh), [Windsurf](https://codeium.com/windsurf), and [Google IDX](https://idx.dev).
+</Info>
+
+## Installation
+
+<Tabs>
+  <Tab title="VS Code Marketplace">
+    Install directly from the marketplace:
+
+    1. Open VS Code (or Cursor, Windsurf, etc.)
+    2. Go to Extensions (`Cmd+Shift+X` / `Ctrl+Shift+X`)
+    3. Search for "specsmd"
+    4. Click **Install**
+
+    Or install via command line:
+    ```bash
+    code --install-extension fabriqaai.specsmd
+    ```
+
+    <Card
+      title="View on Marketplace"
+      icon="microsoft"
+      href="https://marketplace.visualstudio.com/items?itemName=fabriqaai.specsmd"
+    >
+      Install from the official VS Code Marketplace
+    </Card>
+  </Tab>
+  <Tab title="Manual Install (VSIX)">
+    Download and install the VSIX file manually:
+
+    1. Go to [GitHub Releases](https://github.com/fabriqaai/specs.md/releases)
+    2. Download the latest `.vsix` file
+    3. In VS Code, open Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
+    4. Run "Extensions: Install from VSIX..."
+    5. Select the downloaded file
+
+    <Card
+      title="GitHub Releases"
+      icon="github"
+      href="https://github.com/fabriqaai/specs.md/releases"
+    >
+      Download VSIX for manual installation
+    </Card>
+  </Tab>
+</Tabs>
+
+## Features
+
+The extension provides three main views:
+
+### Bolts Tab
+
+Track your bolt execution progress in real-time.
+
+<AccordionGroup>
+  <Accordion title="Current Focus">
+    Shows active bolts being worked on with:
+    - Bolt name and type (DDD, Simple)
+    - Current stage progress
+    - Stage pipeline with status indicators
+    - Stories list with completion status
+  </Accordion>
+  <Accordion title="Up Next Queue">
+    Shows pending bolts ready to be started:
+    - Unblocked bolts first (higher priority)
+    - Blocked bolts with dependency info
+    - Quick start button for each bolt
+  </Accordion>
+  <Accordion title="Recent Activity">
+    Timeline of bolt and stage completions:
+    - Filterable by All, Stages, or Bolts
+    - Relative timestamps
+    - Click to navigate to files
+  </Accordion>
+</AccordionGroup>
+
+### Specs Tab
+
+Browse your project specifications hierarchically.
+
+- **Intents** - High-level goals with progress indicators
+- **Units** - Cohesive work elements within intents
+- **Stories** - Individual user stories with status
+
+Click any item to open its markdown file.
+
+### Overview Tab
+
+High-level project metrics and quick actions.
+
+- **Progress** - Overall completion percentage
+- **Stats** - Active, queued, done, and blocked bolts
+- **Suggested Actions** - AI-recommended next steps
+- **Standards** - Quick access to project standards
+
+## Activation
+
+The extension automatically activates when it detects:
+- A `memory-bank/` folder in your workspace
+- A `.specsmd/` folder in your workspace
+
+<Note>
+  Make sure you've run `npx specsmd@latest install` first to set up your project structure.
+</Note>
+
+## Refreshing Data
+
+The extension watches your memory-bank files for changes. To manually refresh:
+- Click the refresh icon in the sidebar header
+- Or use Command Palette: "specsmd: Refresh"
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Extension not showing in sidebar">
+    Ensure your workspace has a `memory-bank/` or `.specsmd/` folder. The extension only activates when these are present.
+
+    ```bash
+    # Initialize specs.md first
+    npx specsmd@latest install
+    ```
+  </Accordion>
+  <Accordion title="Data not updating">
+    Click the refresh icon in the sidebar header, or check that your memory-bank files are saved.
+  </Accordion>
+  <Accordion title="Extension not working in Cursor/Windsurf">
+    The extension is compatible with VS Code-based IDEs. Make sure you're installing from the VS Code Marketplace or using a compatible VSIX.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Quick Start"
+    icon="rocket"
+    href="/getting-started/quick-start"
+  >
+    Initialize your project and create your first Intent
+  </Card>
+  <Card
+    title="Core Concepts"
+    icon="cube"
+    href="/core-concepts/bolts"
+  >
+    Learn about Bolts and how to track them
+  </Card>
+</CardGroup>
