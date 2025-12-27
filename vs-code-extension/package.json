@@ -2,8 +2,8 @@
     "name": "specsmd",
     "displayName": "specsmd extension",
     "description": "Dashboard sidebar for browsing AI-DLC memory-bank artifacts",
-    "version": "0.0.1",
-    "publisher": "specsmd",
+    "version": "0.0.2",
+    "publisher": "fabriqaai",
     "repository": {
         "type": "git",
         "url": "https://github.com/fabriqaai/specsmd.git"
