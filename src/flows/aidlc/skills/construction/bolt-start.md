@@ -204,135 +204,78 @@ stages_completed:
 ---
 ```
 
-**If this is the FINAL stage**, also update:
+**If this is the FINAL stage**, proceed to **Step 10** (bolt completion).
 
-```yaml
-status: complete
-current_stage: null
-completed: {timestamp}
-```
-
-Then proceed to **Step 10** (story updates) and **Step 11** (status cascade).
+**If this is NOT the final stage**, update bolt file and proceed to next stage. Stop here.
 
 ---
 
-### 10. Update Stories on Bolt Completion (CRITICAL)
+### 10. Mark Bolt Complete (CRITICAL - MANDATORY ON FINAL STAGE)
 
-**Trigger**: When bolt reaches FINAL stage and `status` is set to `complete`.
+**Trigger**: ONLY when this is the FINAL stage.
 
-**⚠️ THIS STEP IS MANDATORY. DO NOT SKIP.**
+**⚠️ DO NOT SKIP THIS STEP. When the final stage completes, you MUST run the command below.**
 
-When marking a bolt as `status: complete`, you MUST update all stories in the bolt's `stories` array:
-
-**Step 10.1**: Read bolt's stories from frontmatter:
-```yaml
-stories:
-  - 001-story-name
-  - 002-story-name
-  - 003-story-name
+```bash
+node .specsmd/scripts/bolt-complete.js {bolt-id}
 ```
 
-**Step 10.2**: Locate each story file:
-```
-{intent}/units/{unit}/stories/{story-id}.md
-```
+**What this command does (deterministically):**
+1. Updates bolt file to `status: complete`
+2. Updates ALL stories in bolt's `stories` array to `status: complete, implemented: true`
+3. Updates unit status if all bolts for unit are complete
+4. Updates intent status if all units for intent are complete
 
-**Step 10.3**: Update each story's frontmatter:
-
-```yaml
-# Change from
-status: draft
-implemented: false
-
-# To
-status: complete
-implemented: true
-```
-
-**Example**:
-
+**Example output:**
 ```text
-Bolt stories: [001-create-role, 002-manage-permissions, 003-view-roles]
+════════════════════════════════════════
+Bolt Completion: 016-analytics-tracker
+════════════════════════════════════════
 
-Updated:
-✅ stories/001-create-role.md → status: complete, implemented: true
-✅ stories/002-manage-permissions.md → status: complete, implemented: true
-✅ stories/003-view-roles.md → status: complete, implemented: true
+Bolt: 016-analytics-tracker
+Intent: 007-installer-analytics
+Unit: analytics-tracker
+Stories: 12
+
+✓ Bolt status: in-progress → complete
+
+Updating stories:
+  ✓ 001-initialize-mixpanel - draft → complete
+  ✓ 002-generate-machine-hash - draft → complete
+  ...
+
+Stories: 12 updated, 0 skipped, 0 errors
+
+✓ Unit status: in-progress → complete
+✓ Intent status: construction → complete
+
+════════════════════════════════════════
+✓ Bolt Complete: 016-analytics-tracker
+════════════════════════════════════════
 ```
 
-This ensures the memory-bank reflects actual implementation status and the VS Code extension shows correct completion indicators.
+**Do NOT manually edit story files.** The command handles everything deterministically.
 
----
+**Verify the script completed successfully:**
 
-### 11. Update Unit & Intent Status (Status Cascade)
+After running the command, verify the changes were applied correctly:
 
-**Trigger**: After stories are updated (Step 10).
+- [ ] **Bolt file updated**:
+  - [ ] `status: complete`
+  - [ ] `current_stage: null`
+  - [ ] `completed: {timestamp}` set
 
-Status changes cascade upward: Bolt → Story → Unit → Intent.
+- [ ] **Stories updated** (sample 2-3 from the bolt's stories array):
+  - [ ] `status: complete`
+  - [ ] `implemented: true`
 
-**11.1 On Bolt Start** (when changing from `planned` to `in-progress`):
+- [ ] **Unit status updated** (if all bolts for this unit are complete):
+  - [ ] Check `{intent}/units/{unit}/unit-brief.md` → `status: complete`
 
-1. **Update Unit Status**:
-   - Read unit-brief: `{intent}/units/{unit}/unit-brief.md`
-   - If unit status is `stories-defined` or `stories-updated` → change to `in-progress`
+- [ ] **Intent status updated** (if all units for this intent are complete):
+  - [ ] Check `{intent}/intent.md` → `status: complete`
 
-2. **Update Intent Status**:
-   - Read requirements: `{intent}/requirements.md`
-   - If intent status is `units-defined` → change to `construction`
-
-**11.2 On Bolt Completion** (after updating stories in Step 10):
-
-1. **Check Unit Completion**:
-   - Find all bolts for this unit: scan `memory-bank/bolts/*/bolt.md` and match `unit: {unit-name}` in frontmatter
-   - If ALL bolts have `status: complete` → update unit-brief to `status: complete`
-
-2. **Check Intent Completion**:
-   - Read unit-briefs for all units in intent: `{intent}/units/*/unit-brief.md`
-   - If ALL units have `status: complete` → update requirements to `status: complete`
-
-**Status Transitions**:
-
-```text
-Intent:  draft → requirements-defined → units-defined → construction → complete
-Unit:    draft → stories-defined → in-progress → complete
-Story:   draft → in-progress → complete
-```
-
-**Example** (001-artifact-parser completes):
-
-```text
-1. Stories updated: 001, 002, 003, 004 → complete
-2. Check unit bolts:
-   - 001-artifact-parser: complete ✓
-   - 005-artifact-parser: planned ✗
-   → Unit stays in-progress (not all bolts complete)
-3. Intent stays construction (unit not complete)
-```
-
-**Example** (last bolt for file-watcher completes):
-
-```text
-1. Stories updated: 001, 002 → complete
-2. Check unit bolts:
-   - 003-file-watcher: complete ✓
-   → Only bolt for unit, all complete!
-   → Update unit-brief: status: complete
-3. Check intent units:
-   - artifact-parser: in-progress ✗
-   - file-watcher: complete ✓
-   - sidebar-provider: in-progress ✗
-   → Intent stays construction (not all units complete)
-```
-
----
-
-### 12. Continue or Complete
-
-Based on condition:
-
-- **More stages remain** → Proceed to next stage
-- **Final stage complete** → Mark bolt complete, suggest next bolt
-- **User stops** → Save progress, can resume later
+**If any verification fails**, the script may have encountered an error. Check the console output for error messages.
 
 ---
 

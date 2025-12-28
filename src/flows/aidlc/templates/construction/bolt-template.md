@@ -27,8 +27,8 @@ memory-bank/bolts/{bolt-id}/
 ```yaml
 ---
 id: bolt-{unit}-{sequence}
-unit: {unit-name}
-intent: {intent-name}
+unit: {UUU}-{unit-name}
+intent: {NNN}-{intent-name}
 type: ddd-construction-bolt
 status: planned
 stories:
@@ -132,8 +132,8 @@ complexity:
 ```yaml
 ---
 id: bolt-auth-service-1
-unit: auth-service
-intent: user-authentication
+unit: 001-auth-service
+intent: 001-user-authentication
 type: ddd-construction-bolt
 status: in-progress
 stories:

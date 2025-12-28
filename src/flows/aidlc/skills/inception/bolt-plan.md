@@ -63,7 +63,7 @@ Review all stories to understand:
 
    ```yaml
    ---
-   unit: expense-tracker-ui
+   unit: 001-expense-tracker-ui
    unit_type: frontend
    default_bolt_type: simple-construction-bolt
    ---
@@ -235,8 +235,8 @@ Establish execution order based on dependencies:
    ```markdown
    ---
    id: {BBB}-{unit-name}
-   unit: {unit-name}
-   intent: {intent-name}
+   unit: {UUU}-{unit-name}
+   intent: {NNN}-{intent-name}
    type: {bolt-type}  # From unit-brief.md or default (ddd-construction-bolt, simple-construction-bolt)
    status: planned
    stories: [story-1, story-2]
