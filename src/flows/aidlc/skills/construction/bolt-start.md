@@ -221,12 +221,14 @@ node .specsmd/scripts/bolt-complete.js {bolt-id}
 ```
 
 **What this command does (deterministically):**
+
 1. Updates bolt file to `status: complete`
 2. Updates ALL stories in bolt's `stories` array to `status: complete, implemented: true`
 3. Updates unit status if all bolts for unit are complete
 4. Updates intent status if all units for intent are complete
 
 **Example output:**
+
 ```text
 ════════════════════════════════════════
 Bolt Completion: 016-analytics-tracker
