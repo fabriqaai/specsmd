@@ -184,11 +184,12 @@ If the bolt type specifies automatic validation criteria, follow those rules.
 
 ### 9. Update Bolt File on Stage Completion
 
+**Trigger**: After EACH stage completion (not just final stage).
+
 After each stage completion:
 
 - Add stage to `stages_completed` with timestamp
 - Update `current_stage` to next stage
-- If final stage, set `status: completed` and `completed` timestamp
 
 **⚠️ TIMESTAMP FORMAT**: See `memory-bank.yaml` → `conventions.timestamps`
 
@@ -197,33 +198,56 @@ After each stage completion:
 status: in-progress
 current_stage: {next-stage-from-bolt-type}
 stages_completed:
-  - {stage-name}: {timestamp}
+  - name: {stage-name}
+    completed: {timestamp}
+    artifact: {artifact-filename}
 ---
 ```
 
-**On bolt completion**, also update:
+**If this is the FINAL stage**, also update:
 
 ```yaml
+status: complete
+current_stage: null
 completed: {timestamp}
 ```
 
-#### Update Story Status (On Bolt Completion)
+Then proceed to **Step 10** (story updates) and **Step 11** (status cascade).
 
-When marking a bolt as `status: complete`, update all stories in the bolt's `stories` array:
+---
 
-1. **Read bolt's stories**: Get story IDs from bolt frontmatter `stories: [001-story-name, 002-story-name, ...]`
-2. **Locate story files**: `{intent}/units/{unit}/stories/{story-id}.md`
-3. **Update each story frontmatter**:
+### 10. Update Stories on Bolt Completion (CRITICAL)
 
-   ```yaml
-   # Change from
-   status: draft
-   implemented: false
+**Trigger**: When bolt reaches FINAL stage and `status` is set to `complete`.
 
-   # To
-   status: complete
-   implemented: true
-   ```
+**⚠️ THIS STEP IS MANDATORY. DO NOT SKIP.**
+
+When marking a bolt as `status: complete`, you MUST update all stories in the bolt's `stories` array:
+
+**Step 10.1**: Read bolt's stories from frontmatter:
+```yaml
+stories:
+  - 001-story-name
+  - 002-story-name
+  - 003-story-name
+```
+
+**Step 10.2**: Locate each story file:
+```
+{intent}/units/{unit}/stories/{story-id}.md
+```
+
+**Step 10.3**: Update each story's frontmatter:
+
+```yaml
+# Change from
+status: draft
+implemented: false
+
+# To
+status: complete
+implemented: true
+```
 
 **Example**:
 
@@ -238,11 +262,15 @@ Updated:
 
 This ensures the memory-bank reflects actual implementation status and the VS Code extension shows correct completion indicators.
 
-#### Update Unit & Intent Status (Status Cascade)
+---
+
+### 11. Update Unit & Intent Status (Status Cascade)
+
+**Trigger**: After stories are updated (Step 10).
 
 Status changes cascade upward: Bolt → Story → Unit → Intent.
 
-**On Bolt Start** (when changing from `planned` to `in-progress`):
+**11.1 On Bolt Start** (when changing from `planned` to `in-progress`):
 
 1. **Update Unit Status**:
    - Read unit-brief: `{intent}/units/{unit}/unit-brief.md`
@@ -252,7 +280,7 @@ Status changes cascade upward: Bolt → Story → Unit → Intent.
    - Read requirements: `{intent}/requirements.md`
    - If intent status is `units-defined` → change to `construction`
 
-**On Bolt Completion** (after updating stories):
+**11.2 On Bolt Completion** (after updating stories in Step 10):
 
 1. **Check Unit Completion**:
    - Find all bolts for this unit: scan `memory-bank/bolts/*/bolt.md` and match `unit: {unit-name}` in frontmatter
@@ -296,7 +324,9 @@ Story:   draft → in-progress → complete
    → Intent stays construction (not all units complete)
 ```
 
-### 10. Continue or Complete
+---
+
+### 12. Continue or Complete
 
 Based on condition:
 
@@ -392,6 +422,31 @@ If construction log doesn't exist, create it using template:
 3 - **operations**: Proceed to Operations (if all complete)
 
 **Type a number or press Enter for suggested action.**
+```
+
+---
+
+## Bolt Completion Checklist
+
+**Use this checklist to verify all completion tasks are done:**
+
+```text
+□ Bolt file updated:
+  □ status: complete
+  □ completed: {timestamp}
+  □ current_stage: null
+
+□ Stories updated (Step 10):
+  □ Each story in bolt's stories array:
+    □ status: complete
+    □ implemented: true
+
+□ Status cascade checked (Step 11):
+  □ Unit status updated if all bolts complete
+  □ Intent status updated if all units complete
+
+□ Construction log updated:
+  □ "{bolt-id} completed" entry added
 ```
 
 ---
