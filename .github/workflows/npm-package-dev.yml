@@ -1,0 +1,43 @@
+name: NPM Package Dev Release
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'src/**'
+
+jobs:
+  npm-package-dev:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        working-directory: src
+        run: npm ci
+
+      - name: Run tests
+        working-directory: src
+        run: npm test
+
+      - name: Set fixed dev version
+        working-directory: src
+        run: npm version 0.0.0-dev --no-git-tag-version
+
+      - name: Copy README to src for npm package
+        run: cp README.md src/README.md
+
+      - name: Publish to npm (dev tag)
+        working-directory: src
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --tag dev --access public
