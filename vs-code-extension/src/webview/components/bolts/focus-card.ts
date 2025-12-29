@@ -341,7 +341,7 @@ export class FocusCard extends BaseElement {
 
                     <div class="actions">
                         <button class="action-btn action-btn-primary" @click=${this._handleContinue}>Continue</button>
-                        <button class="action-btn action-btn-secondary" @click=${this._handleViewFiles}>Files</button>
+                        <button class="action-btn action-btn-secondary" @click=${this._handleViewFiles}>See Bolt</button>
                     </div>
                 </div>
             </div>
