@@ -289,10 +289,23 @@ Establish execution order based on dependencies:
 
 Check the plan against:
 
+**Frontmatter Validation (CRITICAL - check each bolt.md)**:
+
+- [ ] `id` - Bolt identifier present
+- [ ] `unit` - Parent unit ID present
+- [ ] `intent` - Parent intent ID present
+- [ ] `type` - Bolt type specified (`ddd-construction-bolt` or `simple-construction-bolt`)
+- [ ] `status` - Set to `planned`
+- [ ] `stories` - **Array of story IDs included** (NOT just in body, MUST be in frontmatter)
+- [ ] `created` - Timestamp present
+- [ ] `requires_bolts` - Dependency array present (can be empty `[]`)
+- [ ] `enables_bolts` - Enables array present (can be empty `[]`)
+- [ ] `complexity` - Complexity block with all 4 fields
+
+**Content Validation**:
+
 - [ ] All stories are assigned to bolts
 - [ ] Dependencies are respected (bolt-to-bolt AND unit-to-unit)
-- [ ] All dependencies documented in frontmatter
-- [ ] Complexity assessment included for each bolt
 - [ ] Each bolt has clear outputs
 - [ ] No bolt is too large (max 5-6 stories)
 - [ ] No circular dependencies exist

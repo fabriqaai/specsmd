@@ -57,6 +57,27 @@ complexity:
 
 ---
 
+## Required Frontmatter Fields (VALIDATION CHECKLIST)
+
+Before creating a bolt, verify ALL required fields are present:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `id` | **YES** | Bolt identifier (format: `{BBB}-{unit-name}`) |
+| `unit` | **YES** | Parent unit ID |
+| `intent` | **YES** | Parent intent ID |
+| `type` | **YES** | Bolt type (`ddd-construction-bolt` or `simple-construction-bolt`) |
+| `status` | **YES** | Current status (`planned`, `in-progress`, `completed`, `blocked`) |
+| `stories` | **YES** | Array of story IDs included in this bolt |
+| `created` | **YES** | Creation timestamp |
+| `requires_bolts` | **YES** | Array of bolt IDs this depends on (can be empty `[]`) |
+| `enables_bolts` | **YES** | Array of bolt IDs waiting on this (can be empty `[]`) |
+| `complexity` | **YES** | Complexity assessment block |
+
+**If any required field is missing, the bolt is INVALID.**
+
+---
+
 ## Content
 
 ```markdown
