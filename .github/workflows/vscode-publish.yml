@@ -1,10 +1,12 @@
 name: VS Code Extension CI/Release
 
 on:
+  workflow_dispatch:
   push:
     branches: [main, dev]
     paths:
       - 'vs-code-extension/**'
+      - '.github/workflows/vscode-publish.yml'
   pull_request:
     branches: [main]
     paths:
