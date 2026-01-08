@@ -58,6 +58,14 @@ import {
 } from './webviewMessaging';
 import * as fs from 'fs';
 import * as path from 'path';
+import {
+    trackTabChanged,
+    trackBoltAction,
+    trackArtifactOpened,
+    trackFilterChanged,
+    normalizeBoltType,
+    normalizeBoltStatus,
+} from '../analytics';
 
 /**
  * WebviewViewProvider for the SpecsMD sidebar.
@@ -696,15 +704,24 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
                 }
                 break;
 
-            case 'tabChange':
+            case 'tabChange': {
+                const previousTab = this._store.getState().ui.activeTab;
                 this.setActiveTab(message.tab);
+                // Track tab navigation (only on explicit user navigation)
+                trackTabChanged(previousTab, message.tab);
                 break;
+            }
 
             case 'refresh':
                 await this.refresh();
                 break;
 
             case 'openArtifact':
+                // Track artifact opened before opening
+                trackArtifactOpened(
+                    message.kind as 'bolt' | 'unit' | 'story' | 'intent' | 'standard',
+                    this._store.getState().ui.activeTab
+                );
                 await this._openArtifact(message.kind, message.path);
                 break;
 
@@ -715,12 +732,16 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
                 break;
 
             case 'activityFilter':
+                // Track filter change
+                trackFilterChanged('activity', message.filter);
                 this._store.setUIState({ activityFilter: message.filter as StateActivityFilter });
                 this._context.workspaceState.update(ACTIVITY_FILTER_KEY, message.filter);
                 // No need to re-render, filtering is done client-side
                 break;
 
             case 'specsFilter':
+                // Track filter change
+                trackFilterChanged('specs', message.filter);
                 this._store.setUIState({ specsFilter: message.filter as StateSpecsFilter });
                 this._context.workspaceState.update(SPECS_FILTER_KEY, message.filter);
                 // Re-render to apply the filter server-side
@@ -735,21 +756,53 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
                 break;
             }
 
-            case 'startBolt':
+            case 'startBolt': {
+                // Track bolt action with normalized type and status
+                const startBolt = this._store.getState().bolts.get(message.boltId);
+                trackBoltAction(
+                    'start',
+                    normalizeBoltType(startBolt?.type),
+                    'queued'
+                );
                 await this._showStartBoltCommand(message.boltId);
                 break;
+            }
 
-            case 'continueBolt':
+            case 'continueBolt': {
+                // Track bolt action with normalized type and status
+                const continueBolt = this._store.getState().bolts.get(message.boltId);
+                trackBoltAction(
+                    'continue',
+                    normalizeBoltType(continueBolt?.type),
+                    'active'
+                );
                 await this._showContinueBoltCommand(message.boltId, message.boltName);
                 break;
+            }
 
-            case 'viewBoltFiles':
+            case 'viewBoltFiles': {
+                // Track bolt action with normalized type and status
+                const viewBolt = this._store.getState().bolts.get(message.boltId);
+                trackBoltAction(
+                    'view_files',
+                    normalizeBoltType(viewBolt?.type),
+                    normalizeBoltStatus(viewBolt?.status)
+                );
                 await this._openBoltFile(message.boltId);
                 break;
+            }
 
-            case 'openBoltMd':
+            case 'openBoltMd': {
+                // Track bolt action with normalized type and status
+                const openBolt = this._store.getState().bolts.get(message.boltId);
+                trackBoltAction(
+                    'open_md',
+                    normalizeBoltType(openBolt?.type),
+                    normalizeBoltStatus(openBolt?.status)
+                );
                 await this._openBoltFile(message.boltId);
                 break;
+            }
 
             case 'openExternal':
                 if (message.url) {
