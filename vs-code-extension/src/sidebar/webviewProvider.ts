@@ -462,7 +462,8 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
             completedAt: bolt.completedAt?.toISOString() ?? '',
             relativeTime: bolt.completedAt ? formatRelativeTime(bolt.completedAt, now) : 'unknown',
             path: bolt.path,
-            files
+            files,
+            constructionLogPath: bolt.constructionLogPath
         };
     }
 
