@@ -145,6 +145,8 @@ export interface QueuedBoltData {
         id: string;
         name: string;
         status: 'complete' | 'active' | 'pending';
+        /** Path to the story file for click-to-open */
+        path?: string;
     }[];
 }
 

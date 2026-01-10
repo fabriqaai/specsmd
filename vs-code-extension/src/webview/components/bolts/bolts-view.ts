@@ -101,7 +101,9 @@ export class BoltsView extends BaseElement {
 
                 <queue-section
                     .bolts=${this.data.upNextQueue}
-                    @start-bolt=${this._handleStartBolt}>
+                    @start-bolt=${this._handleStartBolt}
+                    @open-file=${this._handleOpenFile}
+                    @open-bolt=${this._handleOpenBolt}>
                 </queue-section>
 
                 <completions-section

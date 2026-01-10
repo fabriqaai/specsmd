@@ -554,6 +554,8 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
      * Transforms a Bolt to QueuedBoltData.
      */
     private _transformQueuedBolt(bolt: Bolt): QueuedBoltData {
+        const state = this._store.getState();
+
         return {
             id: bolt.id,
             name: bolt.id,
@@ -566,11 +568,31 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
                 name: s.name,
                 status: this._mapStatus(s.status)
             })),
-            stories: bolt.stories.map(id => ({
-                id,
-                name: id,
-                status: 'pending' as const
-            }))
+            stories: bolt.stories.map(storyRef => {
+                // Construct the story file path from bolt's intent/unit
+                // Path format: {workspace}/memory-bank/intents/{intent}/units/{unit}/stories/{storyRef}.md
+                let storyPath: string | undefined;
+                if (bolt.intent && bolt.unit && state.workspace.path) {
+                    const storyFileName = storyRef.endsWith('.md') ? storyRef : `${storyRef}.md`;
+                    storyPath = path.join(
+                        state.workspace.path,
+                        'memory-bank',
+                        'intents',
+                        bolt.intent,
+                        'units',
+                        bolt.unit,
+                        'stories',
+                        storyFileName
+                    );
+                }
+
+                return {
+                    id: storyRef,
+                    name: storyRef,
+                    status: 'pending' as const,
+                    path: storyPath
+                };
+            })
         };
     }
 

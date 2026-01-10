@@ -14,6 +14,8 @@ export interface QueueStoryData {
     id: string;
     name: string;
     status: 'complete' | 'active' | 'pending';
+    /** Path to the story file for click-to-open */
+    path?: string;
 }
 
 /**
@@ -36,6 +38,8 @@ export interface QueuedBoltData {
  * Queue item component.
  *
  * @fires start-bolt - When Start button is clicked
+ * @fires open-bolt - When bolt magnifier button is clicked
+ * @fires open-file - When a story file magnifier is clicked
  *
  * @example
  * ```html
@@ -232,6 +236,58 @@ export class QueueItem extends BaseElement {
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
+
+            .open-btn {
+                background: none;
+                border: none;
+                color: var(--description-foreground);
+                cursor: pointer;
+                padding: 2px 4px;
+                font-size: 11px;
+                border-radius: 3px;
+                opacity: 0;
+                transition: all 0.15s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .story-item:hover .open-btn {
+                opacity: 0.7;
+            }
+
+            .open-btn:hover {
+                opacity: 1 !important;
+                background: var(--vscode-list-hoverBackground);
+                color: var(--foreground);
+            }
+
+            .bolt-open-btn {
+                background: none;
+                border: none;
+                color: var(--description-foreground);
+                cursor: pointer;
+                padding: 4px 8px;
+                font-size: 14px;
+                border-radius: 4px;
+                opacity: 0;
+                transition: all 0.15s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .header:hover .bolt-open-btn {
+                opacity: 0.7;
+            }
+
+            .bolt-open-btn:hover {
+                opacity: 1 !important;
+                background: var(--vscode-list-hoverBackground);
+                color: var(--foreground);
+            }
         `
     ];
 
@@ -262,6 +318,7 @@ export class QueueItem extends BaseElement {
                         <div class="blocked-info">Waiting: ${this.bolt.blockedBy.join(', ')}</div>
                     ` : ''}
                 </div>
+                <button class="bolt-open-btn" @click=${this._handleOpenBolt} title="Open bolt.md">🔍</button>
                 <div class="actions">
                     ${this.bolt.isBlocked
                         ? html`<button class="start-btn" disabled>Blocked</button>`
@@ -276,6 +333,13 @@ export class QueueItem extends BaseElement {
                         <div class="story-item">
                             <div class="story-status ${story.status}"></div>
                             <span class="story-name">${story.name}</span>
+                            ${story.path ? html`
+                                <button
+                                    class="open-btn"
+                                    @click=${(e: Event) => this._handleOpenFile(e, story.path!)}
+                                    title="Open story file"
+                                >🔍</button>
+                            ` : ''}
                         </div>
                     `)}
                 </div>
@@ -292,6 +356,24 @@ export class QueueItem extends BaseElement {
     private _handleStart(e: Event): void {
         e.stopPropagation();
         this.dispatchEvent(new CustomEvent('start-bolt', {
+            detail: { boltId: this.bolt.id },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    private _handleOpenFile(e: Event, path: string): void {
+        e.stopPropagation();
+        this.dispatchEvent(new CustomEvent('open-file', {
+            detail: { path },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    private _handleOpenBolt(e: Event): void {
+        e.stopPropagation();
+        this.dispatchEvent(new CustomEvent('open-bolt', {
             detail: { boltId: this.bolt.id },
             bubbles: true,
             composed: true
