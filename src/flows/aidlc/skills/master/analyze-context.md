@@ -53,7 +53,7 @@ For recent/active intents:
 Check `schema.bolts` directory:
 
 - Are there bolt instance files?
-- What is their status? (planned, in-progress, completed)
+- What is their status? (planned, in-progress, complete)
 - What stage are in-progress bolts at?
 
 ### 5. Determine Phase

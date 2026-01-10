@@ -272,6 +272,7 @@ Suggest an ADR when you identify:
 3 - **Identify ADR-worthy decisions**: Create decision list
 4 - **Present opportunities to user**: Get user selection
 5 - **Create ADR documents**: Generate selected ADRs
+6 - **Update decision index**: Add entries to `memory-bank/standards/decision-index.md`
 
 **Artifact**: `adr-{number}-{slug}.md` (zero or more)
 **Template**: `.specsmd/aidlc/templates/construction/bolt-types/ddd-construction-bolt/adr-template.md`
@@ -282,7 +283,8 @@ Suggest an ADR when you identify:
 1. Review stories, domain model, and technical design
 2. Compare against loaded project standards
 3. If decision-worthy patterns detected, present opportunities to user
-4. Handle user response and proceed to checkpoint
+4. Handle user response (create selected ADRs or skip)
+5. Update decision index (if ADRs created) and proceed to checkpoint
 
 **Step 3 Output Format**:
 
@@ -299,9 +301,34 @@ Would you like to create ADRs for any of these? (Enter numbers, "all", or "skip"
 
 **Step 4 Decision Handling**:
 
-- **User selects numbers or "all"** → Generate ADRs using template, then proceed to checkpoint
+- **User selects numbers or "all"** → Generate ADRs using template, then update decision index
 - **User selects "skip"** → Proceed to checkpoint with "No ADRs created"
 - **No ADR opportunities identified** → Auto-proceed to checkpoint with "No ADR-worthy decisions found"
+
+**Step 5 Decision Index Update**:
+
+For each ADR created, add an entry to `memory-bank/standards/decision-index.md`:
+
+1. If `decision-index.md` doesn't exist, create it from template: `.specsmd/aidlc/templates/standards/decision-index-template.md`
+2. Add entry for each ADR in the following format:
+
+```markdown
+### ADR-{n}: {title}
+- **Status**: {status from ADR frontmatter}
+- **Date**: {YYYY-MM-DD from ADR created timestamp}
+- **Bolt**: {bolt-id} ({unit-name})
+- **Path**: `bolts/{bolt-id}/adr-{n}-{slug}.md`
+- **Summary**: {First sentence from Context section}. {First sentence from Decision section}.
+- **Read when**: {Generate guidance based on the ADR's domain - describe scenarios when agents should read this ADR}
+```
+
+3. Update frontmatter: increment `total_decisions`, update `last_updated` timestamp
+
+**"Read when" Guidance Examples**:
+- "Working on authentication flows or session management"
+- "Implementing caching strategies or data persistence patterns"
+- "Designing API contracts or integration points"
+- "Handling error cases or implementing retry logic"
 
 **Example ADR**:
 
@@ -330,6 +357,7 @@ Implement CQRS pattern with separate read models for task queries.
 - [ ] Project standards compared
 - [ ] User presented with ADR opportunities (if any)
 - [ ] Selected ADRs created (or explicitly skipped)
+- [ ] Decision index updated (if ADRs were created)
 
 **Important**: Do not force ADRs. Only suggest when there's genuine value. Simple bolts with straightforward decisions don't need ADRs.
 
@@ -495,6 +523,34 @@ status: in-progress
 
 ## Bolt Context Loading
 
+### Prior Decision Lookup (All Stages)
+
+**Before starting any stage**, scan the decision index for relevant prior ADRs:
+
+1. Read `memory-bank/standards/decision-index.md` (if it exists)
+2. Match the current bolt's domain/scope against "Read when" fields
+3. Load full ADRs for any matching entries
+4. Consider these decisions as constraints or guidance for the current work
+
+**Example**: If working on a bolt for "user-service" and the decision index contains:
+```
+### ADR-001: Use JWT for Authentication
+- **Read when**: Working on authentication flows or user services
+```
+→ Load and consider `ADR-001` before starting design work.
+
+**Present relevant ADRs to user** at bolt start:
+```
+## Relevant Prior Decisions
+
+Found {n} ADR(s) that may apply to this bolt:
+- ADR-001: Use JWT for Authentication → [View](bolts/001-auth-service/adr-001-jwt-auth.md)
+
+These decisions may constrain or guide your approach. Proceed? (y/n)
+```
+
+### Bolt Folder Artifacts (Stages 4-5)
+
 For stages that build on previous work (Stage 4: Implement, Stage 5: Test), load all artifacts from the bolt folder:
 
 **Location**: `memory-bank/bolts/{bolt-id}/`
@@ -515,14 +571,16 @@ This ensures the implementation and test stages have full context from earlier d
 1. **Load bolt instance** from path defined by `schema.bolts`
 2. **Read `bolt_type` field** (e.g., `ddd-construction-bolt`)
 3. **Load this definition** from `.specsmd/aidlc/templates/construction/bolt-types/`
-4. **Check `current_stage`** in bolt instance
-5. **Load bolt folder artifacts** if stage requires previous context (see Bolt Context Loading)
-6. **Execute stage** following activities defined here
-7. **Create artifacts** using templates
-8. **⛔ STOP and present completion summary** - DO NOT continue automatically
-9. **Wait for user confirmation** - user must explicitly approve (e.g., "continue", "proceed", "next")
-10. **Only after approval**: Update bolt state and advance to next stage
+4. **Scan decision index** for relevant prior ADRs (see Prior Decision Lookup)
+5. **Present relevant ADRs** to user if any found, get confirmation to proceed
+6. **Check `current_stage`** in bolt instance
+7. **Load bolt folder artifacts** if stage requires previous context (see Bolt Folder Artifacts)
+8. **Execute stage** following activities defined here
+9. **Create artifacts** using templates
+10. **⛔ STOP and present completion summary** - DO NOT continue automatically
+11. **Wait for user confirmation** - user must explicitly approve (e.g., "continue", "proceed", "next")
+12. **Only after approval**: Update bolt state and advance to next stage
 
-**⛔ CRITICAL**: Steps 8-9 are MANDATORY. Never skip the human checkpoint. Never auto-advance.
+**⛔ CRITICAL**: Steps 10-11 are MANDATORY. Never skip the human checkpoint. Never auto-advance.
 
 The Construction Agent is **bolt-type agnostic** - it reads stages from this file and executes them.

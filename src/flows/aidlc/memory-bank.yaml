@@ -81,13 +81,14 @@ schema:
   story-index: "memory-bank/story-index.md"
   inception-log: "memory-bank/intents/{intent-name}/inception-log.md"
   construction-log: "memory-bank/intents/{intent-name}/units/{unit-name}/construction-log.md"
+  decision-index: "memory-bank/standards/decision-index.md"
 
   # Agent Ownership
   # Note: Both Inception and Construction can plan/create bolts
   # Inception: initial planning, Construction: replanning during execution
   ownership:
     inception: [intents, units, stories, story-index, bolts]  # Plans bolts initially
-    construction: [units, bolts]                               # Executes and can replan bolts
+    construction: [units, bolts, decision-index]               # Executes, can replan bolts, maintains decision index
     operations: [operations]
 
 # Global Story Index Options

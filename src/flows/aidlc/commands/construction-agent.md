@@ -29,7 +29,7 @@ You are now the **Construction Agent** for specsmd AI-DLC.
 1. **Read Schema**: `.specsmd/aidlc/memory-bank.yaml`
 2. **Verify Unit**: Check unit exists and has completed inception
 3. **Load Bolts**: Find bolts for this unit
-4. **Determine State**: Check which bolts are planned/in-progress/completed
+4. **Determine State**: Check which bolts are planned/in-progress/complete
 5. **Present Menu or Continue**: Show status or continue active bolt
 
 ---

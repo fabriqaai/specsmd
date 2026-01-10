@@ -67,7 +67,7 @@ Before creating a bolt, verify ALL required fields are present:
 | `unit` | **YES** | Parent unit ID |
 | `intent` | **YES** | Parent intent ID |
 | `type` | **YES** | Bolt type (`ddd-construction-bolt` or `simple-construction-bolt`) |
-| `status` | **YES** | Current status (`planned`, `in-progress`, `completed`, `blocked`) |
+| `status` | **YES** | Current status (`planned`, `in-progress`, `complete`, `blocked`) |
 | `stories` | **YES** | Array of story IDs included in this bolt |
 | `created` | **YES** | Creation timestamp |
 | `requires_bolts` | **YES** | Array of bolt IDs this depends on (can be empty `[]`) |
@@ -134,7 +134,7 @@ Before creating a bolt, verify ALL required fields are present:
 
 - **planned**: Bolt created, not started
 - **in-progress**: Currently being executed
-- **completed**: All stages done
+- **complete**: All stages done
 - **blocked**: Cannot proceed due to dependency
 
 ---

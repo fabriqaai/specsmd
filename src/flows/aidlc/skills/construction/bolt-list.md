@@ -52,7 +52,7 @@ For each bolt, determine progress:
 
 - **planned**: 0% - Not started
 - **in-progress**: `stages_completed / total_stages`
-- **completed**: 100%
+- **complete**: 100%
 - **blocked**: Show blocker reason
 
 ### 5. Display Results

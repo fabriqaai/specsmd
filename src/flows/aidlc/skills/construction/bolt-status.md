@@ -81,7 +81,7 @@ Check for issues:
 - **Unit**: `{unit-name}`
 - **Intent**: `{intent-name}`
 - **Type**: {bolt-type}
-- **Status**: {planned|in-progress|completed|blocked}
+- **Status**: {planned|in-progress|complete|blocked}
 
 ### Progress
 [██████████░░░░░░░░░░] 50% (2/4 stages)
