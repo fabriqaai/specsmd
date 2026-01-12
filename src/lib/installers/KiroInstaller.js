@@ -43,9 +43,14 @@ class KiroInstaller extends ToolInstaller {
         const kiroSpecsPath = path.join('.kiro', 'specs');
         const specsPath = 'specs';
 
-        // Only create if .kiro/specs doesn't exist
+        // Check if .kiro/specs already exists
         if (await fs.pathExists(kiroSpecsPath)) {
-            console.log(theme.dim(`  .kiro/specs already exists, skipping symlink`));
+            const stats = await fs.lstat(kiroSpecsPath);
+            if (stats.isSymbolicLink()) {
+                console.log(theme.dim(`  .kiro/specs symlink already exists, skipping`));
+            } else {
+                console.log(theme.dim(`  .kiro/specs already exists as folder, skipping symlink`));
+            }
             return;
         }
 
@@ -57,7 +62,14 @@ class KiroInstaller extends ToolInstaller {
             await fs.ensureSymlink(path.join('..', specsPath), kiroSpecsPath);
             CLIUtils.displayStatus('', 'Created .kiro/specs symlink for Kiro compatibility', 'success');
         } catch (err) {
-            console.log(theme.warning(`  Failed to create specs symlink: ${err.message}`));
+            // Handle specific error cases
+            if (err.code === 'EPERM' || err.code === 'EACCES') {
+                console.log(theme.warning(`  Cannot create symlink (permission denied). On Windows, try running as Administrator.`));
+            } else if (err.code === 'EEXIST') {
+                console.log(theme.dim(`  .kiro/specs already exists, skipping symlink`));
+            } else {
+                console.log(theme.warning(`  Failed to create specs symlink: ${err.message}`));
+            }
         }
     }
 }
