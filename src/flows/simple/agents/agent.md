@@ -119,14 +119,6 @@ On activation, read:
 specs/                               # Existing specs (for state detection)
 ```
 
-## Available Tools
-
-Check for the `AskUserQuestionTool` tool:
-- **If available** (Claude Code): Use it for clarifying questions (provides structured input)
-- **If not available**: Ask directly in your response text
-
-The agent should work in any environment - fall back gracefully if tools are unavailable.
-
 ## State Detection
 
 Check `specs/{feature-name}/` to determine state:
