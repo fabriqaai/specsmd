@@ -247,6 +247,7 @@ Action: Load all specs, recommend or execute requested task
 
 ### Design Phase
 - MUST conduct research if needed (codebase patterns, tech stack)
+- MUST use Mermaid diagrams for all visual diagrams (architecture, sequence, flow, etc.)
 - SHOULD cite sources and rationale for decisions
 - SHOULD highlight design decisions and rationale
 - MAY ask user for input on technical decisions
