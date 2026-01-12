@@ -20,8 +20,8 @@ Generate an implementation plan with coding tasks based on the approved design. 
 ### Initial Generation
 
 1. **Read both documents**:
-   - `memory-bank/specs/{feature}/requirements.md`
-   - `memory-bank/specs/{feature}/design.md`
+   - `specs/{feature}/requirements.md`
+   - `specs/{feature}/design.md`
 2. **Convert design into tasks**:
    - Create incremental coding steps
    - Each task builds on previous
@@ -31,7 +31,7 @@ Generate an implementation plan with coding tasks based on the approved design. 
    - Numbered checkbox list
    - Max 2 levels of hierarchy
    - Requirement references for traceability
-4. **Write file** to `memory-bank/specs/{feature}/tasks.md`
+4. **Write file** to `specs/{feature}/tasks.md`
 5. **Ask for approval**: "Do the tasks look good?"
 
 ### Update Flow
@@ -82,7 +82,7 @@ Generate an implementation plan with coding tasks based on the approved design. 
 
 ## Output
 
-- **File**: `memory-bank/specs/{feature-name}/tasks.md`
+- **File**: `specs/{feature-name}/tasks.md`
 - **Approval Prompt**: "Do the tasks look good?"
 
 ## Task Types (Include)

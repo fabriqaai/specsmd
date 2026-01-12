@@ -126,12 +126,11 @@ After creating specs, your project will have:
     ├── memory-bank.yaml          # Storage schema
     └── quick-start.md            # This file
 
-memory-bank/
-└── specs/                        # Your feature specs
-    └── {feature-name}/
-        ├── requirements.md       # What to build
-        ├── design.md             # How to build it
-        └── tasks.md              # Step-by-step plan
+specs/                                # Your feature specs
+└── {feature-name}/
+    ├── requirements.md           # What to build
+    ├── design.md                 # How to build it
+    └── tasks.md                  # Step-by-step plan
 ```
 
 ---
@@ -190,7 +189,7 @@ The agent is stateless. It reads spec files at startup. Ensure documents are sav
 When you run `/specsmd-agent` without arguments, it lists existing specs and asks which to work on.
 
 ### Want to start over
-Delete the spec folder: `rm -rf memory-bank/specs/{feature-name}`
+Delete the spec folder: `rm -rf specs/{feature-name}`
 
 ### Get help
 Ask the agent: `/specsmd-agent How do I add a new requirement?`

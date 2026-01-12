@@ -19,10 +19,10 @@ Generate a technical design document based on approved requirements. This is Pha
 
 ### Initial Generation
 
-1. **Read requirements** from `memory-bank/specs/{feature}/requirements.md`
+1. **Read requirements** from `specs/{feature}/requirements.md`
 2. **Research codebase** if needed:
    - Identify existing patterns and conventions
-   - Check tech stack from `memory-bank/standards/` if available
+   - Check existing project standards if available
    - Look for similar implementations to reference
 3. **Generate design.md** following the template:
    - Overview (solution approach, tech decisions)
@@ -31,7 +31,7 @@ Generate a technical design document based on approved requirements. This is Pha
    - Data Models (with validation rules)
    - Error Handling (recovery strategies)
    - Testing Strategy
-4. **Write file** to `memory-bank/specs/{feature}/design.md`
+4. **Write file** to `specs/{feature}/design.md`
 5. **Ask for approval**: "Does the design look good? If so, we can move on to the implementation plan."
 
 ### Update Flow
@@ -65,7 +65,7 @@ Generate a technical design document based on approved requirements. This is Pha
 
 ## Output
 
-- **File**: `memory-bank/specs/{feature-name}/design.md`
+- **File**: `specs/{feature-name}/design.md`
 - **Approval Prompt**: "Does the design look good? If so, we can move on to the implementation plan."
 
 ## Design Sections Checklist

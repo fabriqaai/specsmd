@@ -16,12 +16,12 @@ Generate a requirements document for a feature using EARS (Easy Approach to Requ
 
 1. **Parse feature idea** from user input
 2. **Derive feature name** in kebab-case (e.g., "user-authentication")
-3. **Create directory** at `memory-bank/specs/{feature-name}/`
+3. **Create directory** at `specs/{feature-name}/`
 4. **Generate requirements.md** following the template:
    - Introduction (2-3 sentences)
    - Glossary (3-10 domain terms)
    - Requirements (3-7 user stories with EARS acceptance criteria)
-5. **Write file** to `memory-bank/specs/{feature-name}/requirements.md`
+5. **Write file** to `specs/{feature-name}/requirements.md`
 6. **Ask for approval**: "Do the requirements look good? If so, we can move on to the design."
 
 ### Update Flow (Existing Spec)
@@ -53,7 +53,7 @@ Generate a requirements document for a feature using EARS (Easy Approach to Requ
 
 ## Output
 
-- **File**: `memory-bank/specs/{feature-name}/requirements.md`
+- **File**: `specs/{feature-name}/requirements.md`
 - **Approval Prompt**: "Do the requirements look good? If so, we can move on to the design."
 
 ## Example Generation

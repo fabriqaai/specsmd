@@ -16,19 +16,19 @@ context:
     design:
       - path: ".specsmd/simple/skills/design.md"
       - path: ".specsmd/simple/templates/design-template.md"
-      - path: "memory-bank/specs/{feature}/requirements.md"
+      - path: "specs/{feature}/requirements.md"
     tasks:
       - path: ".specsmd/simple/skills/tasks.md"
       - path: ".specsmd/simple/templates/tasks-template.md"
-      - path: "memory-bank/specs/{feature}/requirements.md"
-      - path: "memory-bank/specs/{feature}/design.md"
+      - path: "specs/{feature}/requirements.md"
+      - path: "specs/{feature}/design.md"
     execute:
       - path: ".specsmd/simple/skills/execute.md"
-      - path: "memory-bank/specs/{feature}/requirements.md"
-      - path: "memory-bank/specs/{feature}/design.md"
-      - path: "memory-bank/specs/{feature}/tasks.md"
+      - path: "specs/{feature}/requirements.md"
+      - path: "specs/{feature}/design.md"
+      - path: "specs/{feature}/tasks.md"
 
 # Scan directories on activation
 scan:
-  - path: "memory-bank/specs/"
+  - path: "specs/"
     purpose: "Detect existing specs for state detection"

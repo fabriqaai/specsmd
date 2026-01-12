@@ -16,7 +16,7 @@ When this command is invoked, the agent should:
 1. **Load Context**
    - Read `.specsmd/simple/memory-bank.yaml`
    - Read `.specsmd/simple/agents/agent.md`
-   - Scan `memory-bank/specs/` for existing specs
+   - Scan `specs/` for existing specs
 
 2. **Parse Arguments**
    - `$ARGUMENTS` contains user input after command

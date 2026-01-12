@@ -27,10 +27,10 @@ naming:
 
 # Schema Definition (Source of Truth for Agent)
 schema:
-  specs: "memory-bank/specs/{feature-name}/"
-  requirements: "memory-bank/specs/{feature-name}/requirements.md"
-  design: "memory-bank/specs/{feature-name}/design.md"
-  tasks: "memory-bank/specs/{feature-name}/tasks.md"
+  specs: "specs/{feature-name}/"
+  requirements: "specs/{feature-name}/requirements.md"
+  design: "specs/{feature-name}/design.md"
+  tasks: "specs/{feature-name}/tasks.md"
 
 # Workflow Configuration
 workflow:

@@ -79,12 +79,11 @@ Or ask: "What's the next task for user-auth?"
 ## Output Structure
 
 ```
-memory-bank/
-└── specs/
-    └── {feature-name}/
-        ├── requirements.md    # Phase 1: What to build
-        ├── design.md          # Phase 2: How to build it
-        └── tasks.md           # Phase 3: Step-by-step plan
+specs/
+└── {feature-name}/
+    ├── requirements.md    # Phase 1: What to build
+    ├── design.md          # Phase 2: How to build it
+    └── tasks.md           # Phase 3: Step-by-step plan
 ```
 
 ## EARS Format
@@ -141,7 +140,7 @@ src/flows/simple/
 | **Target** | Quick feature specs | Full development lifecycle |
 | **Phases** | 3: Requirements → Design → Tasks | 3: Inception → Construction → Operations |
 | **Agents** | 1 (Agent) | 4 (Master, Inception, Construction, Operations) |
-| **Output** | 3 markdown files | Full memory-bank hierarchy |
+| **Output** | 3 markdown files | Full artifact hierarchy |
 | **DDD Stages** | Not included | Full DDD stages in Construction |
 | **Bolts** | No concept | Time-boxed execution sessions |
 | **Hierarchy** | Flat (specs/) | Nested (intents/units/stories) |

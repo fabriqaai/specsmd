@@ -7,9 +7,9 @@ Execute implementation tasks from an approved tasks.md file. This is the post-sp
 ## Preconditions
 
 - All three spec files exist:
-  - `memory-bank/specs/{feature}/requirements.md`
-  - `memory-bank/specs/{feature}/design.md`
-  - `memory-bank/specs/{feature}/tasks.md`
+  - `specs/{feature}/requirements.md`
+  - `specs/{feature}/design.md`
+  - `specs/{feature}/tasks.md`
 - Tasks have been approved by user
 
 ## Trigger Conditions
