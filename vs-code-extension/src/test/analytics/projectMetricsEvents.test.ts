@@ -679,13 +679,13 @@ suite('Project Metrics Events Test Suite', () => {
     // ============================================
     suite('Event Name Constants', () => {
         const PROJECT_EVENTS = {
-            SNAPSHOT: 'project_snapshot',
-            CHANGED: 'project_changed',
+            SNAPSHOT: 'ext_project_snapshot',
+            CHANGED: 'ext_project_changed',
         } as const;
 
         test('should have correct event names', () => {
-            assert.strictEqual(PROJECT_EVENTS.SNAPSHOT, 'project_snapshot');
-            assert.strictEqual(PROJECT_EVENTS.CHANGED, 'project_changed');
+            assert.strictEqual(PROJECT_EVENTS.SNAPSHOT, 'ext_project_snapshot');
+            assert.strictEqual(PROJECT_EVENTS.CHANGED, 'ext_project_changed');
         });
 
         test('should have exactly 2 events', () => {

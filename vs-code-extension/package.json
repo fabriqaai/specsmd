@@ -2,7 +2,7 @@
     "name": "specsmd",
     "displayName": "specsmd - Memory Bank Extension - Spec Driven Development",
     "description": "Dashboard sidebar for browsing AI-DLC memory-bank artifacts",
-    "version": "0.0.9",
+    "version": "0.0.15",
     "publisher": "fabriqaai",
     "icon": "resources/favicon.png",
     "homepage": "https://specs.md",
@@ -65,6 +65,10 @@
             {
                 "command": "specsmd.copyPath",
                 "title": "Copy Path"
+            },
+            {
+                "command": "specsmd.selectMarkdownEditor",
+                "title": "specsmd: Select Markdown Editor"
             }
         ],
         "menus": {
@@ -83,6 +87,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Enable anonymous usage telemetry to help improve specsmd. No personally identifiable information is collected."
+                },
+                "specsmd.markdownEditor": {
+                    "type": "string",
+                    "default": "default",
+                    "markdownDescription": "Markdown editor to use when opening files from specsmd. Use `default` for text editor, `preview` for markdown preview, `side-by-side` for both, or enter a custom editor viewType (e.g., `fabriqa.markdownEditor`). [Select from available editors](command:specsmd.selectMarkdownEditor)"
                 }
             }
         }
@@ -111,7 +120,7 @@
         "@types/vscode": "^1.85.0",
         "@vscode/test-electron": "^2.3.8",
         "@vscode/vsce": "^2.22.0",
-        "esbuild": "^0.24.0",
+        "esbuild": "^0.27.2",
         "eslint": "^9.39.2",
         "glob": "^10.3.10",
         "mocha": "^10.2.0",

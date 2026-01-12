@@ -18,10 +18,10 @@ import type {
 
 // Event names
 const ENGAGEMENT_EVENTS = {
-    TAB_CHANGED: 'tab_changed',
-    BOLT_ACTION: 'bolt_action',
-    ARTIFACT_OPENED: 'artifact_opened',
-    FILTER_CHANGED: 'filter_changed',
+    TAB_CHANGED: 'ext_tab_changed',
+    BOLT_ACTION: 'ext_bolt_action',
+    ARTIFACT_OPENED: 'ext_artifact_opened',
+    FILTER_CHANGED: 'ext_filter_changed',
 } as const;
 
 /**

@@ -41,7 +41,7 @@ export interface BoltsViewData {
  * @fires start-bolt - When Start button is clicked
  * @fires continue-bolt - When Continue button is clicked
  * @fires view-files - When Files button is clicked
- * @fires open-file - When activity file is clicked
+ * @fires open-file - When a file is clicked (story, artifact, or activity item)
  * @fires open-bolt - When bolt magnifier is clicked
  *
  * @example
@@ -95,12 +95,15 @@ export class BoltsView extends BaseElement {
                     @toggle-focus=${this._handleToggleFocus}
                     @continue-bolt=${this._handleContinueBolt}
                     @view-files=${this._handleViewFiles}
-                    @open-bolt=${this._handleOpenBolt}>
+                    @open-bolt=${this._handleOpenBolt}
+                    @open-file=${this._handleOpenFile}>
                 </focus-section>
 
                 <queue-section
                     .bolts=${this.data.upNextQueue}
-                    @start-bolt=${this._handleStartBolt}>
+                    @start-bolt=${this._handleStartBolt}
+                    @open-file=${this._handleOpenFile}
+                    @open-bolt=${this._handleOpenBolt}>
                 </queue-section>
 
                 <completions-section

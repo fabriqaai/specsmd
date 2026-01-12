@@ -19,8 +19,8 @@ import type { EventProperties } from './types';
 // ============================================
 
 export const PROJECT_EVENTS = {
-    SNAPSHOT: 'project_snapshot',
-    CHANGED: 'project_changed',
+    SNAPSHOT: 'ext_project_snapshot',
+    CHANGED: 'ext_project_changed',
 } as const;
 
 // ============================================

@@ -15,13 +15,13 @@ import type {
 
 // Event names
 const EVENTS = {
-    EXTENSION_ACTIVATED: 'extension_activated',
-    WELCOME_VIEW_DISPLAYED: 'welcome_view_displayed',
-    WELCOME_COPY_COMMAND_CLICKED: 'welcome_copy_command_clicked',
-    WELCOME_INSTALL_CLICKED: 'welcome_install_clicked',
-    WELCOME_WEBSITE_CLICKED: 'welcome_website_clicked',
-    WELCOME_INSTALL_COMPLETED: 'welcome_install_completed',
-    EXTENSION_ERROR: 'extension_error',
+    EXTENSION_ACTIVATED: 'ext_extension_activated',
+    WELCOME_VIEW_DISPLAYED: 'ext_welcome_view_displayed',
+    WELCOME_COPY_COMMAND_CLICKED: 'ext_welcome_copy_command_clicked',
+    WELCOME_INSTALL_CLICKED: 'ext_welcome_install_clicked',
+    WELCOME_WEBSITE_CLICKED: 'ext_welcome_website_clicked',
+    WELCOME_INSTALL_COMPLETED: 'ext_welcome_install_completed',
+    EXTENSION_ERROR: 'ext_extension_error',
 } as const;
 
 // GlobalState key for first-activation detection

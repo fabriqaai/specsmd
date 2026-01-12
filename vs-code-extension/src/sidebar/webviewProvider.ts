@@ -67,6 +67,7 @@ import {
     normalizeBoltStatus,
     projectMetricsTracker,
 } from '../analytics';
+import { openFile } from '../utils';
 
 /**
  * WebviewViewProvider for the SpecsMD sidebar.
@@ -424,6 +425,7 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
      * Transforms a Bolt to ActiveBoltData.
      */
     private _transformActiveBolt(bolt: Bolt): ActiveBoltData {
+        const state = this._store.getState();
         const stagesComplete = bolt.stages.filter(s => s.status === ArtifactStatus.Complete).length;
         const files = this._scanBoltArtifactFiles(bolt.path);
 
@@ -440,11 +442,31 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
                 name: s.name,
                 status: this._mapStatus(s.status)
             })),
-            stories: bolt.stories.map(id => ({
-                id,
-                name: id,
-                status: 'pending' as const // Would need story status lookup
-            })),
+            stories: bolt.stories.map(storyRef => {
+                // Construct the story file path directly from bolt's intent/unit
+                // Path format: {workspace}/memory-bank/intents/{intent}/units/{unit}/stories/{storyRef}.md
+                let storyPath: string | undefined;
+                if (bolt.intent && bolt.unit && state.workspace.path) {
+                    const storyFileName = storyRef.endsWith('.md') ? storyRef : `${storyRef}.md`;
+                    storyPath = path.join(
+                        state.workspace.path,
+                        'memory-bank',
+                        'intents',
+                        bolt.intent,
+                        'units',
+                        bolt.unit,
+                        'stories',
+                        storyFileName
+                    );
+                }
+
+                return {
+                    id: storyRef,
+                    name: storyRef,
+                    status: 'pending' as const,
+                    path: storyPath
+                };
+            }),
             path: bolt.path,
             files
         };
@@ -532,6 +554,8 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
      * Transforms a Bolt to QueuedBoltData.
      */
     private _transformQueuedBolt(bolt: Bolt): QueuedBoltData {
+        const state = this._store.getState();
+
         return {
             id: bolt.id,
             name: bolt.id,
@@ -544,11 +568,31 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
                 name: s.name,
                 status: this._mapStatus(s.status)
             })),
-            stories: bolt.stories.map(id => ({
-                id,
-                name: id,
-                status: 'pending' as const
-            }))
+            stories: bolt.stories.map(storyRef => {
+                // Construct the story file path from bolt's intent/unit
+                // Path format: {workspace}/memory-bank/intents/{intent}/units/{unit}/stories/{storyRef}.md
+                let storyPath: string | undefined;
+                if (bolt.intent && bolt.unit && state.workspace.path) {
+                    const storyFileName = storyRef.endsWith('.md') ? storyRef : `${storyRef}.md`;
+                    storyPath = path.join(
+                        state.workspace.path,
+                        'memory-bank',
+                        'intents',
+                        bolt.intent,
+                        'units',
+                        bolt.unit,
+                        'stories',
+                        storyFileName
+                    );
+                }
+
+                return {
+                    id: storyRef,
+                    name: storyRef,
+                    status: 'pending' as const,
+                    path: storyPath
+                };
+            })
         };
     }
 
@@ -819,14 +863,13 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
 
     /**
      * Opens an artifact file.
+     * Uses the user's markdown editor preference for .md files.
      */
-    private async _openArtifact(kind: string, path: string): Promise<void> {
+    private async _openArtifact(kind: string, filePath: string): Promise<void> {
         try {
-            const uri = vscode.Uri.file(path);
-            const doc = await vscode.workspace.openTextDocument(uri);
-            await vscode.window.showTextDocument(doc);
+            await openFile(filePath);
         } catch (error) {
-            vscode.window.showErrorMessage(`Failed to open ${kind}: ${path}`);
+            vscode.window.showErrorMessage(`Failed to open ${kind}: ${filePath}`);
         }
     }
 
@@ -869,6 +912,7 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
 
     /**
      * Opens the bolt file in the editor.
+     * Uses the user's markdown editor preference.
      */
     private async _openBoltFile(boltId: string): Promise<void> {
         const state = this._store.getState();
@@ -876,9 +920,7 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
 
         if (bolt?.filePath) {
             try {
-                const uri = vscode.Uri.file(bolt.filePath);
-                const doc = await vscode.workspace.openTextDocument(uri);
-                await vscode.window.showTextDocument(doc);
+                await openFile(bolt.filePath);
             } catch (error) {
                 vscode.window.showErrorMessage(`Failed to open bolt file: ${bolt.filePath}`);
             }

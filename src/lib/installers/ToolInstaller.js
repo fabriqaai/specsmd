@@ -56,7 +56,10 @@ class ToolInstaller {
                     const targetFileName = `specsmd-${prefix}${cmdFile}`;
                     const targetPath = path.join(targetCommandsDir, targetFileName);
 
-                    const content = await fs.readFile(sourcePath, 'utf8');
+                    let content = await fs.readFile(sourcePath, 'utf8');
+                    if (this.transformContent) {
+                        content = this.transformContent(content);
+                    }
                     await fs.outputFile(targetPath, content, 'utf8');
                     installedFiles.push(targetFileName);
                 } catch (err) {

@@ -11,6 +11,7 @@ import { SpecsmdWebviewProvider, createWebviewProvider } from './sidebar/webview
 import { FileWatcher } from './watcher';
 import { WelcomeViewProvider, createInstallationWatcher } from './welcome';
 import { tracker, trackActivation, trackError, projectMetricsTracker } from './analytics';
+import { openFile, showMarkdownEditorPicker } from './utils';
 
 let webviewProvider: SpecsmdWebviewProvider | undefined;
 let fileWatcher: FileWatcher | undefined;
@@ -145,12 +146,19 @@ function registerCommands(context: vscode.ExtensionContext): void {
     );
 
     // Open file command (can be triggered from webview)
+    // Uses the user's markdown editor preference for .md files
     context.subscriptions.push(
         vscode.commands.registerCommand('specsmd.openFile', async (filePath: string) => {
             if (filePath) {
-                const uri = vscode.Uri.file(filePath);
-                await vscode.window.showTextDocument(uri);
+                await openFile(filePath);
             }
+        })
+    );
+
+    // Select markdown editor command
+    context.subscriptions.push(
+        vscode.commands.registerCommand('specsmd.selectMarkdownEditor', async () => {
+            await showMarkdownEditorPicker();
         })
     );
 

@@ -11,11 +11,19 @@ class OpenCodeInstaller extends ToolInstaller {
     }
 
     get commandsDir() {
-        return path.join('.opencode', 'agent');
+        return path.join('.opencode', 'command');
     }
 
     get detectPath() {
         return '.opencode';
+    }
+
+    /**
+     * OpenCode requires 'agent: build' in command frontmatter.
+     * This inserts the line before the closing '---' of existing frontmatter.
+     */
+    transformContent(content) {
+        return content.replace(/^(---\n[\s\S]*?)(---)/, '$1agent: build\n$2');
     }
 }
 

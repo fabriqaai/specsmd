@@ -386,17 +386,17 @@ suite('Engagement Events Test Suite', () => {
     // Test event name constants
     suite('Event Name Constants', () => {
         const ENGAGEMENT_EVENTS = {
-            TAB_CHANGED: 'tab_changed',
-            BOLT_ACTION: 'bolt_action',
-            ARTIFACT_OPENED: 'artifact_opened',
-            FILTER_CHANGED: 'filter_changed',
+            TAB_CHANGED: 'ext_tab_changed',
+            BOLT_ACTION: 'ext_bolt_action',
+            ARTIFACT_OPENED: 'ext_artifact_opened',
+            FILTER_CHANGED: 'ext_filter_changed',
         } as const;
 
         test('should have correct event names', () => {
-            assert.strictEqual(ENGAGEMENT_EVENTS.TAB_CHANGED, 'tab_changed');
-            assert.strictEqual(ENGAGEMENT_EVENTS.BOLT_ACTION, 'bolt_action');
-            assert.strictEqual(ENGAGEMENT_EVENTS.ARTIFACT_OPENED, 'artifact_opened');
-            assert.strictEqual(ENGAGEMENT_EVENTS.FILTER_CHANGED, 'filter_changed');
+            assert.strictEqual(ENGAGEMENT_EVENTS.TAB_CHANGED, 'ext_tab_changed');
+            assert.strictEqual(ENGAGEMENT_EVENTS.BOLT_ACTION, 'ext_bolt_action');
+            assert.strictEqual(ENGAGEMENT_EVENTS.ARTIFACT_OPENED, 'ext_artifact_opened');
+            assert.strictEqual(ENGAGEMENT_EVENTS.FILTER_CHANGED, 'ext_filter_changed');
         });
 
         test('should have exactly 4 events', () => {
