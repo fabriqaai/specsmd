@@ -185,6 +185,7 @@ During execution, only one task per interaction. Review before continuing.
 2. **Check INCOSE rules** - Singular, Complete, Verifiable, Unambiguous, Consistent
 3. **Include edge cases** - Error scenarios in acceptance criteria
 4. **Review checkpoints** - Verify tests pass during execution
+5. **One task at a time** - Default behavior; ask the agent to continue if you're comfortable
 
 ---
 
