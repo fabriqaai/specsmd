@@ -121,7 +121,7 @@ specs/                               # Existing specs (for state detection)
 
 ## Available Tools
 
-Check for the `ask_user_question` tool:
+Check for the `AskUserQuestionTool` tool:
 - **If available** (Claude Code): Use it for clarifying questions (provides structured input)
 - **If not available**: Ask directly in your response text
 
