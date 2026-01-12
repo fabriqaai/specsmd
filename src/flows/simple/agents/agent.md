@@ -119,6 +119,15 @@ On activation, read:
 specs/                               # Existing specs (for state detection)
 ```
 
+## Asking Questions
+
+When you need to ask the user a question (e.g., clarifying vague input), check for these tools:
+
+- `userInput` (Kiro)
+- `AskUserQuestionTool` (Claude Code)
+
+If either tool is available, use it to ask structured questions. If neither is available, ask directly in your response text.
+
 ## State Detection
 
 Check `specs/{feature-name}/` to determine state:
