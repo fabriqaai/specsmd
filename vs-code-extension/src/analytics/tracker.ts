@@ -89,7 +89,7 @@ class AnalyticsTracker {
             // Check privacy opt-out BEFORE any initialization
             if (isTelemetryDisabled()) {
                 const reason = getOptOutReason();
-                console.debug(`[specsmd] Analytics disabled: ${reason}`);
+                console.log(`[specsmd] Analytics disabled: ${reason}`);
                 this.enabled = false;
                 return false;
             }
@@ -100,9 +100,9 @@ class AnalyticsTracker {
             try {
                 // eslint-disable-next-line @typescript-eslint/no-require-imports
                 Mixpanel = require('mixpanel');
-            } catch {
+            } catch (e) {
                 // Mixpanel not installed - disable analytics
-                console.debug('[specsmd] Mixpanel not available, analytics disabled');
+                console.log('[specsmd] Mixpanel not available, analytics disabled', e);
                 this.enabled = false;
                 return false;
             }
@@ -136,7 +136,7 @@ class AnalyticsTracker {
             };
 
             this.enabled = true;
-            console.debug('[specsmd] Analytics initialized');
+            console.log('[specsmd] Analytics initialized successfully');
             return true;
         } catch (error) {
             // Silent failure - analytics should never break extension
@@ -180,6 +180,7 @@ class AnalyticsTracker {
             };
 
             // Fire and forget - don't await, no callback handling
+            console.log(`[specsmd] Tracking event: ${eventName}`);
             this.mixpanel.track(eventName, eventData);
         } catch {
             // Silent failure - analytics should never break extension
