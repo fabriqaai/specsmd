@@ -14,4 +14,5 @@ vsc-extension-quickstart.md
 **/*.vsix
 node_modules/**
 !node_modules/js-yaml/**
+!node_modules/mixpanel/**
 esbuild.webview.mjs
