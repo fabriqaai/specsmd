@@ -296,6 +296,7 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
         // Build structured data for Bolts view (Lit components)
         const boltsData = {
             currentIntent: data.currentIntent,
+            currentIntentContext: data.currentIntentContext,
             stats: data.stats,
             activeBolts: data.activeBolts,
             upNextQueue: data.upNextQueue,
@@ -330,6 +331,7 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
         if (!state.workspace.isProject) {
             return {
                 currentIntent: null,
+                currentIntentContext: 'none',
                 stats: { active: 0, queued: 0, done: 0, blocked: 0 },
                 activeBolts: [],
                 upNextQueue: [],
@@ -347,7 +349,7 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
         }
 
         // Get computed values from state
-        const { currentIntent, activeBolts, pendingBolts, completedBolts, activityFeed, boltStats, nextActions } = state.computed;
+        const { currentIntent, currentIntentContext, activeBolts, pendingBolts, completedBolts, activityFeed, boltStats, nextActions } = state.computed;
 
         // Transform current intent
         const currentIntentData = currentIntent
@@ -405,6 +407,7 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
 
         return {
             currentIntent: currentIntentData,
+            currentIntentContext,
             stats: boltStats,
             activeBolts: activeBoltsData,
             upNextQueue,
