@@ -97,14 +97,16 @@ Break an intent into discrete, executable work items.
     <output>
       ## Work Items for "{intent-title}"
 
-      | # | Work Item | Complexity | Mode | Depends On |
-      |---|-----------|------------|------|------------|
+      **Total**: {count} work items
+      **Estimated**: {low} autopilot, {medium} confirm, {high} validate
+
+      **Work Item Details**:
+
       {for each item}
-      | {n} | {title} | {complexity} | {mode} | {dependencies} |
+      {n}. **{title}** ({mode}) — {description}
       {/for}
 
-      Total: {count} work items
-      Estimated: {low} autopilot, {medium} confirm, {high} validate
+      ---
 
       Approve this plan? [Y/n/modify]
     </output>
