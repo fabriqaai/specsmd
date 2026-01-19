@@ -14,7 +14,7 @@ const THEME_COLORS = {
 const FLOWS = {
     fire: {
         name: 'FIRE',
-        description: 'Rapid execution - Solo devs or small teams, brownfield, 0-2 adaptive checkpoints',
+        description: 'Rapid execution - Solo devs or small teams, brownfield/monorepo, 0-2 adaptive checkpoints',
         path: 'fire'
     },
     aidlc: {
@@ -29,7 +29,13 @@ const FLOWS = {
     }
 };
 
+const LINKS = {
+    website: 'https://specs.md',
+    flows: 'https://specs.md/flows'
+};
+
 module.exports = {
     THEME_COLORS,
-    FLOWS
+    FLOWS,
+    LINKS
 };
