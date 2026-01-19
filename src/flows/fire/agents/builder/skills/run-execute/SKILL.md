@@ -66,7 +66,11 @@ Before executing scripts, ensure required dependencies are installed:
   <step n="2" title="Load Context">
     <action>Read work item from .specs-fire/intents/{intent}/work-items/{id}.md</action>
     <action>Read intent brief for broader context</action>
-    <action>Read project standards (.specs-fire/standards/)</action>
+    <action>Load ALL project standards:</action>
+    <substep>.specs-fire/standards/tech-stack.md — Technology choices</substep>
+    <substep>.specs-fire/standards/coding-standards.md — Code style and patterns</substep>
+    <substep>.specs-fire/standards/testing-standards.md — Testing strategy and coverage</substep>
+    <substep>.specs-fire/standards/system-architecture.md — Architecture context and constraints</substep>
     <action>Determine execution mode from work item</action>
   </step>
 
@@ -163,6 +167,12 @@ Before executing scripts, ensure required dependencies are installed:
   </step>
 
   <step n="6" title="Run Tests">
+    <action>Load testing standards from .specs-fire/standards/testing-standards.md</action>
+    <action>Write tests following testing standards:</action>
+    <substep>Unit tests for new/modified functions</substep>
+    <substep>Integration tests for API endpoints or workflows</substep>
+    <substep>Follow test naming and structure conventions</substep>
+
     <action>Run test suite</action>
     <check if="tests fail">
       <output>
@@ -171,7 +181,11 @@ Before executing scripts, ensure required dependencies are installed:
       <action>Fix failing tests</action>
       <action>Re-run tests</action>
     </check>
-    <action>Record test results and coverage</action>
+
+    <action>Validate acceptance criteria from work item</action>
+    <action>Measure coverage against target from testing-standards.md</action>
+    <action>Generate test report using template: templates/test-report.md.hbs</action>
+    <action>Save to: .specs-fire/runs/{run-id}/test-report.md</action>
   </step>
 
   <step n="7" title="Complete Run">
@@ -193,7 +207,9 @@ Before executing scripts, ensure required dependencies are installed:
       Tests added: {count}
       Coverage: {percentage}%
 
-      Walkthrough: .specs-fire/runs/{run-id}/walkthrough.md
+      Artifacts:
+      - Test Report: .specs-fire/runs/{run-id}/test-report.md
+      - Walkthrough: .specs-fire/runs/{run-id}/walkthrough.md
 
       Continue to next work item? [Y/n]
     </output>

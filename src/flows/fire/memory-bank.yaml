@@ -11,7 +11,7 @@ structure:
   - path: runs/
     description: "Execution logs and walkthroughs per run"
   - path: standards/
-    description: "Project standards (tech-stack, coding-standards)"
+    description: "Project standards (tech-stack, coding-standards, testing-standards)"
 
 # Central state file (FIRE's source of truth)
 state:
@@ -67,8 +67,10 @@ naming:
     example: "run-001/"
     note: "Sequential 3-digit number, folder per run"
     contents:
-      - "run.md"        # Run log
-      - "walkthrough.md" # Implementation walkthrough
+      - "plan.md"         # Approved implementation plan (confirm/validate modes)
+      - "run.md"          # Run log
+      - "test-report.md"  # Test results and coverage
+      - "walkthrough.md"  # Implementation walkthrough
 
 # Schema Definition (Source of Truth for Agents)
 schema:
@@ -81,8 +83,13 @@ schema:
   run-folder: ".specs-fire/runs/{run-id}/"
   plan: ".specs-fire/runs/{run-id}/plan.md"
   run-log: ".specs-fire/runs/{run-id}/run.md"
+  test-report: ".specs-fire/runs/{run-id}/test-report.md"
   walkthrough: ".specs-fire/runs/{run-id}/walkthrough.md"
   standards: ".specs-fire/standards/"
+  tech-stack: ".specs-fire/standards/tech-stack.md"
+  coding-standards: ".specs-fire/standards/coding-standards.md"
+  testing-standards: ".specs-fire/standards/testing-standards.md"
+  system-architecture: ".specs-fire/standards/system-architecture.md"
 
   # Agent Ownership
   ownership:

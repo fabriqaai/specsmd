@@ -104,8 +104,11 @@ Initialize a new FIRE project by detecting workspace type and setting up standar
     <action>Create .specs-fire/runs/</action>
     <action>Create .specs-fire/standards/</action>
     <action>Generate .specs-fire/state.yaml (include autonomy_bias)</action>
-    <action>Generate .specs-fire/standards/tech-stack.md</action>
-    <action>Generate .specs-fire/standards/coding-standards.md</action>
+    <action>Generate standards using templates:</action>
+    <substep>tech-stack.md — templates/tech-stack.md.hbs</substep>
+    <substep>coding-standards.md — templates/coding-standards.md.hbs</substep>
+    <substep>testing-standards.md — templates/testing-standards.md.hbs</substep>
+    <substep>system-architecture.md — templates/system-architecture.md.hbs</substep>
   </step>
 
   <step n="6" title="Complete">
@@ -120,7 +123,9 @@ Initialize a new FIRE project by detecting workspace type and setting up standar
       ├── runs/
       └── standards/
           ├── tech-stack.md
-          └── coding-standards.md
+          ├── coding-standards.md
+          ├── testing-standards.md
+          └── system-architecture.md
       ```
 
       Ready to capture your first intent.
@@ -136,6 +141,10 @@ Initialize a new FIRE project by detecting workspace type and setting up standar
 
 ## Output
 
-- `.specs-fire/state.yaml` — Central state file
-- `.specs-fire/standards/tech-stack.md` — Technology choices
-- `.specs-fire/standards/coding-standards.md` — Coding conventions
+| Artifact | Location | Template |
+|----------|----------|----------|
+| State | `.specs-fire/state.yaml` | — |
+| Tech Stack | `.specs-fire/standards/tech-stack.md` | `templates/tech-stack.md.hbs` |
+| Coding Standards | `.specs-fire/standards/coding-standards.md` | `templates/coding-standards.md.hbs` |
+| Testing Standards | `.specs-fire/standards/testing-standards.md` | `templates/testing-standards.md.hbs` |
+| System Architecture | `.specs-fire/standards/system-architecture.md` | `templates/system-architecture.md.hbs` |
