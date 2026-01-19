@@ -71,17 +71,7 @@ Initialize a new FIRE project by detecting workspace type and setting up standar
     </output>
   </step>
 
-  <step n="4" title="Choose Default Mode">
-    <ask>
-      Default execution mode for work items?
-
-      [1] Autopilot - AI executes directly (fast, for experienced teams)
-      [2] Confirm (Recommended) - AI shows plan, you approve
-      [3] Validate - Design review + plan approval (for critical work)
-    </ask>
-  </step>
-
-  <step n="5" title="Create Structure">
+  <step n="4" title="Create Structure">
     <action>Create .specs-fire/ directory</action>
     <action>Create .specs-fire/intents/</action>
     <action>Create .specs-fire/runs/</action>
@@ -91,7 +81,7 @@ Initialize a new FIRE project by detecting workspace type and setting up standar
     <action>Generate .specs-fire/standards/coding-standards.md</action>
   </step>
 
-  <step n="6" title="Complete">
+  <step n="5" title="Complete">
     <output>
       FIRE initialized!
 
