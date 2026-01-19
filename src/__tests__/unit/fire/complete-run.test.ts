@@ -1,12 +1,12 @@
 /**
- * Unit tests for complete-run.ts
+ * Unit tests for complete-run.js
  *
  * Tests for completing FIRE runs including:
- * - Input validation (rootPath, params)
+ * - Input validation (rootPath, runId)
  * - State file validation
  * - Run log updates
  * - Work item status updates
- * - Warning generation for non-fatal issues
+ * - Run history tracking
  * - Error handling with clear messages
  */
 
@@ -22,8 +22,30 @@ import { join } from 'path';
 import { tmpdir } from 'os';
 import * as yaml from 'yaml';
 
-// Import the module under test
-import { completeRun } from '../../../flows/fire/agents/builder/skills/run-execute/scripts/complete-run';
+// Import the module under test (CommonJS module)
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { completeRun } = require('../../../flows/fire/agents/builder/skills/run-execute/scripts/complete-run.js');
+
+// Helper types
+interface CompleteRunParams {
+  filesCreated?: Array<{ path: string; purpose: string }>;
+  filesModified?: Array<{ path: string; changes: string }>;
+  decisions?: Array<{ decision: string; choice: string; rationale: string }>;
+  testsAdded?: number;
+  coverage?: number;
+}
+
+interface CompleteRunResult {
+  success: boolean;
+  runId: string;
+  workItemId: string;
+  intentId: string;
+  completedAt: string;
+  filesCreated: number;
+  filesModified: number;
+  testsAdded: number;
+  coverage: number;
+}
 
 describe('complete-run', () => {
   let testRoot: string;
@@ -101,9 +123,8 @@ WI-001
   /**
    * Helper for valid completion params
    */
-  function validParams(runId = 'run-001') {
+  function validParams(): CompleteRunParams {
     return {
-      runId,
       filesCreated: [{ path: 'src/new-file.ts', purpose: 'New feature implementation' }],
       filesModified: [{ path: 'src/existing.ts', changes: 'Added import' }],
       decisions: [{ decision: 'Use pattern X', choice: 'Pattern X', rationale: 'Better performance' }],
@@ -117,41 +138,33 @@ WI-001
   // ===========================================================================
 
   describe('rootPath validation', () => {
-    it('should throw FIREError when rootPath is null', () => {
-      expect(() => completeRun(null as unknown as string, validParams()))
+    it('should throw when rootPath is null', () => {
+      expect(() => completeRun(null, 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
 
-    it('should throw FIREError when rootPath is undefined', () => {
-      expect(() => completeRun(undefined as unknown as string, validParams()))
+    it('should throw when rootPath is undefined', () => {
+      expect(() => completeRun(undefined, 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
 
-    it('should throw FIREError when rootPath is not a string', () => {
-      expect(() => completeRun(123 as unknown as string, validParams()))
+    it('should throw when rootPath is not a string', () => {
+      expect(() => completeRun(123, 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
 
-    it('should throw FIREError when rootPath is empty string', () => {
-      expect(() => completeRun('', validParams()))
+    it('should throw when rootPath is empty string', () => {
+      expect(() => completeRun('', 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
 
-    it('should throw FIREError when rootPath does not exist', () => {
-      expect(() => completeRun('/nonexistent/path/xyz', validParams()))
-        .toThrow('FIRE Error');
-    });
-
-    it('should throw FIREError when rootPath is a file, not directory', () => {
-      const filePath = join(testRoot, 'file.txt');
-      writeFileSync(filePath, 'content');
-
-      expect(() => completeRun(filePath, validParams()))
+    it('should throw when rootPath does not exist', () => {
+      expect(() => completeRun('/nonexistent/path/xyz', 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
   });
 
-  describe('params validation', () => {
+  describe('runId validation', () => {
     beforeEach(() => {
       createStateFile({
         intents: [],
@@ -160,33 +173,18 @@ WI-001
       createRunFolder('run-001');
     });
 
-    it('should throw FIREError when params is null', () => {
-      expect(() => completeRun(testRoot, null as unknown as typeof validParams))
+    it('should throw when runId is null', () => {
+      expect(() => completeRun(testRoot, null, validParams()))
         .toThrow('FIRE Error');
     });
 
-    it('should throw FIREError when params is undefined', () => {
-      expect(() => completeRun(testRoot, undefined as unknown as typeof validParams))
+    it('should throw when runId is undefined', () => {
+      expect(() => completeRun(testRoot, undefined, validParams()))
         .toThrow('FIRE Error');
     });
 
-    it('should throw FIREError when params is not an object', () => {
-      expect(() => completeRun(testRoot, 'string' as unknown as typeof validParams))
-        .toThrow('FIRE Error');
-    });
-
-    it('should throw FIREError when runId is missing', () => {
-      const params = { ...validParams() };
-      delete (params as Record<string, unknown>).runId;
-
-      expect(() => completeRun(testRoot, params as typeof validParams))
-        .toThrow('FIRE Error');
-    });
-
-    it('should throw FIREError when runId is empty', () => {
-      const params = { ...validParams(), runId: '' };
-
-      expect(() => completeRun(testRoot, params))
+    it('should throw when runId is empty', () => {
+      expect(() => completeRun(testRoot, '', validParams()))
         .toThrow('FIRE Error');
     });
   });
@@ -196,44 +194,36 @@ WI-001
   // ===========================================================================
 
   describe('project structure validation', () => {
-    it('should throw FIREError when .specs-fire directory does not exist', () => {
+    it('should throw when .specs-fire directory does not exist', () => {
       rmSync(specsFireDir, { recursive: true, force: true });
 
-      expect(() => completeRun(testRoot, validParams()))
+      expect(() => completeRun(testRoot, 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
 
-    it('should throw FIREError when state.yaml does not exist', () => {
-      expect(() => completeRun(testRoot, validParams()))
+    it('should throw when state.yaml does not exist', () => {
+      expect(() => completeRun(testRoot, 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
 
-    it('should throw FIREError when runs directory does not exist', () => {
-      createStateFile({ intents: [], active_run: null });
-      rmSync(runsPath, { recursive: true, force: true });
-
-      expect(() => completeRun(testRoot, validParams()))
-        .toThrow('FIRE Error');
-    });
-
-    it('should throw FIREError when run folder does not exist', () => {
+    it('should throw when run folder does not exist', () => {
       createStateFile({
         intents: [],
         active_run: { id: 'run-001', work_item: 'WI-001', intent: 'INT-001' },
       });
 
-      expect(() => completeRun(testRoot, validParams()))
+      expect(() => completeRun(testRoot, 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
 
-    it('should throw FIREError when run.md does not exist', () => {
+    it('should throw when run.md does not exist', () => {
       createStateFile({
         intents: [],
         active_run: { id: 'run-001', work_item: 'WI-001', intent: 'INT-001' },
       });
       mkdirSync(join(runsPath, 'run-001'));
 
-      expect(() => completeRun(testRoot, validParams()))
+      expect(() => completeRun(testRoot, 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
   });
@@ -247,53 +237,23 @@ WI-001
       createRunFolder('run-001');
     });
 
-    it('should throw FIREError when no active run exists', () => {
+    it('should throw when no active run exists', () => {
       createStateFile({
         intents: [],
         active_run: null,
       });
 
-      expect(() => completeRun(testRoot, validParams()))
+      expect(() => completeRun(testRoot, 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
 
-    it('should throw FIREError when active_run.id does not match params.runId', () => {
+    it('should throw when active_run.id does not match runId', () => {
       createStateFile({
         intents: [],
         active_run: { id: 'run-002', work_item: 'WI-001', intent: 'INT-001' },
       });
 
-      expect(() => completeRun(testRoot, validParams('run-001')))
-        .toThrow('FIRE Error');
-    });
-
-    it('should throw FIREError when active_run is missing id', () => {
-      createStateFile({
-        intents: [],
-        active_run: { work_item: 'WI-001', intent: 'INT-001' },
-      });
-
-      expect(() => completeRun(testRoot, validParams()))
-        .toThrow('FIRE Error');
-    });
-
-    it('should throw FIREError when active_run is missing work_item', () => {
-      createStateFile({
-        intents: [],
-        active_run: { id: 'run-001', intent: 'INT-001' },
-      });
-
-      expect(() => completeRun(testRoot, validParams()))
-        .toThrow('FIRE Error');
-    });
-
-    it('should throw FIREError when active_run is missing intent', () => {
-      createStateFile({
-        intents: [],
-        active_run: { id: 'run-001', work_item: 'WI-001' },
-      });
-
-      expect(() => completeRun(testRoot, validParams()))
+      expect(() => completeRun(testRoot, 'run-001', validParams()))
         .toThrow('FIRE Error');
     });
   });
@@ -317,7 +277,7 @@ WI-001
     });
 
     it('should return success result', () => {
-      const result = completeRun(testRoot, validParams());
+      const result: CompleteRunResult = completeRun(testRoot, 'run-001', validParams());
 
       expect(result.success).toBe(true);
       expect(result.runId).toBe('run-001');
@@ -327,7 +287,7 @@ WI-001
 
     it('should return completedAt timestamp', () => {
       const before = new Date().toISOString();
-      const result = completeRun(testRoot, validParams());
+      const result: CompleteRunResult = completeRun(testRoot, 'run-001', validParams());
       const after = new Date().toISOString();
 
       expect(result.completedAt).toBeDefined();
@@ -335,15 +295,39 @@ WI-001
       expect(result.completedAt <= after).toBe(true);
     });
 
+    it('should return file counts', () => {
+      const result: CompleteRunResult = completeRun(testRoot, 'run-001', validParams());
+
+      expect(result.filesCreated).toBe(1);
+      expect(result.filesModified).toBe(1);
+      expect(result.testsAdded).toBe(5);
+      expect(result.coverage).toBe(85);
+    });
+
     it('should clear active_run in state.yaml', () => {
-      completeRun(testRoot, validParams());
+      completeRun(testRoot, 'run-001', validParams());
 
       const state = readStateFile() as { active_run: unknown };
       expect(state.active_run).toBeNull();
     });
 
+    it('should record run in runs.completed history', () => {
+      completeRun(testRoot, 'run-001', validParams());
+
+      const state = readStateFile() as {
+        runs: { completed: Array<{ id: string; work_item: string; intent: string; completed: string }> };
+      };
+
+      expect(state.runs).toBeDefined();
+      expect(state.runs.completed).toBeDefined();
+      expect(state.runs.completed.length).toBe(1);
+      expect(state.runs.completed[0].id).toBe('run-001');
+      expect(state.runs.completed[0].work_item).toBe('WI-001');
+      expect(state.runs.completed[0].intent).toBe('INT-001');
+    });
+
     it('should update work item status to completed', () => {
-      completeRun(testRoot, validParams());
+      completeRun(testRoot, 'run-001', validParams());
 
       const state = readStateFile() as {
         intents: Array<{ work_items: Array<{ id: string; status: string; run_id?: string }> }>;
@@ -355,21 +339,21 @@ WI-001
     });
 
     it('should update run.md status to completed', () => {
-      completeRun(testRoot, validParams());
+      completeRun(testRoot, 'run-001', validParams());
 
       const runLogContent = readFileSync(join(runsPath, 'run-001', 'run.md'), 'utf8');
       expect(runLogContent).toContain('status: completed');
     });
 
     it('should update run.md with completion timestamp', () => {
-      const result = completeRun(testRoot, validParams());
+      const result: CompleteRunResult = completeRun(testRoot, 'run-001', validParams());
 
       const runLogContent = readFileSync(join(runsPath, 'run-001', 'run.md'), 'utf8');
       expect(runLogContent).toContain(`completed: ${result.completedAt}`);
     });
 
     it('should update run.md Files Created section', () => {
-      completeRun(testRoot, validParams());
+      completeRun(testRoot, 'run-001', validParams());
 
       const runLogContent = readFileSync(join(runsPath, 'run-001', 'run.md'), 'utf8');
       expect(runLogContent).toContain('`src/new-file.ts`');
@@ -377,7 +361,7 @@ WI-001
     });
 
     it('should update run.md Files Modified section', () => {
-      completeRun(testRoot, validParams());
+      completeRun(testRoot, 'run-001', validParams());
 
       const runLogContent = readFileSync(join(runsPath, 'run-001', 'run.md'), 'utf8');
       expect(runLogContent).toContain('`src/existing.ts`');
@@ -385,7 +369,7 @@ WI-001
     });
 
     it('should update run.md Decisions section', () => {
-      completeRun(testRoot, validParams());
+      completeRun(testRoot, 'run-001', validParams());
 
       const runLogContent = readFileSync(join(runsPath, 'run-001', 'run.md'), 'utf8');
       expect(runLogContent).toContain('Use pattern X');
@@ -394,7 +378,7 @@ WI-001
     });
 
     it('should add Summary section to run.md', () => {
-      completeRun(testRoot, validParams());
+      completeRun(testRoot, 'run-001', validParams());
 
       const runLogContent = readFileSync(join(runsPath, 'run-001', 'run.md'), 'utf8');
       expect(runLogContent).toContain('## Summary');
@@ -402,130 +386,6 @@ WI-001
       expect(runLogContent).toContain('Files modified: 1');
       expect(runLogContent).toContain('Tests added: 5');
       expect(runLogContent).toContain('Coverage: 85%');
-    });
-  });
-
-  // ===========================================================================
-  // Warning Generation Tests
-  // ===========================================================================
-
-  describe('warning generation', () => {
-    beforeEach(() => {
-      createStateFile({
-        intents: [
-          {
-            id: 'INT-001',
-            work_items: [{ id: 'WI-001', status: 'in_progress' }],
-          },
-        ],
-        active_run: { id: 'run-001', work_item: 'WI-001', intent: 'INT-001' },
-      });
-      createRunFolder('run-001');
-    });
-
-    it('should generate warning when filesCreated is not provided', () => {
-      const params = { ...validParams() };
-      delete (params as Record<string, unknown>).filesCreated;
-
-      const result = completeRun(testRoot, params as typeof validParams);
-
-      expect(result.warnings).toContain('filesCreated was not provided, defaulting to empty array');
-    });
-
-    it('should generate warning when filesModified is not provided', () => {
-      const params = { ...validParams() };
-      delete (params as Record<string, unknown>).filesModified;
-
-      const result = completeRun(testRoot, params as typeof validParams);
-
-      expect(result.warnings.some(w => w.includes('filesModified'))).toBe(true);
-    });
-
-    it('should generate warning when decisions is not provided', () => {
-      const params = { ...validParams() };
-      delete (params as Record<string, unknown>).decisions;
-
-      const result = completeRun(testRoot, params as typeof validParams);
-
-      expect(result.warnings.some(w => w.includes('decisions'))).toBe(true);
-    });
-
-    it('should generate warning when testsAdded is not provided', () => {
-      const params = { ...validParams() };
-      delete (params as Record<string, unknown>).testsAdded;
-
-      const result = completeRun(testRoot, params as typeof validParams);
-
-      expect(result.warnings.some(w => w.includes('testsAdded'))).toBe(true);
-    });
-
-    it('should generate warning when coverage is not provided', () => {
-      const params = { ...validParams() };
-      delete (params as Record<string, unknown>).coverage;
-
-      const result = completeRun(testRoot, params as typeof validParams);
-
-      expect(result.warnings.some(w => w.includes('coverage'))).toBe(true);
-    });
-
-    it('should generate warning when coverage exceeds 100', () => {
-      const params = { ...validParams(), coverage: 150 };
-
-      const result = completeRun(testRoot, params);
-
-      expect(result.warnings.some(w => w.includes('greater than 100'))).toBe(true);
-    });
-
-    it('should clamp coverage to 100 when it exceeds', () => {
-      const params = { ...validParams(), coverage: 150 };
-
-      completeRun(testRoot, params);
-
-      const runLogContent = readFileSync(join(runsPath, 'run-001', 'run.md'), 'utf8');
-      expect(runLogContent).toContain('Coverage: 100%');
-    });
-
-    it('should generate warning when filesCreated entry is missing path', () => {
-      const params = {
-        ...validParams(),
-        filesCreated: [{ purpose: 'No path here' } as { path: string; purpose: string }],
-      };
-
-      const result = completeRun(testRoot, params);
-
-      expect(result.warnings.some(w => w.includes('filesCreated') && w.includes('path'))).toBe(true);
-    });
-
-    it('should generate warning when intent not found in state', () => {
-      createStateFile({
-        intents: [
-          {
-            id: 'OTHER-INTENT',
-            work_items: [],
-          },
-        ],
-        active_run: { id: 'run-001', work_item: 'WI-001', intent: 'INT-001' },
-      });
-
-      const result = completeRun(testRoot, validParams());
-
-      expect(result.warnings.some(w => w.includes('Intent') && w.includes('not found'))).toBe(true);
-    });
-
-    it('should generate warning when work item not found in intent', () => {
-      createStateFile({
-        intents: [
-          {
-            id: 'INT-001',
-            work_items: [{ id: 'OTHER-WI', status: 'pending' }],
-          },
-        ],
-        active_run: { id: 'run-001', work_item: 'WI-001', intent: 'INT-001' },
-      });
-
-      const result = completeRun(testRoot, validParams());
-
-      expect(result.warnings.some(w => w.includes('Work item') && w.includes('not found'))).toBe(true);
     });
   });
 
@@ -549,7 +409,6 @@ WI-001
 
     it('should handle empty arrays gracefully', () => {
       const params = {
-        runId: 'run-001',
         filesCreated: [],
         filesModified: [],
         decisions: [],
@@ -557,7 +416,7 @@ WI-001
         coverage: 0,
       };
 
-      const result = completeRun(testRoot, params);
+      const result: CompleteRunResult = completeRun(testRoot, 'run-001', params);
 
       expect(result.success).toBe(true);
 
@@ -565,26 +424,14 @@ WI-001
       expect(runLogContent).toContain('(none)');
     });
 
-    it('should handle negative testsAdded (defaults to 0)', () => {
-      const params = { ...validParams(), testsAdded: -5 };
+    it('should handle missing params with defaults', () => {
+      const result: CompleteRunResult = completeRun(testRoot, 'run-001', {});
 
-      const result = completeRun(testRoot, params);
-
-      expect(result.warnings.some(w => w.includes('testsAdded') && w.includes('negative'))).toBe(true);
-
-      const runLogContent = readFileSync(join(runsPath, 'run-001', 'run.md'), 'utf8');
-      expect(runLogContent).toContain('Tests added: 0');
-    });
-
-    it('should handle negative coverage (defaults to 0)', () => {
-      const params = { ...validParams(), coverage: -10 };
-
-      const result = completeRun(testRoot, params);
-
-      expect(result.warnings.some(w => w.includes('coverage') && w.includes('negative'))).toBe(true);
-
-      const runLogContent = readFileSync(join(runsPath, 'run-001', 'run.md'), 'utf8');
-      expect(runLogContent).toContain('Coverage: 0%');
+      expect(result.success).toBe(true);
+      expect(result.filesCreated).toBe(0);
+      expect(result.filesModified).toBe(0);
+      expect(result.testsAdded).toBe(0);
+      expect(result.coverage).toBe(0);
     });
 
     it('should preserve other state fields when updating', () => {
@@ -600,27 +447,68 @@ WI-001
         custom_field: 'should be preserved',
       });
 
-      completeRun(testRoot, validParams());
+      completeRun(testRoot, 'run-001', validParams());
 
       const state = readStateFile() as { project: { name: string }; custom_field: string };
       expect(state.project.name).toBe('my-project');
       expect(state.custom_field).toBe('should be preserved');
     });
 
-    it('should generate warning when work item already completed', () => {
+    it('should not duplicate runs in history when completing same run', () => {
+      // Set up state with existing completed runs
       createStateFile({
         intents: [
           {
             id: 'INT-001',
-            work_items: [{ id: 'WI-001', status: 'completed' }],
+            work_items: [{ id: 'WI-001', status: 'in_progress' }],
           },
         ],
         active_run: { id: 'run-001', work_item: 'WI-001', intent: 'INT-001' },
+        runs: {
+          completed: [
+            { id: 'run-001', work_item: 'WI-001', intent: 'INT-001', completed: '2024-01-01T00:00:00Z' },
+          ],
+        },
       });
 
-      const result = completeRun(testRoot, validParams());
+      completeRun(testRoot, 'run-001', validParams());
 
-      expect(result.warnings.some(w => w.includes('already marked as completed'))).toBe(true);
+      const state = readStateFile() as {
+        runs: { completed: Array<{ id: string }> };
+      };
+
+      // Should still have only 1 entry (no duplicate)
+      expect(state.runs.completed.length).toBe(1);
+    });
+
+    it('should append to existing completed runs history', () => {
+      // Set up state with existing completed runs
+      createStateFile({
+        intents: [
+          {
+            id: 'INT-001',
+            work_items: [{ id: 'WI-001', status: 'in_progress' }],
+          },
+        ],
+        active_run: { id: 'run-002', work_item: 'WI-001', intent: 'INT-001' },
+        runs: {
+          completed: [
+            { id: 'run-001', work_item: 'WI-other', intent: 'INT-001', completed: '2024-01-01T00:00:00Z' },
+          ],
+        },
+      });
+      createRunFolder('run-002');
+
+      completeRun(testRoot, 'run-002', validParams());
+
+      const state = readStateFile() as {
+        runs: { completed: Array<{ id: string }> };
+      };
+
+      // Should have 2 entries
+      expect(state.runs.completed.length).toBe(2);
+      expect(state.runs.completed[0].id).toBe('run-001');
+      expect(state.runs.completed[1].id).toBe('run-002');
     });
   });
 });
