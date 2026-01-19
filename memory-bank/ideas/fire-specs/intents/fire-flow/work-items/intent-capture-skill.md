@@ -36,7 +36,7 @@ version: 1.0.0
 
   <objective>
     Capture the user's product vision, producing a validated Intent Document
-    saved to memory-bank/intents/{id}/brief.md
+    saved to .specs-fire/intents/{id}/brief.md
   </objective>
 
   <principles>
@@ -158,7 +158,7 @@ version: 1.0.0
       </action>
 
       <output>
-        Intent document created: memory-bank/intents/{id}/brief.md
+        Intent document created: .specs-fire/intents/{id}/brief.md
 
         Ready to decompose into work items? [Y/n]
         If yes → invoke work-item-decompose skill

@@ -83,10 +83,10 @@ version: 1.0.0
         Render template with gathered data
       </action>
       <action>
-        Save to: memory-bank/walkthroughs/{run_id}-{work_item_id}.md
+        Save to: .specs-fire/walkthroughs/{run_id}-{work_item_id}.md
       </action>
       <output>
-        Walkthrough generated: memory-bank/walkthroughs/{run_id}-{work_item_id}.md
+        Walkthrough generated: .specs-fire/walkthroughs/{run_id}-{work_item_id}.md
       </output>
     </step>
   </workflow>

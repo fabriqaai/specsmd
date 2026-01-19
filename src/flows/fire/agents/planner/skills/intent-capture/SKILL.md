@@ -1,0 +1,142 @@
+# Skill: Intent Capture
+
+Capture user intent through guided conversation.
+
+---
+
+## Trigger
+
+- No active intent exists
+- User wants to start something new
+
+---
+
+## Degrees of Freedom
+
+**HIGH** — This is a creative, exploratory phase. Ask open-ended questions. Don't constrain prematurely.
+
+---
+
+## Workflow
+
+```xml
+<skill name="intent-capture">
+
+  <mandate>
+    NEVER assume requirements. ALWAYS ask clarifying questions.
+    Capture the "what" and "why" - leave the "how" for decomposition.
+  </mandate>
+
+  <step n="1" title="Initial Question">
+    <ask>What do you want to build?</ask>
+    <listen>Let user describe freely. Don't interrupt.</listen>
+  </step>
+
+  <step n="2" title="Elicit Context">
+    <action>Based on response, ask follow-up questions:</action>
+
+    <question if="unclear who benefits">
+      Who is this for? Who will use this feature?
+    </question>
+
+    <question if="unclear problem">
+      What problem does this solve? What's painful today?
+    </question>
+
+    <question if="unclear scope">
+      What's the minimum that would be valuable? What can wait?
+    </question>
+
+    <question if="unclear constraints">
+      Any technical constraints? Existing systems to integrate with?
+    </question>
+
+    <question if="unclear success">
+      How will you know this is working? What does success look like?
+    </question>
+  </step>
+
+  <step n="3" title="Summarize Understanding">
+    <output>
+      Let me make sure I understand:
+
+      **Goal**: {summarized goal}
+      **Users**: {who benefits}
+      **Problem**: {what pain this solves}
+      **Success**: {how to measure}
+
+      Is this accurate? [Y/n/clarify]
+    </output>
+    <check if="response == clarify">
+      <action>Ask specific clarifying questions</action>
+      <goto step="3"/>
+    </check>
+  </step>
+
+  <step n="4" title="Generate Intent Brief">
+    <action>Create intent ID from title (kebab-case)</action>
+    <action>Generate intent brief using template</action>
+    <action>Create directory: .specs-fire/intents/{intent-id}/</action>
+    <action>Save: .specs-fire/intents/{intent-id}/brief.md</action>
+  </step>
+
+  <step n="5" title="Update State">
+    <action>Add intent to state.yaml</action>
+    <action>Set intent status to "in_progress"</action>
+  </step>
+
+  <step n="6" title="Transition">
+    <output>
+      Intent captured: "{intent-title}"
+      Saved to: .specs-fire/intents/{intent-id}/brief.md
+
+      Ready to break this into work items? [Y/n]
+    </output>
+    <check if="response == y">
+      <invoke-skill>work-item-decompose</invoke-skill>
+    </check>
+  </step>
+
+</skill>
+```
+
+---
+
+## Output
+
+**Intent Brief** (`.specs-fire/intents/{id}/brief.md`):
+
+```markdown
+---
+id: {intent-id}
+title: {title}
+status: in_progress
+created: {timestamp}
+---
+
+# Intent: {title}
+
+## Goal
+
+{What we're building and why}
+
+## Users
+
+{Who benefits from this}
+
+## Problem
+
+{What pain this solves}
+
+## Success Criteria
+
+- {How we know it's working}
+
+## Constraints
+
+- {Any limitations or requirements}
+
+## Notes
+
+{Additional context}
+```

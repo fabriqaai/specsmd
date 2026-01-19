@@ -44,7 +44,7 @@ version: 1.0.0
     2. Skill routes to greenfield or brownfield flow
     3. For greenfield: describe project → get AI suggestions → approve
     4. For brownfield: auto-analyze → review → confirm
-    5. Standards saved to memory-bank/standards/
+    5. Standards saved to .specs-fire/standards/
   </quick_start>
 
   <essential_principles>
@@ -196,11 +196,11 @@ version: 1.0.0
       </action>
       <output>
         Standards generated:
-        - memory-bank/standards/tech-stack.md
-        - memory-bank/standards/coding-standards.md
-        - memory-bank/standards/folder-structure.md
-        - memory-bank/standards/system-context.md
-        - memory-bank/standards/project-summary.md
+        - .specs-fire/standards/tech-stack.md
+        - .specs-fire/standards/coding-standards.md
+        - .specs-fire/standards/folder-structure.md
+        - .specs-fire/standards/system-context.md
+        - .specs-fire/standards/project-summary.md
       </output>
     </step>
   </brownfield_flow>

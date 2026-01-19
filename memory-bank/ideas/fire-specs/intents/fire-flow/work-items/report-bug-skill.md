@@ -21,7 +21,7 @@ Create the report-bug skill that helps users capture and report issues with FIRE
 - [ ] Create anonymized version on request
 - [ ] Point user to Discord (#bug-reports) and GitHub Issues
 - [ ] Copy report to clipboard for easy sharing
-- [ ] Store reports in `memory-bank/bug-reports/`
+- [ ] Store reports in `.specs-fire/bug-reports/`
 
 ## SKILL.md Content
 
@@ -84,7 +84,7 @@ version: 1.0.0
         - Steps to reproduce (if identifiable)
       </action>
       <output>
-        Bug report created: memory-bank/bug-reports/{id}-bug-report.md
+        Bug report created: .specs-fire/bug-reports/{id}-bug-report.md
       </output>
     </step>
 
@@ -105,7 +105,7 @@ version: 1.0.0
           - Preserve: errors, structure, versions, timing
         </action>
         <output>
-          Anonymized report: memory-bank/bug-reports/{id}-bug-report-anon.md
+          Anonymized report: .specs-fire/bug-reports/{id}-bug-report-anon.md
 
           Please review to ensure no sensitive information remains.
         </output>
@@ -176,7 +176,7 @@ version: 1.0.0
   </scripts>
 
   <success_criteria>
-    <criterion>Bug report saved to memory-bank/bug-reports/</criterion>
+    <criterion>Bug report saved to .specs-fire/bug-reports/</criterion>
     <criterion>User's description captured</criterion>
     <criterion>Context automatically gathered</criterion>
     <criterion>Anonymized version created if requested</criterion>

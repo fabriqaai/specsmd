@@ -357,7 +357,7 @@ project/
 │       │   └── builder/
 │       └── skills/              # Shared skills
 │
-└── memory-bank/
+└── .specs-fire/
     ├── state.yaml               # Central state
     ├── standards/               # Project standards
     │   ├── tech-stack.md

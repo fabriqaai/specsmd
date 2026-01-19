@@ -183,7 +183,7 @@ version: 1.0.0
 
   <workflow>
     <step n="1" title="Load Intent">
-      <action>Read intent brief from memory-bank/intents/{id}/brief.md</action>
+      <action>Read intent brief from .specs-fire/intents/{id}/brief.md</action>
       <action>Parse requirements and success criteria</action>
     </step>
 
@@ -257,7 +257,7 @@ version: 1.0.0
         Update state.yaml with work items
       </action>
       <output>
-        Created {N} work items in memory-bank/intents/{intent}/work-items/
+        Created {N} work items in .specs-fire/intents/{intent}/work-items/
         State updated.
 
         Ready to start a run? First suggested: {first-unblocked-item}
@@ -352,7 +352,7 @@ const template = Handlebars.compile(
 );
 
 const workItems = JSON.parse(readFileSync(values.data!, 'utf8'));
-const outputDir = `memory-bank/intents/${values.intent}/work-items`;
+const outputDir = `.specs-fire/intents/${values.intent}/work-items`;
 
 mkdirSync(outputDir, { recursive: true });
 

@@ -1,0 +1,109 @@
+# FIRE Flow Configuration
+# Fast Intent-Run Engineering - Simplified AI-native development
+
+# Artifact folder (created at project initialization)
+artifact_root: ".specs-fire"
+
+# Structure created at project initialization
+structure:
+  - path: intents/
+    description: "High-level objectives that deliver user value"
+  - path: runs/
+    description: "Execution logs and walkthroughs per run"
+  - path: standards/
+    description: "Project standards (tech-stack, coding-standards)"
+
+# Central state file (FIRE's source of truth)
+state:
+  path: ".specs-fire/state.yaml"
+  description: "Central state tracking for all FIRE operations"
+  sections:
+    project:
+      - name: "Project name"
+      - description: "Project description"
+      - created: "ISO 8601 timestamp"
+      - framework: "fire-v1"
+    workspace:
+      - type: "greenfield | brownfield"
+      - structure: "monolith | monorepo | multi-part"
+      - default_mode: "autopilot | confirm | validate"
+      - scanned_at: "ISO 8601 timestamp (brownfield)"
+      - parts: "List of project parts (monorepo)"
+    intents:
+      - id: "Intent identifier"
+      - title: "Intent title"
+      - status: "pending | in_progress | completed"
+      - work_items: "List of work items"
+    active_run:
+      - id: "Current run ID"
+      - work_item: "Work item being executed"
+      - started: "ISO 8601 timestamp"
+
+# Data Conventions
+conventions:
+  timestamps:
+    format: "ISO 8601 with time and timezone"
+    pattern: "YYYY-MM-DDTHH:MM:SSZ"
+    example: "2026-01-19T10:30:00Z"
+
+# Naming Conventions
+naming:
+  intents:
+    format: "{id}"
+    example: "user-authentication"
+    note: "Kebab-case, descriptive name"
+
+  work_items:
+    format: "{id}"
+    example: "login-endpoint"
+    note: "Kebab-case, action-oriented name"
+
+  runs:
+    format: "run-{NNN}/"
+    example: "run-001/"
+    note: "Sequential 3-digit number, folder per run"
+    contents:
+      - "run.md"        # Run log
+      - "walkthrough.md" # Implementation walkthrough
+
+# Schema Definition (Source of Truth for Agents)
+schema:
+  state: ".specs-fire/state.yaml"
+  intents: ".specs-fire/intents/{intent-id}/"
+  intent-brief: ".specs-fire/intents/{intent-id}/brief.md"
+  work-items: ".specs-fire/intents/{intent-id}/work-items/"
+  work-item: ".specs-fire/intents/{intent-id}/work-items/{work-item-id}.md"
+  runs: ".specs-fire/runs/"
+  run-folder: ".specs-fire/runs/{run-id}/"
+  run-log: ".specs-fire/runs/{run-id}/run.md"
+  walkthrough: ".specs-fire/runs/{run-id}/walkthrough.md"
+  standards: ".specs-fire/standards/"
+
+  # Agent Ownership
+  ownership:
+    orchestrator: [state]
+    planner: [intents, work-items, state]
+    builder: [runs, state]
+
+# Execution Modes
+execution_modes:
+  autopilot:
+    checkpoints: 0
+    complexity: low
+    description: "Direct execution, walkthrough generated after"
+
+  confirm:
+    checkpoints: 1
+    complexity: medium
+    description: "Plan shown, user confirms, then execution"
+
+  validate:
+    checkpoints: 2
+    complexity: high
+    description: "Design doc review, then plan confirmation, then execution"
+
+# Work Item Complexity Mapping
+complexity_modes:
+  low: autopilot
+  medium: confirm
+  high: validate
