@@ -57,7 +57,7 @@ Before executing scripts, ensure required dependencies are installed:
   </mandate>
 
   <step n="1" title="Initialize Run">
-    <action script="scripts/init-run.ts">Create run record</action>
+    <action script="scripts/init-run.js">Create run record</action>
     <action>Generate run ID: run-{NNN}</action>
     <action>Create folder: .specs-fire/runs/{run-id}/</action>
     <action>Set active_run in state.yaml</action>
@@ -189,7 +189,7 @@ Before executing scripts, ensure required dependencies are installed:
   </step>
 
   <step n="7" title="Complete Run">
-    <action script="scripts/complete-run.ts">Finalize run record</action>
+    <action script="scripts/complete-run.js">Finalize run record</action>
     <action>Update state.yaml (clear active_run, mark work item complete)</action>
     <action>Generate run log: .specs-fire/runs/{run-id}/run.md</action>
   </step>
@@ -224,8 +224,8 @@ Before executing scripts, ensure required dependencies are installed:
 
 | Script | Purpose |
 |--------|---------|
-| `scripts/init-run.ts` | Initialize run record and folder |
-| `scripts/complete-run.ts` | Finalize run and update state |
+| `scripts/init-run.js` | Initialize run record and folder |
+| `scripts/complete-run.js` | Finalize run and update state |
 
 ---
 

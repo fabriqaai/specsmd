@@ -42,6 +42,8 @@ state:
       - work_items: "List of work items in this run"
       - current_item: "Work item currently being executed"
       - started: "ISO 8601 timestamp"
+    runs:
+      - completed: "List of completed runs with id, work_item, intent, completed timestamp"
 
 # Data Conventions
 conventions:
