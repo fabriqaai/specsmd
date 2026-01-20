@@ -48,27 +48,95 @@ Plan the scope of a run by discovering available work items and suggesting group
 
   <mandate>
     DISCOVER all available work - both in state.yaml AND file system.
+    FILE SYSTEM IS SOURCE OF TRUTH — state.yaml may be incomplete.
+    ALWAYS SCAN FILE SYSTEM — even if state.yaml shows all completed.
     SUGGEST smart groupings based on mode, dependencies, and user history.
     LEARN from user choices to improve future recommendations.
     NEVER force a scope - always let user choose.
     DEPENDENCIES = SEQUENTIAL EXECUTION, NOT SEPARATE RUNS.
   </mandate>
 
-  <step n="1" title="Discover Available Work">
-    <action>Read state.yaml for known intents and work items</action>
-    <action>Scan .specs-fire/intents/ for intent briefs not in state</action>
-    <action>Scan .specs-fire/intents/*/work-items/ for work items not in state</action>
+  <step n="1" title="Discover Available Work" critical="true">
+    <critical>
+      MUST scan file system BEFORE deciding if work exists.
+      state.yaml may be missing intents or work items that exist on disk.
+      DO NOT skip this step even if state.yaml shows all items completed.
+    </critical>
 
-    <reconcile>
-      <check if="file exists but not in state">
-        <action>Parse file frontmatter for metadata</action>
-        <action>Add to state.yaml as pending</action>
-        <output>Discovered: {item} from {intent} (not in state)</output>
+    <substep n="1a" title="List All Intent Directories">
+      <action>Use Glob to list: .specs-fire/intents/*/brief.md</action>
+      <action>Extract intent IDs from directory names</action>
+      <output>Found intent directories: {list}</output>
+    </substep>
+
+    <substep n="1b" title="List All Work Item Files">
+      <action>Use Glob to list: .specs-fire/intents/*/work-items/*.md</action>
+      <action>Extract work item IDs and their parent intents</action>
+      <output>Found work item files: {list}</output>
+    </substep>
+
+    <substep n="1c" title="Compare with state.yaml">
+      <action>Read state.yaml for known intents and work items</action>
+      <action>Compare file system list against state.yaml entries</action>
+    </substep>
+
+    <substep n="1d" title="Reconcile Differences">
+      <check if="intent directory exists but not in state.yaml">
+        <output>
+          **Discovered new intent**: {intent-id}
+          (exists in file system but not in state.yaml)
+        </output>
+        <action>Parse brief.md frontmatter for intent metadata</action>
+        <action>Add intent to state.yaml with status: active</action>
+        <action>Scan its work-items/ folder</action>
       </check>
-      <check if="in state but file missing">
-        <output>Warning: {item} in state but file not found</output>
+
+      <check if="work item file exists but not in state.yaml">
+        <output>
+          **Discovered new work item**: {work-item-id} in {intent-id}
+          (exists in file system but not in state.yaml)
+        </output>
+        <action>Parse work item frontmatter for metadata</action>
+        <action>Add work item to state.yaml with status: pending</action>
       </check>
-    </reconcile>
+
+      <check if="work item exists in both but status mismatch">
+        <note>
+          state.yaml is authoritative for status (tracks run history).
+          Frontmatter status may be stale from initial creation.
+        </note>
+        <output>
+          **Status mismatch**: {work-item-id}
+          - state.yaml: {state_status}
+          - frontmatter: {frontmatter_status}
+          (Using state.yaml as authoritative)
+        </output>
+        <action if="frontmatter says pending but state says completed">
+          Update work item frontmatter to match state.yaml
+        </action>
+        <action if="state says pending but frontmatter says completed">
+          Flag for review - work may have been done outside FIRE
+        </action>
+      </check>
+
+      <check if="in state.yaml but file missing">
+        <output>Warning: {item} in state but file not found on disk</output>
+      </check>
+    </substep>
+
+    <output>
+      ## File System Scan Complete
+
+      Intents on disk: {count}
+      Intents in state.yaml: {count}
+      Work items on disk: {count}
+      Work items in state.yaml: {count}
+
+      {if new items discovered}
+      **Newly discovered (added to state.yaml)**:
+      {list new items}
+      {/if}
+    </output>
   </step>
 
   <step n="2" title="Collect Pending Work Items">

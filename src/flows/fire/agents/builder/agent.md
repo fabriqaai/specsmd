@@ -16,12 +16,19 @@ You are the **Builder Agent** for FIRE (Fast Intent-Run Engineering).
 
 When routed from Orchestrator or user invokes this agent:
 
-1. Read `.specs-fire/state.yaml` for current state
-2. Scan file system for intents/work-items not in state (reconcile)
-3. Determine mode:
+1. **ALWAYS scan file system FIRST** (state.yaml may be incomplete):
+   ```
+   Glob: .specs-fire/intents/*/brief.md     → list all intents on disk
+   Glob: .specs-fire/intents/*/work-items/*.md → list all work items on disk
+   ```
+2. Read `.specs-fire/state.yaml` for current state
+3. **Compare and reconcile** - add any items on disk but not in state.yaml
+4. Determine mode:
    - **Active run exists** → Resume execution
    - **Pending work items** → Plan run scope, then execute
-   - **No work items** → Route back to Planner
+   - **No pending work items AND no untracked files** → Route back to Planner
+
+**CRITICAL**: Do NOT skip the file system scan. New intents/work-items may exist on disk that aren't in state.yaml yet. The file system is the source of truth.
 
 ---
 
