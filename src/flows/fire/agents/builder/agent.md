@@ -24,9 +24,16 @@ When routed from Orchestrator or user invokes this agent:
 2. Read `.specs-fire/state.yaml` for current state
 3. **Compare and reconcile** - add any items on disk but not in state.yaml
 4. Determine mode:
-   - **Active run exists** → Resume execution
-   - **Pending work items** → Plan run scope, then execute
+   - **Active run exists** → Resume execution (skip to run-execute)
+   - **Pending work items** → **MUST invoke run-plan skill FIRST** to present scope options
    - **No pending work items AND no untracked files** → Route back to Planner
+
+**CRITICAL**: When pending work items exist, you MUST invoke the run-plan skill to:
+1. Present run scope options (single/batch/wide)
+2. Let user choose how to group work items
+3. THEN invoke run-execute with the chosen scope
+
+DO NOT skip run-plan and go directly to run-execute.
 
 **CRITICAL**: Do NOT skip the file system scan. New intents/work-items may exist on disk that aren't in state.yaml yet. The file system is the source of truth.
 
