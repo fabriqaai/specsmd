@@ -132,11 +132,60 @@ Supports both single-item and multi-item (batch/wide) runs.
     <action>Get current_item from state.yaml active_run</action>
     <action>Load work item from .specs-fire/intents/{intent}/work-items/{id}.md</action>
     <action>Read intent brief for broader context</action>
-    <action>Load ALL project standards:</action>
-    <substep>.specs-fire/standards/tech-stack.md — Technology choices</substep>
-    <substep>.specs-fire/standards/coding-standards.md — Code style and patterns</substep>
-    <substep>.specs-fire/standards/testing-standards.md — Testing strategy and coverage</substep>
-    <substep>.specs-fire/standards/system-architecture.md — Architecture context and constraints</substep>
+    <action>Load project standards using hierarchical resolution:</action>
+
+    <standards_resolution critical="true">
+      <substep n="2a" title="Discover Standards Locations">
+        <action>Scan repository for: **/.specs-fire/standards/</action>
+        <action>Build list sorted by path depth (root = depth 0)</action>
+        <example>
+          depth 0: .specs-fire/standards/
+          depth 2: packages/api/.specs-fire/standards/
+          depth 2: apps/mobile/.specs-fire/standards/
+        </example>
+      </substep>
+
+      <substep n="2b" title="Load Constitution (Root Only)">
+        <action>Load .specs-fire/standards/constitution.md from ROOT</action>
+        <critical>IGNORE any constitution.md in nested directories</critical>
+        <critical>Constitution is ALWAYS inherited, NEVER overridden</critical>
+        <note>If constitution.md doesn't exist, skip gracefully</note>
+      </substep>
+
+      <substep n="2c" title="Resolve Module Standards">
+        <action>For each discovered standards location (excluding root):</action>
+
+        <resolution_algorithm>
+          FOR each standard_file IN [tech-stack.md, coding-standards.md,
+                                      testing-standards.md, system-architecture.md]:
+
+            IF {location}/standards/{standard_file} EXISTS:
+              → USE this file for scope {location.parent_path}/**
+            ELSE:
+              → Walk UP to find nearest ancestor with this file
+              → USE ancestor's file (ultimately root if none found)
+        </resolution_algorithm>
+      </substep>
+
+      <substep n="2d" title="Present Standards with Scoping">
+        <action>Present loaded standards with clear path-based scoping:</action>
+
+        <output_format>
+          ## Constitution (applies to ALL files)
+          [content of root constitution.md]
+
+          ## Standards for {module_path}/** files
+          When editing files under {module_path}/, apply:
+          - Tech Stack: [resolved tech-stack.md for this scope]
+          - Coding Standards: [resolved coding-standards.md for this scope]
+          - Testing Standards: [resolved testing-standards.md for this scope]
+
+          ## Default Standards (paths without specific scope)
+          For all other files, apply root standards.
+        </output_format>
+      </substep>
+    </standards_resolution>
+
     <action>Determine execution mode from work item</action>
   </step>
 
@@ -240,11 +289,27 @@ Supports both single-item and multi-item (batch/wide) runs.
     <substep n="5b">Track file operation (create/modify)</substep>
     <substep n="5c">Record decisions made</substep>
 
+    <standards_application critical="true">
+      When editing a file at path X:
+      1. Find the LONGEST matching standards scope (most specific)
+      2. Apply those standards to the file
+      3. If no specific scope matches, apply root standards
+
+      <example>
+        Editing packages/api/src/handler.go
+        → Apply "Standards for packages/api/**"
+
+        Editing scripts/deploy.sh
+        → Apply "Default Standards" (root)
+      </example>
+    </standards_application>
+
     <brownfield_rules>
       <rule>READ existing code before modifying</rule>
       <rule>MATCH existing naming conventions</rule>
       <rule>FOLLOW existing patterns in the codebase</rule>
       <rule>PRESERVE existing tests</rule>
+      <rule>USE module-specific standards when editing module files</rule>
     </brownfield_rules>
   </step>
 
@@ -487,6 +552,9 @@ Supports both single-item and multi-item (batch/wide) runs.
 
 <success_criteria>
   <criterion>Run initialized via init-run.js script</criterion>
+  <criterion>Standards loaded with hierarchical resolution</criterion>
+  <criterion>Constitution loaded from root (if exists)</criterion>
+  <criterion>Module-specific standards applied to module files</criterion>
   <criterion>plan.md created BEFORE implementation</criterion>
   <criterion>All work items implemented</criterion>
   <criterion>All tests pass</criterion>
