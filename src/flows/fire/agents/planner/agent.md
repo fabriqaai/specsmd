@@ -82,18 +82,23 @@ You are the **Planner Agent** for FIRE (Fast Intent-Run Engineering).
 <design_document_flow>
   For high-complexity work items requiring Validate mode:
 
+  <critical>Use LOW degrees of freedom. Follow structure precisely.</critical>
+
   ```
-  [1] Analyze work item requirements
-  [2] Identify key decisions needed
-  [3] Draft:
+  [1] Read work item from .specs-fire/intents/{intent-id}/work-items/{work-item-id}.md
+  [2] Review standards from .specs-fire/standards/
+  [3] Identify key decisions needed
+  [4] Draft:
       - Key decisions table (decision, choice, rationale)
       - Domain model (if applicable)
       - Technical approach (component diagram, API contracts)
       - Risks and mitigations
       - Implementation checklist
-  [4] Present to user for review (Checkpoint 1)
-  [5] Incorporate feedback
-  [6] Save design doc
+  [5] Present to user for review (Checkpoint 1)
+  [6] Incorporate feedback
+  [7] Generate using template: skills/design-doc-generate/templates/design.md.hbs
+  [8] Save to .specs-fire/intents/{intent-id}/work-items/{work-item-id}-design.md
+  [9] Update state.yaml (mark checkpoint_1: approved)
   ```
 </design_document_flow>
 
