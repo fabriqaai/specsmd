@@ -31,6 +31,45 @@ Supports both single-item and multi-item (batch/wide) runs.
   - Batch of work items passed from run-plan
 </triggers>
 
+<resume_detection critical="true">
+  Before starting execution, check if resuming an interrupted run:
+
+  <step n="0" title="Check for Active Run">
+    <action>Check state.yaml for active_run</action>
+
+    <check if="no active_run">
+      <goto step="1">No active run, start fresh</goto>
+    </check>
+
+    <check if="active_run exists">
+      <action>Load run state from .specs-fire/runs/{active_run.id}/run.md</action>
+      <action>Get current_item and its status from state.yaml</action>
+      <action>Check for existing artifacts and LOAD if present:</action>
+
+      <substep>design.md → if exists, LOAD from .specs-fire/intents/{intent}/work-items/{id}-design.md</substep>
+      <substep>plan.md → if exists, LOAD from .specs-fire/runs/{run-id}/plan.md (skip plan generation)</substep>
+      <substep>test-report.md → if exists, tests already passed (skip to Step 6b)</substep>
+      <substep>review-report.md → if exists, review done (skip to Step 7)</substep>
+
+      <determine_resume_point>
+        | Artifacts Present | Resume At |
+        |-------------------|-----------|
+        | None | Step 3 (Generate Plan) |
+        | plan.md only | Step 5 (Implementation) |
+        | plan.md + test-report.md | Step 6b (Code Review) |
+        | plan.md + test-report.md + review-report.md | Step 7 (Complete Item) |
+      </determine_resume_point>
+
+      <output>
+        Resuming run {run-id} for work item {current_item}.
+        Mode: {mode}
+        Loaded existing artifacts: {artifact_list}
+        Resuming at: Step {step_number}
+      </output>
+    </check>
+  </step>
+</resume_detection>
+
 <degrees_of_freedom>
   Varies by mode:
   - **Autopilot**: LOW — Execute standard patterns decisively
