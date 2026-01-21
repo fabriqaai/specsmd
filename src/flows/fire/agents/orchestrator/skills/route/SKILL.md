@@ -1,21 +1,25 @@
-# Skill: Route
+---
+name: route
+description: Analyze project state and route user to the appropriate agent based on current context.
+version: 1.0.0
+---
 
+<objective>
 Analyze project state and route user to the appropriate agent.
+</objective>
 
----
+<triggers>
+  - User runs `/fire` on initialized project
+  - After any agent completes its task
+</triggers>
 
-## Trigger
+<llm critical="true">
+  <mandate>ALWAYS scan file system for intents/work-items not in state.yaml</mandate>
+  <mandate>FILE SYSTEM is source of truth — state.yaml may be incomplete</mandate>
+  <mandate>Route based on VERIFIED state, not assumptions</mandate>
+</llm>
 
-- User runs `/fire` on initialized project
-- After any agent completes its task
-
----
-
-## Workflow
-
-```xml
-<skill name="route">
-
+<flow>
   <step n="1" title="Discover and Read State">
     <action>Read .specs-fire/state.yaml</action>
     <action>Scan .specs-fire/intents/ for briefs not in state</action>
@@ -32,7 +36,7 @@ Analyze project state and route user to the appropriate agent.
         Current item: {active_run.current_item}
         Progress: {completed_count}/{total_count} items
       </output>
-      <route-to>builder-agent (run-execute)</route-to>
+      <route_to>builder-agent (run-execute)</route_to>
       <stop/>
     </check>
   </step>
@@ -46,7 +50,7 @@ Analyze project state and route user to the appropriate agent.
         Plan run scope and start execution? [Y/n]
       </output>
       <check if="response == y">
-        <route-to>builder-agent (run-plan)</route-to>
+        <route_to>builder-agent (run-plan)</route_to>
       </check>
       <stop/>
     </check>
@@ -59,7 +63,7 @@ Analyze project state and route user to the appropriate agent.
         Intent "{intent.title}" needs decomposition.
         Routing to Planner to create work items.
       </output>
-      <route-to>planner-agent (work-item-decompose)</route-to>
+      <route_to>planner-agent (work-item-decompose)</route_to>
       <stop/>
     </check>
     <check if="all work items completed">
@@ -81,43 +85,44 @@ Analyze project state and route user to the appropriate agent.
 
       What do you want to build?
     </output>
-    <route-to>planner-agent (intent-capture)</route-to>
+    <route_to>planner-agent (intent-capture)</route_to>
   </step>
+</flow>
 
-</skill>
-```
+<routing_decision_tree>
+  ```
+  state.yaml + file system scan
+      │
+      ├── active_run? ──────────────> Builder (run-execute, resume)
+      │
+      ├── pending work items? ──────> Builder (run-plan, then execute)
+      │
+      ├── intent without work items? > Planner (work-item-decompose)
+      │
+      └── no active intents ────────> Planner (intent-capture)
+  ```
+</routing_decision_tree>
 
----
+<context_passed_to_agents>
+  **To Planner:**
+  ```yaml
+  context:
+    action: intent-capture | work-item-decompose
+    intent_id: {if decomposing}
+  ```
 
-## Routing Decision Tree
+  **To Builder:**
+  ```yaml
+  context:
+    action: run-plan | run-execute | resume
+    pending_items: [{list of pending work items}]  # for run-plan
+    run_id: {if resuming}
+  ```
+</context_passed_to_agents>
 
-```
-state.yaml + file system scan
-    │
-    ├── active_run? ──────────────> Builder (run-execute, resume)
-    │
-    ├── pending work items? ──────> Builder (run-plan, then execute)
-    │
-    ├── intent without work items? > Planner (work-item-decompose)
-    │
-    └── no active intents ────────> Planner (intent-capture)
-```
-
----
-
-## Context Passed to Agents
-
-**To Planner:**
-```yaml
-context:
-  action: intent-capture | work-item-decompose
-  intent_id: {if decomposing}
-```
-
-**To Builder:**
-```yaml
-context:
-  action: run-plan | run-execute | resume
-  pending_items: [{list of pending work items}]  # for run-plan
-  run_id: {if resuming}
-```
+<success_criteria>
+  <criterion>File system scanned for untracked intents/work-items</criterion>
+  <criterion>State reconciled with file system</criterion>
+  <criterion>Correct agent selected based on state</criterion>
+  <criterion>Context passed to target agent</criterion>
+</success_criteria>

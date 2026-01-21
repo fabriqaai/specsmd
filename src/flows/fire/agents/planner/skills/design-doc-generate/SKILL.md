@@ -1,35 +1,31 @@
-# Skill: Design Doc Generate
+---
+name: design-doc-generate
+description: Generate design documents for Validate mode work items (Checkpoint 1). Required for high-complexity items.
+version: 1.0.0
+---
 
+<objective>
 Generate design documents for Validate mode work items (Checkpoint 1).
+</objective>
 
----
+<triggers>
+  - Work item has complexity: high
+  - Work item has mode: validate
+  - Design review required before implementation
+</triggers>
 
-## Trigger
+<degrees_of_freedom>
+  **LOW** — Follow the design doc structure precisely. Decisions must have rationale.
+</degrees_of_freedom>
 
-- Work item has complexity: high
-- Work item has mode: validate
-- Design review required before implementation
+<llm critical="true">
+  <mandate>Design doc MUST be approved before implementation</mandate>
+  <mandate>Document DECISIONS with RATIONALE, not just choices</mandate>
+  <mandate>Keep concise — enough detail to implement, no more</mandate>
+  <mandate>Include risks upfront — don't hide complexity</mandate>
+</llm>
 
----
-
-## Degrees of Freedom
-
-**LOW** — Follow the design doc structure precisely. Decisions must have rationale.
-
----
-
-## Workflow
-
-```xml
-<skill name="design-doc-generate">
-
-  <mandate>
-    Design doc MUST be approved before implementation.
-    Document DECISIONS with RATIONALE, not just choices.
-    Keep concise - enough detail to implement, no more.
-    Include risks upfront - don't hide complexity.
-  </mandate>
-
+<flow>
   <step n="1" title="Analyze Work Item">
     <action>Read work item from .specs-fire/intents/{intent-id}/work-items/{id}.md</action>
     <action>Identify key design decisions needed</action>
@@ -50,11 +46,11 @@ Generate design documents for Validate mode work items (Checkpoint 1).
     <substep>Select recommended choice</substep>
     <substep>Document rationale</substep>
 
-    <output-format>
+    <output_format>
       | Decision | Choice | Rationale |
       |----------|--------|-----------|
       | ... | ... | ... |
-    </output-format>
+    </output_format>
   </step>
 
   <step n="4" title="Define Domain Model" if="has_domain_complexity">
@@ -76,11 +72,11 @@ Generate design documents for Validate mode work items (Checkpoint 1).
     <action>Assess impact (high/medium/low)</action>
     <action>Propose mitigations</action>
 
-    <output-format>
+    <output_format>
       | Risk | Impact | Mitigation |
       |------|--------|------------|
       | ... | ... | ... |
-    </output-format>
+    </output_format>
   </step>
 
   <step n="7" title="Create Implementation Checklist">
@@ -139,75 +135,21 @@ Generate design documents for Validate mode work items (Checkpoint 1).
       <goto step="3"/>
     </check>
   </step>
+</flow>
 
-</skill>
-```
+<output_artifacts>
+  | Artifact | Location | Template |
+  |----------|----------|----------|
+  | Design Doc | `.specs-fire/intents/{intent-id}/work-items/{id}-design.md` | `./templates/design-doc.md.hbs` |
+</output_artifacts>
 
----
-
-## Output
-
-**Design Doc** (`.specs-fire/intents/{intent-id}/work-items/{id}-design.md`):
-
-```markdown
----
-work_item: {work-item-id}
-intent: {intent-id}
-created: {timestamp}
-mode: validate
-checkpoint_1: approved
----
-
-# Design: {title}
-
-## Summary
-
-{Brief description of what will be built and why}
-
-## Key Decisions
-
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| {decision} | {choice} | {why} |
-
-## Domain Model
-
-### Entities
-- **{Name}**: {description}
-
-### Value Objects
-- **{Name}**: {description}
-
-## Technical Approach
-
-### Component Diagram
-
-```
-[ASCII diagram]
-```
-
-### API Endpoints
-
-- `POST /api/...` - {description}
-
-### Database Changes
-
-```sql
-CREATE TABLE ...
-```
-
-## Risks & Mitigations
-
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| {risk} | {impact} | {mitigation} |
-
-## Implementation Checklist
-
-- [ ] {step 1}
-- [ ] {step 2}
-- [ ] {step 3}
-
----
-*Checkpoint 1 approved: {timestamp}*
-```
+<success_criteria>
+  <criterion>Work item analyzed for design decisions</criterion>
+  <criterion>Key decisions documented with rationale</criterion>
+  <criterion>Domain model defined (if applicable)</criterion>
+  <criterion>Technical approach specified</criterion>
+  <criterion>Risks identified with mitigations</criterion>
+  <criterion>Implementation checklist created</criterion>
+  <criterion>Design doc approved at checkpoint</criterion>
+  <criterion>Design doc saved to correct location</criterion>
+</success_criteria>

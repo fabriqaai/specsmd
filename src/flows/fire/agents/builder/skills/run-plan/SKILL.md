@@ -1,61 +1,55 @@
-# Skill: Run Plan
+---
+name: run-plan
+description: Plan the scope of a run by discovering available work items and suggesting groupings. Invoked before run-execute.
+version: 1.0.0
+---
 
+<objective>
 Plan the scope of a run by discovering available work items and suggesting groupings.
+</objective>
 
----
+<triggers>
+  - After work-item decomposition completes
+  - User wants to start execution
+  - Pending work items exist
+</triggers>
 
-## Trigger
+<degrees_of_freedom>
+  **MEDIUM** — Present smart grouping suggestions but let user choose scope.
+</degrees_of_freedom>
 
-- After work-item decomposition completes
-- User wants to start execution
-- Pending work items exist
+<llm critical="true">
+  <mandate>DISCOVER all available work — both in state.yaml AND file system</mandate>
+  <mandate>FILE SYSTEM IS SOURCE OF TRUTH — state.yaml may be incomplete</mandate>
+  <mandate>ALWAYS SCAN FILE SYSTEM — even if state.yaml shows all completed</mandate>
+  <mandate>SUGGEST smart groupings based on mode, dependencies, and user history</mandate>
+  <mandate>LEARN from user choices to improve future recommendations</mandate>
+  <mandate>NEVER force a scope — always let user choose</mandate>
+  <mandate>DEPENDENCIES = SEQUENTIAL EXECUTION, NOT SEPARATE RUNS</mandate>
+</llm>
 
----
+<critical_clarifications>
+  <clarification title="Dependencies Mean Sequential Execution, NOT Separate Runs">
+    When work items have dependencies:
+    - They execute **sequentially within the SAME run**
+    - They do **NOT** require separate runs
+    - The dependent item waits for its dependency to complete before starting
 
-## Degrees of Freedom
+    **Example**: If item 05 depends on item 04:
+    - **CORRECT**: ONE run with both items, 04 executes first, then 05
+    - **WRONG**: TWO separate runs
+  </clarification>
 
-**MEDIUM** — Present smart grouping suggestions but let user choose scope.
+  <clarification title="All Options Can Include Multiple Items Per Run">
+    | Option | Items Per Run | Execution |
+    |--------|---------------|-----------|
+    | Single | 1 item | One at a time, separate runs |
+    | Batch | Multiple items (same mode) | Sequential within run |
+    | Wide | All compatible items | Sequential within run |
+  </clarification>
+</critical_clarifications>
 
----
-
-## Critical Clarifications
-
-### Dependencies Mean Sequential Execution, NOT Separate Runs
-
-**IMPORTANT**: When work items have dependencies:
-- They execute **sequentially within the SAME run**
-- They do **NOT** require separate runs
-- The dependent item waits for its dependency to complete before starting
-
-**Example**: If item 05 depends on item 04:
-- **CORRECT**: ONE run with both items, 04 executes first, then 05
-- **WRONG**: TWO separate runs
-
-### All Options Can Include Multiple Items Per Run
-
-| Option | Items Per Run | Execution |
-|--------|---------------|-----------|
-| Single | 1 item | One at a time, separate runs |
-| Batch | Multiple items (same mode) | Sequential within run |
-| Wide | All compatible items | Sequential within run |
-
----
-
-## Workflow
-
-```xml
-<skill name="run-plan">
-
-  <mandate>
-    DISCOVER all available work - both in state.yaml AND file system.
-    FILE SYSTEM IS SOURCE OF TRUTH — state.yaml may be incomplete.
-    ALWAYS SCAN FILE SYSTEM — even if state.yaml shows all completed.
-    SUGGEST smart groupings based on mode, dependencies, and user history.
-    LEARN from user choices to improve future recommendations.
-    NEVER force a scope - always let user choose.
-    DEPENDENCIES = SEQUENTIAL EXECUTION, NOT SEPARATE RUNS.
-  </mandate>
-
+<flow>
   <step n="1" title="Discover Available Work" critical="true">
     <critical>
       MUST scan file system BEFORE deciding if work exists.
@@ -152,7 +146,7 @@ Plan the scope of a run by discovering available work items and suggesting group
         Create a new intent? [Y/n]
       </output>
       <check if="response == y">
-        <route-to>planner-agent (intent-capture)</route-to>
+        <route_to>planner-agent (intent-capture)</route_to>
       </check>
       <stop/>
     </check>
@@ -162,14 +156,14 @@ Plan the scope of a run by discovering available work items and suggesting group
     <action>Read workspace.autonomy_bias from state.yaml</action>
     <action>Read workspace.run_scope_preference from state.yaml (if exists)</action>
 
-    <grouping-rules>
+    <grouping_rules>
       <rule>Dependencies = SEQUENTIAL execution in SAME run (NOT separate runs)</rule>
       <rule>Different modes CAN be in same run (executed sequentially)</rule>
       <rule>Cross-intent items allowed in same run if compatible</rule>
       <rule>Validate mode items may benefit from running alone (more checkpoints)</rule>
-    </grouping-rules>
+    </grouping_rules>
 
-    <generate-options>
+    <generate_options>
       <option name="single">
         Each work item in its own run
         Total runs: {count of pending items}
@@ -186,7 +180,7 @@ Plan the scope of a run by discovering available work items and suggesting group
         Same as batch - all items in one run
         Total runs: 1
       </option>
-    </generate-options>
+    </generate_options>
   </step>
 
   <step n="4" title="Present Options">
@@ -195,7 +189,7 @@ Plan the scope of a run by discovering available work items and suggesting group
     <substep>run_scope_preference (user's historical choice)</substep>
     <substep>Number of pending items (few items→single is fine)</substep>
 
-    <output>
+    <template_output section="options">
       ## Run Planning
 
       **Found**: {count} pending work items across {intent_count} intent(s)
@@ -227,7 +221,7 @@ Plan the scope of a run by discovering available work items and suggesting group
           1 run, sequential execution
 
       Choose [1/2/3]:
-    </output>
+    </template_output>
   </step>
 
   <step n="5" title="Process Choice">
@@ -245,11 +239,11 @@ Plan the scope of a run by discovering available work items and suggesting group
     <action>Update workspace.run_scope_preference in state.yaml</action>
     <action>Add to workspace.run_scope_history (keep last 10)</action>
 
-    <history-entry>
+    <history_entry>
       choice: {run_scope}
       items_count: {count}
       timestamp: {now}
-    </history-entry>
+    </history_entry>
 
     <note>
       After 3+ consistent choices, start pre-selecting that option
@@ -275,102 +269,100 @@ Plan the scope of a run by discovering available work items and suggesting group
       Begin execution? [Y/n]
     </output>
     <check if="response == y">
-      <invoke-skill args="work_items_for_run, run_scope">run-execute</invoke-skill>
+      <invoke_skill args="work_items_for_run, run_scope">run-execute</invoke_skill>
     </check>
   </step>
+</flow>
 
-</skill>
-```
+<state_schema_updates>
+  **workspace section additions**:
+  ```yaml
+  workspace:
+    # ... existing fields ...
+    run_scope_preference: batch  # single | batch | wide (learned)
+    run_scope_history:
+      - choice: batch
+        items_count: 4
+        timestamp: 2026-01-19T10:00:00Z
+  ```
 
----
+  **active_run with multi-item support**:
+  ```yaml
+  active_run:
+    id: run-001
+    scope: batch  # single | batch | wide
+    work_items:
+      - id: 01-stats-data-model
+        intent: session-stats
+        mode: autopilot
+        status: completed
+      - id: 02-stats-api-endpoint
+        intent: session-stats
+        mode: autopilot
+        status: in_progress
+    current_item: 02-stats-api-endpoint
+    started: 2026-01-19T10:00:00Z
+  ```
+</state_schema_updates>
 
-## State Schema Updates
+<file_discovery_logic>
+  ```
+  .specs-fire/
+  ├── intents/
+  │   ├── user-auth/
+  │   │   ├── brief.md           ← Parse frontmatter for intent metadata
+  │   │   └── work-items/
+  │   │       ├── login-endpoint.md   ← Parse for work item metadata
+  │   │       └── session-mgmt.md
+  │   └── analytics/
+  │       ├── brief.md
+  │       └── work-items/
+  │           └── dashboard.md
+  ```
 
-**workspace section additions**:
-```yaml
-workspace:
-  # ... existing fields ...
-  run_scope_preference: batch  # single | batch | wide (learned)
-  run_scope_history:
-    - choice: batch
-      items_count: 4
-      timestamp: 2026-01-19T10:00:00Z
-```
+  **Frontmatter parsing**:
+  - Extract `id`, `title`, `status` from YAML frontmatter
+  - If status missing, default to `pending`
+  - If in file but not state.yaml, add to state
+</file_discovery_logic>
 
-**active_run with multi-item support**:
-```yaml
-active_run:
-  id: run-001
-  scope: batch  # single | batch | wide
-  work_items:
-    - id: 01-stats-data-model
-      intent: session-stats
-      mode: autopilot
-      status: completed
-    - id: 02-stats-api-endpoint
-      intent: session-stats
-      mode: autopilot
-      status: in_progress
-  current_item: 02-stats-api-endpoint
-  started: 2026-01-19T10:00:00Z
-```
+<grouping_algorithm>
+  ```
+  1. Collect all pending items with their modes
+  2. Build dependency graph
+  3. Sort items in dependency order (dependencies first)
+  4. For "single" option:
+     - Each item is its own run
+  5. For "batch" or "wide" option:
+     - ALL items in ONE run
+     - Execution order follows dependency graph
+     - Checkpoints pause at confirm/validate items
+  ```
+</grouping_algorithm>
 
----
+<recommendation_logic>
+  ```
+  IF run_scope_history has 3+ same choices:
+    pre_selected = most_common_choice
 
-## File Discovery Logic
+  ELSE IF autonomy_bias == autonomous:
+    recommended = batch (all in one run)
 
-```
-.specs-fire/
-├── intents/
-│   ├── user-auth/
-│   │   ├── brief.md           ← Parse frontmatter for intent metadata
-│   │   └── work-items/
-│   │       ├── login-endpoint.md   ← Parse for work item metadata
-│   │       └── session-mgmt.md
-│   └── analytics/
-│       ├── brief.md
-│       └── work-items/
-│           └── dashboard.md
-```
-
-**Frontmatter parsing**:
-- Extract `id`, `title`, `status` from YAML frontmatter
-- If status missing, default to `pending`
-- If in file but not state.yaml, add to state
-
----
-
-## Grouping Algorithm
-
-```
-1. Collect all pending items with their modes
-2. Build dependency graph
-3. Sort items in dependency order (dependencies first)
-4. For "single" option:
-   - Each item is its own run
-5. For "batch" or "wide" option:
-   - ALL items in ONE run
-   - Execution order follows dependency graph
-   - Checkpoints pause at confirm/validate items
-```
-
----
-
-## Recommendation Logic
-
-```
-IF run_scope_history has 3+ same choices:
-  pre_selected = most_common_choice
-
-ELSE IF autonomy_bias == autonomous:
-  recommended = batch (all in one run)
-
-ELSE IF autonomy_bias == controlled:
-  recommended = single
-
-ELSE: # balanced
-  IF pending_count <= 2:
+  ELSE IF autonomy_bias == controlled:
     recommended = single
-  ELSE:
-    recommended = batch
-```
+
+  ELSE: # balanced
+    IF pending_count <= 2:
+      recommended = single
+    ELSE:
+      recommended = batch
+  ```
+</recommendation_logic>
+
+<success_criteria>
+  <criterion>File system scanned for all intents and work items</criterion>
+  <criterion>state.yaml reconciled with file system</criterion>
+  <criterion>Run scope options presented to user</criterion>
+  <criterion>User choice recorded for future recommendations</criterion>
+  <criterion>run-execute invoked with selected work items</criterion>
+</success_criteria>

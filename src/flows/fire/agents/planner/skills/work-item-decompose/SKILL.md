@@ -1,33 +1,29 @@
-# Skill: Work Item Decompose
+---
+name: work-item-decompose
+description: Break an intent into discrete, executable work items with complexity assessment and dependency validation.
+version: 1.0.0
+---
 
+<objective>
 Break an intent into discrete, executable work items.
+</objective>
 
----
+<triggers>
+  - Intent exists without work items
+  - User wants to plan execution
+</triggers>
 
-## Trigger
+<degrees_of_freedom>
+  **MEDIUM** — Follow decomposition patterns but adapt to the specific intent.
+</degrees_of_freedom>
 
-- Intent exists without work items
-- User wants to plan execution
+<llm critical="true">
+  <mandate>Each work item MUST be completable in a single run</mandate>
+  <mandate>Each work item MUST have clear acceptance criteria</mandate>
+  <mandate>Dependencies MUST be explicit and validated</mandate>
+</llm>
 
----
-
-## Degrees of Freedom
-
-**MEDIUM** — Follow decomposition patterns but adapt to the specific intent.
-
----
-
-## Workflow
-
-```xml
-<skill name="work-item-decompose">
-
-  <mandate>
-    Each work item MUST be completable in a single run.
-    Each work item MUST have clear acceptance criteria.
-    Dependencies MUST be explicit and validated.
-  </mandate>
-
+<flow>
   <step n="1" title="Load Intent">
     <action>Read intent brief from .specs-fire/intents/{intent-id}/brief.md</action>
     <action>Understand goal, users, success criteria</action>
@@ -74,13 +70,13 @@ Break an intent into discrete, executable work items.
     <action>Read workspace.autonomy_bias from state.yaml</action>
     <action>Apply bias to determine final execution mode:</action>
 
-    <bias-table>
+    <bias_table>
       | Raw Complexity | autonomous | balanced | controlled |
       |----------------|------------|----------|------------|
       | low            | autopilot  | autopilot| confirm    |
       | medium         | autopilot  | confirm  | validate   |
       | high           | confirm    | validate | validate   |
-    </bias-table>
+    </bias_table>
 
     <note>
       This allows user preference to shift thresholds:
@@ -147,48 +143,23 @@ Break an intent into discrete, executable work items.
       Ready to plan execution scope? [Y/n]
     </output>
     <check if="response == y">
-      <route-to>builder-agent (run-plan)</route-to>
+      <route_to>builder-agent (run-plan)</route_to>
     </check>
   </step>
+</flow>
 
-</skill>
-```
+<output_artifacts>
+  | Artifact | Location | Template |
+  |----------|----------|----------|
+  | Work Item | `.specs-fire/intents/{intent-id}/work-items/{id}.md` | `./templates/work-item.md.hbs` |
+</output_artifacts>
 
----
-
-## Output
-
-**Work Item** (`.specs-fire/intents/{intent-id}/work-items/{id}.md`):
-
-```markdown
----
-id: {work-item-id}
-title: {title}
-intent: {intent-id}
-complexity: low | medium | high
-mode: autopilot | confirm | validate
-status: pending
-depends_on: [{dependency-ids}]
-created: {timestamp}
----
-
-# Work Item: {title}
-
-## Description
-
-{What this work item delivers}
-
-## Acceptance Criteria
-
-- [ ] {criterion-1}
-- [ ] {criterion-2}
-- [ ] {criterion-3}
-
-## Technical Notes
-
-{Any implementation hints or constraints}
-
-## Dependencies
-
-{List of work items this depends on}
-```
+<success_criteria>
+  <criterion>Intent decomposed into discrete work items</criterion>
+  <criterion>Each work item has clear acceptance criteria</criterion>
+  <criterion>Complexity assessed for each item</criterion>
+  <criterion>Autonomy bias applied to determine modes</criterion>
+  <criterion>Dependencies validated (no circular dependencies)</criterion>
+  <criterion>Work items saved to correct locations</criterion>
+  <criterion>State.yaml updated with work items list</criterion>
+</success_criteria>

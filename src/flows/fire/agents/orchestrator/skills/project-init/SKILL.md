@@ -1,21 +1,19 @@
-# Skill: Project Init
+---
+name: project-init
+description: Initialize a new FIRE project by detecting workspace type and setting up standards.
+version: 1.0.0
+---
 
+<objective>
 Initialize a new FIRE project by detecting workspace type and setting up standards.
+</objective>
 
----
+<triggers>
+  - User runs `/fire` on uninitialized project
+  - No `.specs-fire/state.yaml` exists
+</triggers>
 
-## Trigger
-
-- User runs `/fire` on uninitialized project
-- No `.specs-fire/state.yaml` exists
-
----
-
-## Workflow
-
-```xml
-<skill name="project-init">
-
+<flow>
   <step n="1" title="Welcome">
     <output>
       Welcome to FIRE (Fast Intent-Run Engineering).
@@ -131,20 +129,25 @@ Initialize a new FIRE project by detecting workspace type and setting up standar
       Ready to capture your first intent.
       What do you want to build?
     </output>
-    <route-to>planner-agent (intent-capture)</route-to>
+    <route_to>planner-agent (intent-capture)</route_to>
   </step>
+</flow>
 
-</skill>
-```
+<output_artifacts>
+  | Artifact | Location | Template |
+  |----------|----------|----------|
+  | State | `.specs-fire/state.yaml` | — |
+  | Tech Stack | `.specs-fire/standards/tech-stack.md` | `templates/tech-stack.md.hbs` |
+  | Coding Standards | `.specs-fire/standards/coding-standards.md` | `templates/coding-standards.md.hbs` |
+  | Testing Standards | `.specs-fire/standards/testing-standards.md` | `templates/testing-standards.md.hbs` |
+  | System Architecture | `.specs-fire/standards/system-architecture.md` | `templates/system-architecture.md.hbs` |
+</output_artifacts>
 
----
-
-## Output
-
-| Artifact | Location | Template |
-|----------|----------|----------|
-| State | `.specs-fire/state.yaml` | — |
-| Tech Stack | `.specs-fire/standards/tech-stack.md` | `templates/tech-stack.md.hbs` |
-| Coding Standards | `.specs-fire/standards/coding-standards.md` | `templates/coding-standards.md.hbs` |
-| Testing Standards | `.specs-fire/standards/testing-standards.md` | `templates/testing-standards.md.hbs` |
-| System Architecture | `.specs-fire/standards/system-architecture.md` | `templates/system-architecture.md.hbs` |
+<success_criteria>
+  <criterion>Workspace type correctly detected</criterion>
+  <criterion>Tech stack identified or suggested</criterion>
+  <criterion>Autonomy level selected</criterion>
+  <criterion>.specs-fire/ directory structure created</criterion>
+  <criterion>Standards files generated from templates</criterion>
+  <criterion>state.yaml created with correct configuration</criterion>
+</success_criteria>

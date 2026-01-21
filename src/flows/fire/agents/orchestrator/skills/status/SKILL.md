@@ -1,21 +1,19 @@
-# Skill: Status
+---
+name: status
+description: Display current FIRE project status including intents, work items, and active runs.
+version: 1.0.0
+---
 
+<objective>
 Display current FIRE project status.
+</objective>
 
----
+<triggers>
+  - User runs `/fire status`
+  - User asks "what's the status?"
+</triggers>
 
-## Trigger
-
-- User runs `/fire status`
-- User asks "what's the status?"
-
----
-
-## Workflow
-
-```xml
-<skill name="status">
-
+<flow>
   <step n="1" title="Read State">
     <action>Read .specs-fire/state.yaml</action>
   </step>
@@ -59,41 +57,44 @@ Display current FIRE project status.
       - Runs: {total_runs}
     </output>
   </step>
+</flow>
 
-</skill>
-```
+<example_output>
+  ```
+  # FIRE Status
 
----
+  **Project**: my-saas-app
+  **Workspace**: brownfield / monolith
+  **Autonomy**: balanced
 
-## Example Output
+  ## Intents
 
-```
-# FIRE Status
+  ### User Authentication [in_progress]
 
-**Project**: my-saas-app
-**Workspace**: brownfield / monolith
-**Autonomy**: balanced
+  | Work Item | Status | Complexity | Mode |
+  |-----------|--------|------------|------|
+  | login-endpoint | completed | medium | confirm |
+  | session-management | in_progress | medium | confirm |
+  | password-reset | pending | high | validate |
 
-## Intents
+  ## Active Run
 
-### User Authentication [in_progress]
+  - **Run**: run-002
+  - **Work Item**: session-management
+  - **Started**: 2026-01-19T10:30:00Z
+  - **Mode**: confirm
 
-| Work Item | Status | Complexity | Mode |
-|-----------|--------|------------|------|
-| login-endpoint | completed | medium | confirm |
-| session-management | in_progress | medium | confirm |
-| password-reset | pending | high | validate |
+  ## Quick Stats
 
-## Active Run
+  - Intents: 1 (0 completed)
+  - Work Items: 3 (1 completed)
+  - Runs: 2
+  ```
+</example_output>
 
-- **Run**: run-002
-- **Work Item**: session-management
-- **Started**: 2026-01-19T10:30:00Z
-- **Mode**: confirm
-
-## Quick Stats
-
-- Intents: 1 (0 completed)
-- Work Items: 3 (1 completed)
-- Runs: 2
-```
+<success_criteria>
+  <criterion>State file read successfully</criterion>
+  <criterion>All intents and work items displayed</criterion>
+  <criterion>Active run status shown</criterion>
+  <criterion>Quick stats accurate</criterion>
+</success_criteria>

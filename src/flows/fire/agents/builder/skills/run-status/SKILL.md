@@ -1,21 +1,19 @@
-# Skill: Run Status
+---
+name: run-status
+description: Display current run status and progress. Shows work item, mode, duration, and files changed.
+version: 1.0.0
+---
 
+<objective>
 Display current run status and progress.
+</objective>
 
----
+<triggers>
+  - User asks about run status
+  - During long-running execution
+</triggers>
 
-## Trigger
-
-- User asks about run status
-- During long-running execution
-
----
-
-## Workflow
-
-```xml
-<skill name="run-status">
-
+<flow>
   <step n="1" title="Check Active Run">
     <action>Read state.yaml for active_run</action>
     <check if="no active run">
@@ -55,40 +53,42 @@ Display current run status and progress.
       {last 5 actions}
     </output>
   </step>
+</flow>
 
-</skill>
-```
+<example_output>
+  ```
+  ## Run Status: run-003
 
----
+  **Work Item**: Add session management
+  **Intent**: User Authentication
+  **Mode**: confirm
+  **Started**: 2026-01-19T10:30:00Z
+  **Duration**: 12 minutes
 
-## Example Output
+  ### Progress
 
-```
-## Run Status: run-003
+  - [x] Initialize run
+  - [x] Load context
+  - [x] Plan approved (Checkpoint 1)
+  - [~] Execute implementation
+  - [ ] Run tests
+  - [ ] Generate walkthrough
 
-**Work Item**: Add session management
-**Intent**: User Authentication
-**Mode**: confirm
-**Started**: 2026-01-19T10:30:00Z
-**Duration**: 12 minutes
+  ### Files Changed So Far
 
-### Progress
+  Created: 2
+  Modified: 1
 
-- [x] Initialize run
-- [x] Load context
-- [x] Plan approved (Checkpoint 1)
-- [~] Execute implementation
-- [ ] Run tests
-- [ ] Generate walkthrough
+  ### Recent Activity
 
-### Files Changed So Far
+  - Created src/auth/session.ts
+  - Created src/auth/session.test.ts
+  - Modified src/auth/index.ts
+  ```
+</example_output>
 
-Created: 2
-Modified: 1
-
-### Recent Activity
-
-- Created src/auth/session.ts
-- Created src/auth/session.test.ts
-- Modified src/auth/index.ts
-```
+<success_criteria>
+  <criterion>Current run status displayed</criterion>
+  <criterion>Progress indicators accurate</criterion>
+  <criterion>Files changed shown</criterion>
+</success_criteria>
