@@ -79,10 +79,9 @@ import { MemoryBankModel } from '../../../parser/types';
 
 /**
  * AIDLC artifacts structure returned by the parser.
+ * Currently identical to MemoryBankModel but kept as separate type for future extension.
  */
-export interface AidlcArtifacts extends MemoryBankModel {
-    // Extends MemoryBankModel with any additional AIDLC-specific data
-}
+export type AidlcArtifacts = MemoryBankModel;
 
 /**
  * AIDLC-specific FlowParser implementation.

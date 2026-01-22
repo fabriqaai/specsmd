@@ -149,12 +149,13 @@ export class FireUIProvider implements FlowUIProvider {
                 this._handleViewRunFiles(msg as { runId: string; folderPath: string });
                 break;
 
-            case 'openExternal':
+            case 'openExternal': {
                 const url = (msg as { url: string }).url;
                 if (url) {
                     vscode.env.openExternal(vscode.Uri.parse(url));
                 }
                 break;
+            }
         }
     }
 

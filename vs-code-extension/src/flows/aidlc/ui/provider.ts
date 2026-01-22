@@ -163,12 +163,13 @@ export class AidlcUIProvider implements FlowUIProvider {
                 this._persistUIState('activitySectionHeight', (msg as { height: number }).height);
                 break;
 
-            case 'openExternal':
+            case 'openExternal': {
                 const url = (msg as { url: string }).url;
                 if (url) {
                     vscode.env.openExternal(vscode.Uri.parse(url));
                 }
                 break;
+            }
         }
     }
 
