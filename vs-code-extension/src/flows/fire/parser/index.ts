@@ -53,13 +53,16 @@ export class FireParser implements FlowParser<FireArtifacts> {
         }
 
         try {
-            // Parse state.yaml
+            // Parse state.yaml (uses snake_case keys)
             const stateContent = fs.readFileSync(statePath, 'utf8');
-            const state = yaml.parse(stateContent) as FireState | null;
+            const rawState = yaml.parse(stateContent) as RawFireState | null;
 
-            if (!state) {
+            if (!rawState) {
                 return this._createEmptyArtifacts(rootPath, workspacePath);
             }
+
+            // Convert snake_case to camelCase
+            const state = this._normalizeState(rawState);
 
             // Parse project info
             const project = this._parseProject(state);
@@ -542,6 +545,120 @@ export class FireParser implements FlowParser<FireArtifacts> {
 
         return 'pending';
     }
+
+    /**
+     * Normalize raw YAML state (snake_case) to FireState (camelCase).
+     */
+    private _normalizeState(raw: RawFireState): FireState {
+        return {
+            project: raw.project ? {
+                name: raw.project.name || '',
+                description: raw.project.description,
+                created: raw.project.created || '',
+                fireVersion: raw.project.fire_version || raw.project.fireVersion || '0.0.0'
+            } : { name: '', created: '', fireVersion: '0.0.0' },
+            workspace: raw.workspace ? {
+                type: raw.workspace.type || 'greenfield',
+                structure: raw.workspace.structure || 'monolith',
+                autonomyBias: raw.workspace.autonomy_bias || raw.workspace.autonomyBias || 'balanced',
+                runScopePreference: raw.workspace.run_scope_preference || raw.workspace.runScopePreference || 'single',
+                scannedAt: raw.workspace.scanned_at || raw.workspace.scannedAt,
+                parts: raw.workspace.parts
+            } : { type: 'greenfield', structure: 'monolith', autonomyBias: 'balanced', runScopePreference: 'single' },
+            intents: (raw.intents || []).map(i => ({
+                id: i.id,
+                title: i.title,
+                status: i.status,
+                workItems: (i.work_items || i.workItems || []).map(w => ({
+                    id: w.id,
+                    status: w.status || 'pending' as FireStatus,
+                    mode: w.mode as ExecutionMode | undefined
+                }))
+            })),
+            activeRun: raw.active_run || raw.activeRun ? {
+                id: (raw.active_run || raw.activeRun)!.id,
+                scope: (raw.active_run || raw.activeRun)!.scope,
+                workItems: ((raw.active_run || raw.activeRun)!.work_items || (raw.active_run || raw.activeRun)!.workItems || []).map(w => ({
+                    id: w.id,
+                    intentId: w.intent || w.intentId || '',
+                    mode: this._normalizeMode(w.mode) || 'confirm',
+                    status: (w.status as 'pending' | 'in_progress' | 'completed' | 'failed') || 'pending'
+                })),
+                currentItem: (raw.active_run || raw.activeRun)!.current_item || (raw.active_run || raw.activeRun)!.currentItem || '',
+                started: (raw.active_run || raw.activeRun)!.started || ''
+            } : null,
+            runs: {
+                completed: (raw.runs?.completed || []).map(r => ({
+                    id: r.id,
+                    workItems: (r.work_items || r.workItems || []).map(w => {
+                        if (typeof w === 'string') {
+                            return { id: w, intentId: r.intent || '', mode: 'confirm' as ExecutionMode, status: 'completed' as const };
+                        }
+                        return {
+                            id: w.id,
+                            intentId: w.intent || w.intentId || r.intent || '',
+                            mode: this._normalizeMode(w.mode) || 'confirm',
+                            status: 'completed' as const
+                        };
+                    }),
+                    completed: r.completed || ''
+                }))
+            }
+        };
+    }
+}
+
+/**
+ * Raw state from YAML (uses snake_case).
+ */
+interface RawFireState {
+    project?: {
+        name?: string;
+        description?: string;
+        created?: string;
+        fire_version?: string;
+        fireVersion?: string;
+    };
+    workspace?: {
+        type?: 'greenfield' | 'brownfield';
+        structure?: 'monolith' | 'monorepo' | 'multi-part';
+        autonomy_bias?: 'autonomous' | 'balanced' | 'controlled';
+        autonomyBias?: 'autonomous' | 'balanced' | 'controlled';
+        run_scope_preference?: 'single' | 'batch' | 'wide';
+        runScopePreference?: 'single' | 'batch' | 'wide';
+        scanned_at?: string;
+        scannedAt?: string;
+        parts?: string[];
+    };
+    intents?: Array<{
+        id: string;
+        title: string;
+        status: FireStatus;
+        work_items?: Array<{ id: string; status?: FireStatus; mode?: string }>;
+        workItems?: Array<{ id: string; status?: FireStatus; mode?: string }>;
+    }>;
+    active_run?: RawActiveRun;
+    activeRun?: RawActiveRun;
+    runs?: {
+        completed?: Array<{
+            id: string;
+            intent?: string;
+            scope?: string;
+            work_items?: Array<string | { id: string; intent?: string; intentId?: string; mode?: string }>;
+            workItems?: Array<string | { id: string; intent?: string; intentId?: string; mode?: string }>;
+            completed?: string;
+        }>;
+    };
+}
+
+interface RawActiveRun {
+    id: string;
+    scope: RunScope;
+    work_items?: Array<{ id: string; intent?: string; intentId?: string; mode?: string; status?: string }>;
+    workItems?: Array<{ id: string; intent?: string; intentId?: string; mode?: string; status?: string }>;
+    current_item?: string;
+    currentItem?: string;
+    started?: string;
 }
 
 /**
