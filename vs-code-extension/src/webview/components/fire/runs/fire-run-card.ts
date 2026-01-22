@@ -11,6 +11,7 @@ import '../shared/fire-scope-badge.js';
 import type { PhaseData, FirePhase } from './fire-phase-pipeline.js';
 import type { RunWorkItemData } from './fire-work-item.js';
 import type { RunScope } from '../shared/fire-scope-badge.js';
+import type { RunFileData } from './fire-completed-runs.js';
 
 /**
  * Run data for display.
@@ -26,6 +27,7 @@ export interface FireRunData {
     hasPlan: boolean;
     hasWalkthrough: boolean;
     hasTestReport: boolean;
+    files?: RunFileData[];
 }
 
 /**
@@ -185,6 +187,62 @@ export class FireRunCard extends BaseElement {
                 opacity: 0.5;
                 cursor: not-allowed;
             }
+
+            .files-section {
+                padding: 8px 12px;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .files-header {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                margin-bottom: 8px;
+            }
+
+            .files-title {
+                font-size: 10px;
+                font-weight: 500;
+                text-transform: uppercase;
+                color: var(--description-foreground);
+                letter-spacing: 0.5px;
+            }
+
+            .files-list {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .file-item {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 4px 8px;
+                cursor: pointer;
+                border-radius: 3px;
+                transition: background 0.15s ease;
+            }
+
+            .file-item:hover {
+                background: var(--background);
+            }
+
+            .file-icon {
+                font-size: 12px;
+                color: var(--description-foreground);
+            }
+
+            .file-name {
+                font-size: 11px;
+                color: var(--foreground);
+            }
+
+            .no-files {
+                font-size: 11px;
+                color: var(--description-foreground);
+                font-style: italic;
+            }
         `
     ];
 
@@ -225,21 +283,13 @@ export class FireRunCard extends BaseElement {
                     ` : nothing}
                 </div>
 
+                ${this._renderFilesSection()}
+
                 ${this.isActive ? html`
                     <div class="actions">
                         <button class="action-btn primary" @click=${this._handleContinue}>
                             Continue Run
                         </button>
-                        ${this.run.hasPlan ? html`
-                            <button class="action-btn secondary" @click=${() => this._handleViewArtifact('plan')}>
-                                View Plan
-                            </button>
-                        ` : nothing}
-                        ${this.run.hasTestReport ? html`
-                            <button class="action-btn secondary" @click=${() => this._handleViewArtifact('test-report')}>
-                                View Tests
-                            </button>
-                        ` : nothing}
                     </div>
                 ` : nothing}
             </div>
@@ -276,6 +326,46 @@ export class FireRunCard extends BaseElement {
 
     private _toggleExpanded(): void {
         this._expanded = !this._expanded;
+    }
+
+    private _renderFilesSection() {
+        const files = this.run.files || [];
+
+        if (files.length === 0) {
+            return nothing;
+        }
+
+        return html`
+            <div class="files-section">
+                <div class="files-header">
+                    <span class="files-title">Run Files</span>
+                </div>
+                <div class="files-list">
+                    ${files.map(file => html`
+                        <div class="file-item" @click=${() => this._handleFileClick(file)}>
+                            <span class="file-icon">${this._getFileIcon(file.name)}</span>
+                            <span class="file-name">${file.name}</span>
+                        </div>
+                    `)}
+                </div>
+            </div>
+        `;
+    }
+
+    private _getFileIcon(fileName: string): string {
+        if (fileName.includes('plan')) return '📋';
+        if (fileName.includes('test')) return '🧪';
+        if (fileName.includes('walkthrough')) return '📝';
+        if (fileName.includes('run')) return '🔥';
+        return '📄';
+    }
+
+    private _handleFileClick(file: RunFileData): void {
+        this.dispatchEvent(new CustomEvent('open-file', {
+            detail: { path: file.path },
+            bubbles: true,
+            composed: true
+        }));
     }
 
     private _handleContinue(): void {

@@ -523,7 +523,8 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
             completedAt: state.activeRun.completedAt,
             hasPlan: state.activeRun.hasPlan,
             hasWalkthrough: state.activeRun.hasWalkthrough,
-            hasTestReport: state.activeRun.hasTestReport
+            hasTestReport: state.activeRun.hasTestReport,
+            files: this._scanRunFiles(state.activeRun.folderPath)
         } : null;
 
         // Build intents data
