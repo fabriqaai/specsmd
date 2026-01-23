@@ -7,6 +7,34 @@ description: Get up and running with AI-DLC flow in minutes
   **Alpha Version**: specs.md does not yet fully support brownfield applications as defined in the AI-DLC process. Currently, it relies on the underlying LLM model's capabilities for existing codebase analysis. Full brownfield support is coming soon.
 </Warning>
 
+## Prerequisites
+
+- Node.js 18+ installed
+- An AI coding tool (Claude Code, Cursor, GitHub Copilot, etc.)
+- A project to work on (greenfield recommended for AI-DLC)
+
+## Installation
+
+<Steps>
+  <Step title="Install specs.md">
+    ```bash
+    npx specsmd@latest install
+    ```
+  </Step>
+  <Step title="Select AI-DLC flow">
+    When prompted, select **AI-DLC** as your development flow:
+    ```
+    ? Select a development flow:
+    ❯ AI-DLC - Full methodology with DDD
+      FIRE - Adaptive execution, brownfield & monorepo ready
+      Simple - Spec generation only
+    ```
+  </Step>
+  <Step title="Choose your AI tool">
+    Select your preferred AI coding tool for agent configuration
+  </Step>
+</Steps>
+
 ## Initialize Your Project
 
 Open your AI coding tool and start the Master Agent:
@@ -129,15 +157,44 @@ memory-bank/                   # Created after project-init
 └── operations/                # Deployment context
 ```
 
+## Command Reference
+
+| Agent | Command | Purpose |
+|-------|---------|---------|
+| **Master** | `project-init` | Initialize project with standards |
+| **Master** | `analyze-context` | View current project state |
+| **Inception** | `intent-create` | Create a new intent |
+| **Inception** | `bolt-plan` | Plan bolts for stories |
+| **Construction** | `bolt-start` | Start/continue executing a bolt |
+| **Construction** | `bolt-status` | Check bolt progress |
+| **Operations** | `deploy` | Deploy to environment |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Agent doesn't remember context">
+    Agents are stateless—they read artifacts from Memory Bank at startup. Ensure artifacts are saved after each step.
+  </Accordion>
+  <Accordion title="Bolt stuck in stage">
+    Run `bolt-status` to check current stage. If validation failed, address the feedback and continue with `bolt-start`.
+  </Accordion>
+  <Accordion title="Want to restart a bolt">
+    Bolts can be replanned with `/specsmd-inception-agent bolt-replan`. This creates a new bolt for the same stories.
+  </Accordion>
+  <Accordion title="Multiple intents exist">
+    Run `/specsmd-master-agent analyze-context` to see all intents and their status.
+  </Accordion>
+</AccordionGroup>
+
 ## Next Steps
 
 <CardGroup cols={2}>
   <Card
-    title="What is AI-DLC?"
-    icon="lightbulb"
-    href="/methodology/what-is-ai-dlc"
+    title="AI-DLC Overview"
+    icon="book"
+    href="/aidlc/overview"
   >
-    Understand the methodology behind specs.md
+    Understand the full AI-DLC methodology
   </Card>
   <Card
     title="Core Concepts"
@@ -145,5 +202,19 @@ memory-bank/                   # Created after project-init
     href="/core-concepts/intents"
   >
     Deep dive into Intents, Units, and Bolts
+  </Card>
+  <Card
+    title="Agents"
+    icon="robot"
+    href="/agents/overview"
+  >
+    Learn about the four specialized agents
+  </Card>
+  <Card
+    title="Bolt Types"
+    icon="hammer"
+    href="/guides/bolt-types"
+  >
+    Choose between DDD and Simple bolts
   </Card>
 </CardGroup>

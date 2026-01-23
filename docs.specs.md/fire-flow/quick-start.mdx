@@ -296,6 +296,26 @@ project/
 | `/fire-planner` | Capture intents, decompose work items |
 | `/fire-builder` | Execute work items, generate walkthroughs |
 
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Agent doesn't remember context">
+    Agents are stateless—they read `state.yaml` and artifacts at startup. Ensure files are saved after each step.
+  </Accordion>
+  <Accordion title="Work item stuck">
+    Check `.specs-fire/state.yaml` to see work item status. If blocked, the Builder will explain what's needed.
+  </Accordion>
+  <Accordion title="Want to change execution mode">
+    You can override the suggested mode during execution. Say "Override to Confirm" or "Override to Validate".
+  </Accordion>
+  <Accordion title="Brownfield detection wrong">
+    Review generated standards in `.specs-fire/standards/` and edit as needed. The Planner respects your overrides.
+  </Accordion>
+  <Accordion title="Multiple intents exist">
+    Run `/fire-orchestrator` to see all intents and their status, then specify which to work on.
+  </Accordion>
+</AccordionGroup>
+
 ## Next Steps
 
 <CardGroup cols={2}>

@@ -87,6 +87,7 @@
           {
             "group": "AI-DLC Flow",
             "pages": [
+              "aidlc/overview",
               "agents/quick-start",
               {
                 "group": "Methodology",
@@ -129,8 +130,9 @@
             "group": "Simple Flow",
             "pages": [
               "simple-flow/overview",
+              "simple-flow/quick-start",
               "simple-flow/three-phases",
-              "simple-flow/quick-start"
+              "simple-flow/agent"
             ]
           },
           {
