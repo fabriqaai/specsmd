@@ -96,6 +96,7 @@
           {
             "group": "AI-DLC Flow",
             "pages": [
+              "agents/quick-start",
               {
                 "group": "Concepts",
                 "pages": [
