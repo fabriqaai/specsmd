@@ -278,7 +278,7 @@ export type RunsFilter = 'all' | 'active' | 'completed';
 /**
  * Filter for intents view.
  */
-export type IntentsFilter = 'all' | 'pending' | 'in_progress' | 'completed';
+export type IntentsFilter = 'all' | 'pending' | 'in_progress' | 'completed' | 'blocked';
 
 /**
  * UI state for FIRE flow.

@@ -69,6 +69,7 @@ import {
 } from '../analytics';
 import { openFile } from '../utils';
 import { FlowRegistry, FlowInfo, FlowId } from '../core';
+import { FireStateManager } from '../flows/fire/state';
 
 /**
  * Flow info for webview display.
@@ -1278,7 +1279,86 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
             case 'switchFlow':
                 await this._handleFlowSwitch(message.flowId);
                 break;
+
+            // FIRE flow specific messages
+            case 'fireTabChange':
+                this._handleFireTabChange((message as { tab: string }).tab);
+                break;
+
+            case 'fireIntentsFilter':
+                this._handleFireIntentsFilter((message as { filter: string }).filter);
+                break;
+
+            case 'fireToggleExpand':
+                this._handleFireToggleExpand(
+                    (message as { intentId: string; expanded: boolean }).intentId,
+                    (message as { intentId: string; expanded: boolean }).expanded
+                );
+                break;
         }
+    }
+
+    /**
+     * Handle FIRE tab change.
+     * Persists the tab state to the FIRE state manager.
+     */
+    private _handleFireTabChange(tab: string): void {
+        if (!this._flowRegistry) return;
+
+        const adapter = this._flowRegistry.getActiveAdapter();
+        if (!adapter || adapter.flowId !== 'fire') return;
+
+        // Persist to FIRE state manager
+        adapter.stateManager.persistUIState('activeTab', tab);
+
+        // Update the internal state
+        const stateManager = adapter.stateManager as FireStateManager;
+        stateManager.setFireUIState({ activeTab: tab as 'runs' | 'intents' | 'overview' });
+
+        // Track analytics
+        trackTabChanged(this._store.getState().ui.activeTab, tab as 'runs' | 'intents' | 'overview');
+    }
+
+    /**
+     * Handle FIRE intents filter change.
+     */
+    private _handleFireIntentsFilter(filter: string): void {
+        if (!this._flowRegistry) return;
+
+        const adapter = this._flowRegistry.getActiveAdapter();
+        if (!adapter || adapter.flowId !== 'fire') return;
+
+        adapter.stateManager.persistUIState('intentsFilter', filter);
+
+        const stateManager = adapter.stateManager as FireStateManager;
+        stateManager.setFireUIState({ intentsFilter: filter as 'all' | 'pending' | 'in_progress' | 'completed' | 'blocked' });
+
+        trackFilterChanged('intents', filter);
+    }
+
+    /**
+     * Handle FIRE intent expand/collapse toggle.
+     */
+    private _handleFireToggleExpand(intentId: string, expanded: boolean): void {
+        if (!this._flowRegistry) return;
+
+        const adapter = this._flowRegistry.getActiveAdapter();
+        if (!adapter || adapter.flowId !== 'fire') return;
+
+        const stateManager = adapter.stateManager as FireStateManager;
+        const currentExpanded = stateManager.getFireUIState().expandedIntents || [];
+
+        let newExpanded: string[];
+        if (expanded) {
+            newExpanded = currentExpanded.includes(intentId)
+                ? currentExpanded
+                : [...currentExpanded, intentId];
+        } else {
+            newExpanded = currentExpanded.filter(id => id !== intentId);
+        }
+
+        stateManager.setFireUIState({ expandedIntents: newExpanded });
+        adapter.stateManager.persistUIState('expandedIntents', newExpanded);
     }
 
     /**

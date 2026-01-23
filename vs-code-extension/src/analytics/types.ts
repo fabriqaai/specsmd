@@ -107,9 +107,10 @@ export interface WelcomeViewDisplayedProperties {
 // ============================================
 
 /**
- * Tab identifiers for navigation tracking
+ * Tab identifiers for navigation tracking.
+ * Includes both AI-DLC tabs (bolts, specs, overview) and FIRE tabs (runs, intents, overview).
  */
-export type TabId = 'bolts' | 'specs' | 'overview';
+export type TabId = 'bolts' | 'specs' | 'overview' | 'runs' | 'intents';
 
 /**
  * Bolt action types for interaction tracking

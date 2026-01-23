@@ -24,7 +24,11 @@ export type WebviewToExtensionMessage =
     | { type: 'viewBoltFiles'; boltId: string }
     | { type: 'openBoltMd'; boltId: string }
     | { type: 'openExternal'; url: string }
-    | { type: 'switchFlow'; flowId: string };
+    | { type: 'switchFlow'; flowId: string }
+    // FIRE flow specific messages
+    | { type: 'fireTabChange'; tab: string }
+    | { type: 'fireIntentsFilter'; filter: string }
+    | { type: 'fireToggleExpand'; intentId: string; expanded: boolean };
 
 /**
  * Activity filter options.
