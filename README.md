@@ -4,13 +4,13 @@
   <img src="images/specs_md_pixel_logo.png" alt="specs.md logo" width="400" />
 </p>
 
-**AI-native software development with multi-agent orchestration.**
+**AI-native development framework with pluggable flows for every use case.**
 
-specsmd implements the [AI-Driven Development Lifecycle (AI-DLC)](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/) methodology as a set of markdown-based agents that work with your favorite AI coding tools.
+Choose the flow that matches your project needs: **Simple** for quick specs, **FIRE** for adaptive execution, or **AI-DLC** for full methodology with DDD.
 
 [![npm version](https://img.shields.io/npm/v/specsmd)](https://www.npmjs.com/package/specsmd)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Documentation](https://img.shields.io/badge/docs-specs.md-CD6B4D)](https://specs.md)
+[![Documentation](https://img.shields.io/badge/docs-specs.md-CD6B4D)](https://docs.specs.md)
 
 <p align="center">
   <img src="docs.specs.md/images/quickstart.gif" alt="specs.md demo" width="800" />
@@ -18,20 +18,15 @@ specsmd implements the [AI-Driven Development Lifecycle (AI-DLC)](https://aws.am
 
 ---
 
-## VS Code Extension
+## Three Flows, Every Use Case
 
-Track your AI-DLC progress with our sidebar extension for VS Code and compatible IDEs.
+| Flow | Optimized For | Agents | Checkpoints |
+|------|---------------|--------|-------------|
+| **[Simple](#simple-flow)** | Spec generation, prototypes | 1 | 3 (phase gates) |
+| **[FIRE](#fire-flow)** | Adaptive execution, brownfield, monorepos | 3 | Adaptive (0-2) |
+| **[AI-DLC](#ai-dlc-flow)** | Full traceability, DDD, regulated environments | 4 | Comprehensive |
 
-<p align="center">
-  <img src="vs-code-extension/resources/extension-preview.png" alt="VS Code Extension Preview" width="800" />
-</p>
-
-> **Note:** Works with any VS Code-based IDE including [Cursor](https://cursor.sh), [Google Antigravity](https://antigravity.google), [Windsurf](https://codeium.com/windsurf), and others.
-
-**Install from:**
-- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fabriqaai.specsmd) — VS Code, GitHub Codespaces
-- [Open VSX Registry](https://open-vsx.org/extension/fabriqaai/specsmd) — Cursor, Windsurf, Amazon Kiro, Google Antigravity, VSCodium, Gitpod, Google IDX
-- [GitHub Releases (VSIX)](https://github.com/fabriqaai/specs.md/releases) — Manual installation
+> **Not sure which flow?** If you want quick specs without execution tracking, use **Simple**. If you want adaptive execution that right-sizes rigor, use **FIRE**. If you need comprehensive documentation and DDD, use **AI-DLC**.
 
 ---
 
@@ -45,16 +40,22 @@ Track your AI-DLC progress with our sidebar extension for VS Code and compatible
 ### Installation
 
 > [!NOTE]
-> Do not use npm if you want to always get the latest version. Use the npx command below.
+> Always use npx to get the latest version. Do not install globally with npm.
 
 ```bash
 npx specsmd@latest install
 ```
 
-The installer detects your AI coding tools (Claude Code, Cursor, GitHub Copilot) and sets up:
-- Agent definitions and skills
-- Memory bank structure for context persistence
-- Slash commands for easy agent invocation
+During installation, select your flow:
+
+```
+? Select a development flow:
+  Simple - Spec generation only (requirements, design, tasks)
+❯ FIRE - Adaptive execution, brownfield & monorepo ready
+  AI-DLC - Full methodology with DDD (comprehensive checkpoints)
+```
+
+The installer detects your AI coding tools and sets up agent definitions, slash commands, and project structure for your selected flow.
 
 ### Verify Installation
 
@@ -62,258 +63,171 @@ The installer detects your AI coding tools (Claude Code, Cursor, GitHub Copilot)
 # Check the manifest
 cat .specsmd/manifest.yaml
 
-# List installed agents
-ls .specsmd/aidlc/agents/
+# List installed agents (adjust path for your flow)
+ls .specsmd/fire/agents/     # FIRE flow
+ls .specsmd/simple/agents/   # Simple flow
+ls .specsmd/aidlc/agents/    # AI-DLC flow
 ```
-
-### Initialize Your Project
-Open your AI Assisted Tool (Claude Code, Cursor, GitHub Copilot) and run the following commands:
-
-```bash
-# Start the Master Agent
-/specsmd-master-agent
-
-# Then type:
-project-init
-```
-
-This guides you through establishing:
-- **Tech Stack** - Languages, frameworks, databases, infrastructure
-- **Coding Standards** - Formatting, linting, naming, testing strategy
-- **System Architecture** - Architecture style, API design, state management
-- **UX Guide** - Design system, styling, accessibility (optional)
-- **API Conventions** - API style, versioning, response formats (optional)
-
-### Create Your First Intent
-
-```bash
-/specsmd-inception-agent intent-create
-```
-
-An **Intent** is your high-level goal:
-- "User authentication system"
-- "Product catalog with search"
-- "Payment processing integration"
-
-The agent will:
-1. Ask clarifying questions to minimize ambiguity
-2. Elaborate into user stories and NFRs
-3. Define system context
-4. Decompose into loosely-coupled units
-
-### Plan and Execute Bolts
-
-```bash
-# Plan bolts for your stories
-/specsmd-inception-agent bolt-plan
-
-# Execute a bolt
-/specsmd-construction-agent bolt-start
-```
-
-Each bolt goes through validated stages:
-1. **Domain Model** - Model business logic using DDD principles
-2. **Technical Design** - Apply patterns and make architecture decisions
-3. **ADR Analysis** - Document significant decisions (optional)
-4. **Implement** - Generate production code
-5. **Test** - Verify correctness with automated tests
-
-**Human validation happens at each stage gate.**
 
 ---
 
-## What is AI-DLC?
+## Simple Flow
 
-AI-DLC is a reimagined software development methodology where **AI drives the conversation** and humans validate. Unlike traditional Agile where iterations span weeks, AI-DLC operates in **Bolts** - rapid iterations measured in hours or days.
-
-> "Traditional development methods were built for human-driven, long-running processes. AI-DLC reimagines the development lifecycle with AI as a central collaborator, enabling rapid cycles measured in hours or days rather than weeks."
-
-### AI-DLC vs Traditional Methods
-
-| Aspect | Agile/Scrum | AI-DLC |
-|--------|-------------|--------|
-| Iteration duration | Weeks (Sprints) | Hours/days (Bolts) |
-| Who drives | Human-driven, AI assists | AI-driven, human-validated |
-| Design techniques | Out of scope | Integrated (DDD, TDD, BDD) |
-| Task decomposition | Manual | AI-powered |
-| Phases | Repeating sprints | Rapid three-phase cycles (Inception → Construction → Operations) |
-| Rituals | Daily standups, retrospectives | Mob Elaboration, Mob Construction |
-
----
-
-## How It Works
-
-specsmd provides four specialized agents that guide you through the entire development lifecycle:
-
-```mermaid
-flowchart TB
-    MA[Master Agent<br/>Orchestrates & Navigates] --> IA[Inception Agent]
-    MA --> CA[Construction Agent]
-    MA --> OA[Operations Agent]
-
-    IA --> CA --> OA
-
-    style MA fill:#8B5CF6,stroke:#7C3AED,color:#fff
-    style IA fill:#818CF8,stroke:#6366F1,color:#fff
-    style CA fill:#34D399,stroke:#10B981,color:#fff
-    style OA fill:#FBBF24,stroke:#F59E0B,color:#fff
-```
-
-### The Three Phases
-
-| Phase | Agent | Purpose | Key Outputs |
-|-------|-------|---------|-------------|
-| **Inception** | Inception Agent | Capture intents, elaborate requirements, decompose into units | User stories, NFRs, Unit definitions, Bolt plans |
-| **Construction** | Construction Agent | Execute bolts through domain design → logical design → code → test | Domain models, Technical designs, Code, Tests |
-| **Operations** | Operations Agent | Deploy, verify, and monitor | Deployment units, Monitoring, Runbooks |
-
----
-
-## Key Concepts
-
-### Intent
-A high-level statement of purpose that encapsulates what needs to be achieved - whether a business goal, feature, or technical outcome. It serves as the starting point for AI-driven decomposition.
-
-### Unit
-A cohesive, self-contained work element derived from an Intent. Units are loosely coupled and can be developed independently. Analogous to a Subdomain (DDD) or Epic (Scrum).
-
-### Bolt
-The smallest iteration in AI-DLC, designed for rapid implementation. Unlike Sprints (weeks), Bolts are **hours to days**. Each bolt encapsulates a well-defined scope of work.
-
-| Type | Best For | Stages |
-|------|----------|--------|
-| **DDD Construction** | Complex business logic, domain modeling | Model → Design → ADR → Implement → Test |
-| **Simple Construction** | UI, integrations, utilities | Plan → Implement → Test |
-
-### Memory Bank
-File-based storage for all project artifacts. Maintains context across agent sessions and provides traceability between artifacts.
-
-### Standards
-Project decisions that inform AI code generation. Standards ensure consistency across all generated code and documentation.
-
----
-
-<details>
-<summary><h2>Project Structure</h2></summary>
-
-After installation:
+**Spec generation only.** Generate requirements, design, and task documents without execution tracking.
 
 ```
-.specsmd/
-├── manifest.yaml              # Installation manifest
-└── aidlc/                     # AI-DLC flow
-    ├── agents/                # Agent definitions
-    ├── skills/                # Agent capabilities
-    ├── templates/             # Artifact templates
-    │   └── standards/         # Standards facilitation guides
-    └── memory-bank.yaml       # Memory bank schema
+/specsmd-agent
+```
 
-memory-bank/                   # Created after project-init
-├── intents/                   # Your captured intents
+**Three Phases:**
+1. **Requirements** → `requirements.md` - User stories, EARS criteria
+2. **Design** → `design.md` - Technical design, architecture diagrams
+3. **Tasks** → `tasks.md` - Implementation checklist
+
+**Best for:** Prototypes, MVPs, spec handoff, projects that don't need AI-assisted execution.
+
+**Output structure:**
+```
+specs/
+└── {feature-name}/
+    ├── requirements.md
+    ├── design.md
+    └── tasks.md
+```
+
+[Simple Flow Documentation →](https://docs.specs.md/simple-flow/overview)
+
+---
+
+## FIRE Flow
+
+**Fast Intent-Run Engineering.** Adaptive execution with brownfield and monorepo support. Ships in hours with 0-2 checkpoints based on task complexity.
+
+```
+/fire-orchestrator   # Entry point, routing
+/fire-planner        # Intent capture, work item decomposition
+/fire-builder        # Run execution, walkthrough generation
+```
+
+**Key Features:**
+- **Adaptive checkpoints** - Autopilot (0), Confirm (1), or Validate (2) based on complexity
+- **First-class brownfield** - Auto-detects existing patterns and conventions
+- **Monorepo support** - Hierarchical standards with module-specific overrides
+- **Walkthrough generation** - Documents every change automatically
+
+**Best for:** Teams who hate friction, brownfield projects, monorepos.
+
+**Output structure:**
+```
+.specs-fire/
+├── state.yaml           # Central state tracking
+├── standards/           # Project standards
+├── intents/             # Intent documentation
+├── runs/                # Run logs
+└── walkthroughs/        # Generated documentation
+```
+
+[FIRE Flow Documentation →](https://docs.specs.md/fire-flow/overview)
+
+---
+
+## AI-DLC Flow
+
+**Full methodology.** Implements the [AI-Driven Development Lifecycle](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/) with Domain-Driven Design and comprehensive traceability.
+
+```
+/specsmd-master-agent       # Orchestrates & navigates
+/specsmd-inception-agent    # Requirements, stories, bolt planning
+/specsmd-construction-agent # Execute bolts through DDD stages
+/specsmd-operations-agent   # Deploy, verify, monitor
+```
+
+**Three Sequential Phases:**
+1. **Inception** - Capture intents, elaborate requirements, decompose into units
+2. **Construction** - Execute bolts: Model → Design → ADR → Implement → Test
+3. **Operations** - Deploy, verify, and monitor
+
+**Best for:** Complex domains, multi-team coordination, regulated environments.
+
+**Output structure:**
+```
+memory-bank/
+├── standards/           # Project standards
+├── intents/             # Intent documentation
 │   └── {intent-name}/
 │       ├── requirements.md
 │       ├── system-context.md
 │       └── units/
-├── bolts/                     # Bolt execution records
-├── standards/                 # Project standards
-│   ├── tech-stack.md
-│   ├── coding-standards.md
-│   └── ...
-└── operations/                # Deployment context
+├── bolts/               # Bolt execution records
+└── operations/          # Deployment context
 ```
 
-</details>
-
-<details>
-<summary><h2>Agent Commands</h2></summary>
-
-### Master Agent
-```bash
-/specsmd-master-agent
-```
-| Command | Purpose |
-|---------|---------|
-| `project-init` | Initialize project with standards |
-| `analyze-context` | View current project state |
-| `route-request` | Get directed to the right agent |
-| `explain-flow` | Learn about AI-DLC methodology |
-| `answer-question` | Get help with any specsmd question |
-
-### Inception Agent
-```bash
-/specsmd-inception-agent
-```
-| Command | Purpose |
-|---------|---------|
-| `intent-create` | Create a new intent |
-| `intent-list` | List all intents |
-| `requirements` | Elaborate intent requirements |
-| `context` | Define system context |
-| `units` | Decompose into units |
-| `story-create` | Create stories for a unit |
-| `bolt-plan` | Plan bolts for stories |
-| `review` | Review inception artifacts |
-
-### Construction Agent
-```bash
-/specsmd-construction-agent
-```
-| Command | Purpose |
-|---------|---------|
-| `bolt-start` | Start/continue executing a bolt |
-| `bolt-status` | Check bolt progress |
-| `bolt-list` | List all bolts |
-| `bolt-replan` | Replan bolts if needed |
-
-### Operations Agent
-```bash
-/specsmd-operations-agent
-```
-| Command | Purpose |
-|---------|---------|
-| `build` | Build the project |
-| `deploy` | Deploy to environment |
-| `verify` | Verify deployment |
-| `monitor` | Set up monitoring |
-
-</details>
+[AI-DLC Flow Documentation →](https://docs.specs.md/aidlc/overview)
 
 ---
 
-## Why specsmd?
+## VS Code Extension
 
-### AI-Native, Not AI-Retrofitted
-Built from the ground up for AI-driven development. AI-DLC is a reimagination based on first principles, not a retrofit of existing methods.
+Track your progress with our sidebar extension for VS Code and compatible IDEs.
 
-### Human Oversight as Loss Function
-Validation at each stage catches errors early before they cascade downstream. Each validation transforms artifacts into rich context for subsequent stages.
+<p align="center">
+  <img src="vs-code-extension/resources/extension-preview.png" alt="VS Code Extension Preview" width="800" />
+</p>
 
-### Design Techniques Built-In
-DDD, TDD, and BDD are integral to the methodology - not optional add-ons. This addresses the "whitespace" in Agile that has led to quality issues.
+> **Note:** Works with any VS Code-based IDE including [Cursor](https://cursor.sh), [Google Antigravity](https://antigravity.google), [Windsurf](https://codeium.com/windsurf), and others.
+
+**Features:**
+- Flow switcher for AI-DLC and FIRE views
+- Active run/bolt tracking with progress indicators
+- Intent and work item visualization
+- Click-to-open spec files
+
+**Install from:**
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fabriqaai.specsmd) — VS Code, GitHub Codespaces
+- [Open VSX Registry](https://open-vsx.org/extension/fabriqaai/specsmd) — Cursor, Windsurf, Amazon Kiro, Google Antigravity, VSCodium, Gitpod, Google IDX
+- [GitHub Releases (VSIX)](https://github.com/fabriqaai/specs.md/releases) — Manual installation
+
+---
+
+## Why specs.md?
+
+### Three Flows for Every Use Case
+From quick specs (Simple) to adaptive execution (FIRE) to full methodology (AI-DLC). Choose the flow that matches your project needs.
+
+### Adaptive Checkpoints (FIRE)
+Right-sizes the rigor. Simple bug fixes burn through fast. Critical changes get design review. You configure your autonomy preference.
+
+### First-Class Brownfield & Monorepo (FIRE)
+Auto-detects existing patterns and respects your conventions. Hierarchical standards with module-specific overrides.
+
+### Full DDD Methodology (AI-DLC)
+Domain-Driven Design is integral to Construction, not an optional add-on. Every decision documented with full traceability.
 
 ### Tool Agnostic
-Works with Claude Code, Cursor, GitHub Copilot, and other AI coding assistants. Markdown-based agents work anywhere.
+Works with Claude Code, Cursor, GitHub Copilot, and other AI coding assistants. Markdown-based agents work anywhere—no vendor lock-in.
 
 ### Context Engineering
-Specs and Memory Bank provide structured context for AI agents. Agents reload context each session - no more lost knowledge.
+Structured artifacts provide persistent context for AI agents. Agents reload context each session—no more lost knowledge.
 
 ---
 
 ## Supported Tools
 
-| Tool | Status | Installation |
-|------|--------|--------------|
-| **Claude Code** | Full support | Slash commands in `.claude/commands/` |
-| **Cursor** | Full support | Rules in `.cursor/rules/` (`.mdc` format) |
-| **GitHub Copilot** | Full support | Agents in `.github/agents/` (`.agent.md` format) |
-| **Google Antigravity** | Full support | Agents in `.agent/agents/` |
-| **Windsurf** | Full support | Workflows in `.windsurf/workflows/` |
-| **Amazon Kiro** | Full support | Steering in `.kiro/steering/` |
-| **Gemini CLI** | Full support | Commands in `.gemini/commands/` (`.toml` format) |
-| **Cline** | Full support | Rules in `.clinerules/` |
-| **Roo Code** | Full support | Commands in `.roo/commands/` |
-| **OpenAI Codex** | Full support | Config in `.codex/` |
-| **OpenCode** | Full support | Agents in `.opencode/agent/` |
+specs.md is **IDE and AI-agnostic**—your specs and agents are portable markdown files that work anywhere.
+
+| Tool | Integration |
+|------|-------------|
+| **Claude Code** | Slash commands in `.claude/commands/` |
+| **Cursor** | Rules in `.cursor/rules/` (`.mdc` format) |
+| **GitHub Copilot** | Agents in `.github/agents/` (`.agent.md` format) |
+| **Google Antigravity** | Agents in `.agent/agents/` |
+| **Windsurf** | Rules in `.windsurf/rules/` |
+| **Amazon Kiro** | Steering in `.kiro/steering/` |
+| **Gemini CLI** | Commands in `.gemini/commands/` (`.toml` format) |
+| **Cline** | Rules in `.clinerules/` |
+| **Roo Code** | Commands in `.roo/commands/` |
+| **OpenAI Codex** | Config in `.codex/` |
+| **OpenCode** | Agents in `.opencode/agent/` |
 
 ---
 
@@ -324,7 +238,10 @@ Specs and Memory Bank provide structured context for AI agents. Agents reload co
 
 Ensure specs.md is installed correctly:
 ```bash
-ls .specsmd/aidlc/agents/
+# Check for your flow
+ls .specsmd/fire/agents/     # FIRE
+ls .specsmd/simple/agents/   # Simple
+ls .specsmd/aidlc/agents/    # AI-DLC
 ```
 
 If the directory is empty or missing, reinstall:
@@ -334,33 +251,26 @@ npx specsmd@latest install
 </details>
 
 <details>
-<summary><strong>Memory Bank artifacts missing</strong></summary>
+<summary><strong>Project artifacts missing</strong></summary>
 
-Check if the memory-bank directory exists:
+Check if the artifacts directory exists for your flow:
 ```bash
-ls memory-bank/
+ls .specs-fire/    # FIRE flow
+ls specs/          # Simple flow
+ls memory-bank/    # AI-DLC flow
 ```
 
-If missing, run project initialization:
-```
-/specsmd-master-agent
-> project-init
-```
+If missing, initialize your project using the appropriate agent.
 </details>
 
 <details>
 <summary><strong>Standards not being followed in generated code</strong></summary>
 
-Ensure standards are defined in `memory-bank/standards/`:
-- `tech-stack.md`
-- `coding-standards.md`
-- `architecture.md`
+Ensure standards are defined in your flow's standards directory:
+- FIRE: `.specs-fire/standards/`
+- AI-DLC: `memory-bank/standards/`
 
-If missing or incomplete, use the Master Agent to define them:
-```
-/specsmd-master-agent
-> project-init
-```
+Run project initialization if missing.
 </details>
 
 ---
@@ -368,17 +278,27 @@ If missing or incomplete, use the Master Agent to define them:
 <details>
 <summary><h2>FAQ</h2></summary>
 
+**Q: Which flow should I choose?**
+- **Simple**: Spec generation only, no execution tracking
+- **FIRE**: Adaptive execution, brownfield/monorepo support
+- **AI-DLC**: Full methodology with DDD and comprehensive traceability
+
+**Q: Can I switch flows after installation?**
+Flows are independent—they're not an upgrade path. Each is designed for different use cases. You can reinstall to change flows, but artifacts are structured differently.
+
 **Q: Agents don't seem to remember previous context?**
-Each agent invocation starts fresh. Agents read context from the Memory Bank at startup. Ensure artifacts are saved after each step.
+Each agent invocation starts fresh. Agents read context from artifacts at startup. Ensure artifacts are saved after each step.
 
 **Q: How do I reset project state?**
-Clear the `memory-bank/` directory to reset all artifacts. To remove specsmd entirely, delete the `.specsmd/` directory and tool-specific command files.
+Delete the artifacts directory for your flow:
+- FIRE: `.specs-fire/`
+- Simple: `specs/`
+- AI-DLC: `memory-bank/`
 
-**Q: Can I use specsmd with existing Agile workflows?**
-AI-DLC is designed as a reimagination, not a retrofit. However, familiar concepts (user stories, acceptance criteria) are retained to ease transition.
+To remove specsmd entirely, also delete `.specsmd/` and tool-specific command files.
 
 **Q: What project types is this suited for?**
-specsmd is designed for building complex systems that demand architectural complexity, trade-off management, and scalability. Simpler systems may be better suited for low-code/no-code approaches.
+specs.md supports everything from quick prototypes (Simple) to complex enterprise systems (AI-DLC). Choose the flow that matches your project needs.
 
 </details>
 
@@ -386,11 +306,12 @@ specsmd is designed for building complex systems that demand architectural compl
 
 ## Resources
 
-- [Documentation](https://specs.md)
+- [Documentation](https://docs.specs.md)
+- [Choose Your Flow Guide](https://docs.specs.md/architecture/choose-flow)
 - [AI-DLC Specification (AWS)](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/)
 - [npm Package](https://www.npmjs.com/package/specsmd)
-- [GitHub Issues](https://github.com/fabriqaai/specsmd/issues)
-
+- [GitHub Issues](https://github.com/fabriqaai/specs.md/issues)
+- [Discord Community](http://discord.specs.md/)
 
 ---
 
@@ -401,5 +322,5 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 <p align="center">
-  Built with AWS' AI-DLC methodology by the <a href="https://specs.md">specs.md</a> team.
+  Built by the <a href="https://specs.md">specs.md</a> team.
 </p>
