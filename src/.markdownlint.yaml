@@ -1,0 +1,27 @@
+# Markdownlint configuration for specsmd
+# https://github.com/DavidAnson/markdownlint
+
+default: true
+
+# Disable line length - our markdown files have long lines
+MD013: false
+
+# Allow inline HTML - we use HTML in markdown for formatting
+MD033: false
+
+# Allow first line to not be a heading
+MD041: false
+
+# Allow duplicate headings in different sections
+MD024:
+  siblings_only: true
+
+# Allow trailing punctuation in headings (for ? in questions)
+MD026:
+  punctuation: ".,;:!"
+
+# Allow multiple blank lines (sometimes used for visual separation)
+MD012: false
+
+# Allow bare URLs
+MD034: false
