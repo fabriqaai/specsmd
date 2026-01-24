@@ -88,12 +88,35 @@ class AnalyticsTracker {
 
         // Check if running in development mode (Extension Development Host)
         this.developmentMode = context.extensionMode === vscode.ExtensionMode.Development;
-        if (this.developmentMode) {
-            console.log('[specsmd] Running in development mode - analytics will log to console');
-        }
 
         try {
-            // Check privacy opt-out BEFORE any initialization
+            // Generate IDs
+            this.machineId = getMachineId(context.globalState);
+            this.sessionId = generateSessionId();
+
+            // Detect IDE
+            const ide = detectIDE();
+
+            // Build base properties included with every event
+            this.baseProperties = {
+                distinct_id: this.machineId,
+                session_id: this.sessionId,
+                ide_name: ide.name,
+                ide_version: ide.version,
+                ide_host: ide.host,
+                platform: process.platform,
+                locale: vscode.env.language || 'unknown',
+                extension_version: this.getExtensionVersion(context),
+            };
+
+            // In development mode, skip Mixpanel - just log to console
+            if (this.developmentMode) {
+                console.log('[specsmd] Development mode - analytics will log to console only');
+                this.enabled = true; // Enable so track() doesn't early-return
+                return true;
+            }
+
+            // Check privacy opt-out BEFORE Mixpanel initialization
             if (isTelemetryDisabled()) {
                 const reason = getOptOutReason();
                 console.log(`[specsmd] Analytics disabled: ${reason}`);
@@ -122,25 +145,6 @@ class AnalyticsTracker {
                 // No personal identifiers are collected. Users can opt out.
                 geolocate: true,
             });
-
-            // Generate IDs
-            this.machineId = getMachineId(context.globalState);
-            this.sessionId = generateSessionId();
-
-            // Detect IDE
-            const ide = detectIDE();
-
-            // Build base properties included with every event
-            this.baseProperties = {
-                distinct_id: this.machineId,
-                session_id: this.sessionId,
-                ide_name: ide.name,
-                ide_version: ide.version,
-                ide_host: ide.host,
-                platform: process.platform,
-                locale: vscode.env.language || 'unknown',
-                extension_version: this.getExtensionVersion(context),
-            };
 
             this.enabled = true;
             console.log('[specsmd] Analytics initialized successfully');
@@ -177,6 +181,7 @@ class AnalyticsTracker {
     public track(eventName: string, properties: EventProperties = {}): void {
         // CRITICAL: Never throw from this method
         try {
+            console.log(`[specsmd debug] track called: ${eventName}, devMode=${this.developmentMode}, initialized=${this.initialized}`);
             // In development mode, always log to console
             if (this.developmentMode) {
                 const eventData = {
