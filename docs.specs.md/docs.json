@@ -148,7 +148,6 @@
           {
             "group": "Resources",
             "pages": [
-              "learn",
               "changelog",
               "faq",
               "feedback",
@@ -156,6 +155,10 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Video Tutorials",
+        "href": "/learn"
       }
     ]
   },
