@@ -186,10 +186,10 @@ class AnalyticsTracker {
                 ...properties,
             };
 
-            // In development mode, log full event data to console
+            // Log event to console (always in dev mode, helps debugging)
             if (this.developmentMode) {
                 console.log(`\n[specsmd analytics] EVENT: ${eventName}`);
-                console.log('Properties:', JSON.stringify(eventData, null, 2));
+                console.log('Payload:', JSON.stringify(eventData, null, 2));
                 return; // Don't send to Mixpanel in development mode
             }
 
@@ -223,10 +223,10 @@ class AnalyticsTracker {
                 ...properties,
             };
 
-            // In development mode, log full event data to console
+            // Log event to console (always in dev mode, helps debugging)
             if (this.developmentMode) {
                 console.log(`\n[specsmd analytics] EVENT: ${eventName}`);
-                console.log('Properties:', JSON.stringify(eventData, null, 2));
+                console.log('Payload:', JSON.stringify(eventData, null, 2));
                 return; // Don't send to Mixpanel in development mode
             }
 
