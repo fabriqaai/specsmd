@@ -64,8 +64,9 @@ export type ProjectChangeType =
     | 'bolt_added'
     | 'bolt_completed'
     | 'intent_added'
+    | 'unit_added'
     | 'story_added'
-    | 'entities_removed';
+    | 'counts_changed';
 
 /**
  * Properties for project_changed event
@@ -259,7 +260,7 @@ class ProjectMetricsTracker {
      * Detect the type of change that occurred.
      */
     private detectChangeType(prev: ProjectCounts, curr: ProjectCounts): ProjectChangeType {
-        // Priority order: completed bolts > new bolts > new intents > new stories > removed
+        // Priority order: completed bolts > new bolts > new intents > new units > new stories > other
         if (curr.completedBolts > prev.completedBolts) {
             return 'bolt_completed';
         }
@@ -269,10 +270,13 @@ class ProjectMetricsTracker {
         if (curr.intentCount > prev.intentCount) {
             return 'intent_added';
         }
+        if (curr.unitCount > prev.unitCount) {
+            return 'unit_added';
+        }
         if (curr.storyCount > prev.storyCount) {
             return 'story_added';
         }
-        return 'entities_removed';
+        return 'counts_changed';
     }
 
     /**

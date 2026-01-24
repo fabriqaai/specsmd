@@ -238,8 +238,9 @@ export type ProjectChangeType =
     | 'bolt_added'
     | 'bolt_completed'
     | 'intent_added'
+    | 'unit_added'
     | 'story_added'
-    | 'entities_removed';
+    | 'counts_changed';
 
 /**
  * Properties for project_changed event

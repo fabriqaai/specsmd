@@ -224,8 +224,9 @@ suite('Project Metrics Events Test Suite', () => {
             | 'bolt_added'
             | 'bolt_completed'
             | 'intent_added'
+            | 'unit_added'
             | 'story_added'
-            | 'entities_removed';
+            | 'counts_changed';
 
         const hasChanged = (prev: ProjectCounts, curr: ProjectCounts): boolean => {
             return (
@@ -250,10 +251,13 @@ suite('Project Metrics Events Test Suite', () => {
             if (curr.intentCount > prev.intentCount) {
                 return 'intent_added';
             }
+            if (curr.unitCount > prev.unitCount) {
+                return 'unit_added';
+            }
             if (curr.storyCount > prev.storyCount) {
                 return 'story_added';
             }
-            return 'entities_removed';
+            return 'counts_changed';
         };
 
         const baseCounts: ProjectCounts = {
@@ -333,12 +337,20 @@ suite('Project Metrics Events Test Suite', () => {
             assert.strictEqual(detectChangeType(baseCounts, curr), 'story_added');
         });
 
-        test('should detect entities_removed when counts decrease', () => {
+        test('should detect counts_changed when counts decrease or other changes', () => {
             const curr = {
                 ...baseCounts,
                 intentCount: 1,
             };
-            assert.strictEqual(detectChangeType(baseCounts, curr), 'entities_removed');
+            assert.strictEqual(detectChangeType(baseCounts, curr), 'counts_changed');
+        });
+
+        test('should detect unit_added when units increase', () => {
+            const curr = {
+                ...baseCounts,
+                unitCount: 5,
+            };
+            assert.strictEqual(detectChangeType(baseCounts, curr), 'unit_added');
         });
     });
 
