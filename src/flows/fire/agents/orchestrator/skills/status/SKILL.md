@@ -592,23 +592,25 @@ Detect inconsistencies and offer interactive resolution.
 <!-- ═══════════════════════════════════════════════════════════════════════════ -->
 
 <issue_types>
-  | Type | Severity | Auto-fixable | Description |
-  |------|----------|--------------|-------------|
-  | orphaned_intent | warning | yes | Intent on disk but not in state.yaml |
-  | orphaned_work_item | warning | yes | Work item on disk but not in state.yaml |
-  | orphaned_run | warning | partial | Run folder on disk but not tracked |
-  | missing_intent_file | error | partial | Intent in state but file missing |
-  | missing_work_item_file | error | partial | Work item in state but file missing |
-  | missing_run_folder | error | no | Completed run in state but folder missing |
-  | status_mismatch | error | yes | Work item status doesn't match run history |
-  | status_unverifiable | warning | no | Status can't be verified from run data |
-  | intent_status_mismatch | error | yes | Intent status inconsistent with work items |
-  | incomplete_run_artifacts | warning | partial | Run missing required artifacts |
-  | active_run_missing | error | no | Active run folder doesn't exist |
-  | active_run_corrupted | error | no | Active run folder missing run.md |
-  | stale_run | info | no | Active run is old, may be abandoned |
-  | interrupted_run | warning | no | Run appears stopped mid-execution |
-  | frontmatter_drift | info | yes | Frontmatter status differs from state |
+
+| Type | Severity | Auto-fixable | Description |
+|------|----------|--------------|-------------|
+| orphaned_intent | warning | yes | Intent on disk but not in state.yaml |
+| orphaned_work_item | warning | yes | Work item on disk but not in state.yaml |
+| orphaned_run | warning | partial | Run folder on disk but not tracked |
+| missing_intent_file | error | partial | Intent in state but file missing |
+| missing_work_item_file | error | partial | Work item in state but file missing |
+| missing_run_folder | error | no | Completed run in state but folder missing |
+| status_mismatch | error | yes | Work item status doesn't match run history |
+| status_unverifiable | warning | no | Status can't be verified from run data |
+| intent_status_mismatch | error | yes | Intent status inconsistent with work items |
+| incomplete_run_artifacts | warning | partial | Run missing required artifacts |
+| active_run_missing | error | no | Active run folder doesn't exist |
+| active_run_corrupted | error | no | Active run folder missing run.md |
+| stale_run | info | no | Active run is old, may be abandoned |
+| interrupted_run | warning | no | Run appears stopped mid-execution |
+| frontmatter_drift | info | yes | Frontmatter status differs from state |
+
 </issue_types>
 
 <!-- ═══════════════════════════════════════════════════════════════════════════ -->
