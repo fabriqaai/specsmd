@@ -26,6 +26,9 @@ graph LR
 ## Key Differentiators
 
 <CardGroup cols={2}>
+  <Card title="Dynamic Execution" icon="rotate">
+    **No pre-planned execution.** Builder scans remaining work items and recommends what to run next based on dependencies and current state.
+  </Card>
   <Card title="Adaptive Checkpoints" icon="sliders">
     **0-2 checkpoints per work item** based on complexity. Autopilot for simple tasks, Validate for critical changes.
   </Card>
@@ -38,6 +41,9 @@ graph LR
   <Card title="Walkthrough Generation" icon="file-lines">
     Every change documented automatically. Review what AI did without digging through code.
   </Card>
+  <Card title="Change-Friendly" icon="arrows-rotate">
+    Requirements changed? Just update your specs. No execution plans to re-create—next run adapts automatically.
+  </Card>
 </CardGroup>
 
 ## FIRE vs AI-DLC (specs.md)
@@ -48,6 +54,8 @@ FIRE and specs.md's AI-DLC flow share intent-driven philosophy but are distinct 
 |--------|------|-----------------|
 | **Philosophy** | Intent-driven, AI proposes, human validates | Same |
 | **Hierarchy** | Intent → Work Item → Run | Intent → Unit → Story → Bolt → Stages |
+| **Execution Planning** | Dynamic—Builder recommends next run | Pre-planned—Bolts created before execution |
+| **Requirement Changes** | Just update specs, next run adapts | May require re-planning bolts |
 | **Checkpoints** | Adaptive (based on complexity + config) | Comprehensive (fixed per bolt type) |
 | **Agents** | 3 (Orchestrator, Planner, Builder) | 4 (Master, Inception, Construction, Operations) |
 | **Artifacts** | Adaptive (design docs when needed) | Comprehensive (per bolt type) |
@@ -58,6 +66,18 @@ FIRE and specs.md's AI-DLC flow share intent-driven philosophy but are distinct 
 <Info>
   **Shared philosophy**: Both flows use intents, structured artifacts, and human validation. FIRE adapts the ceremony to the task; AI-DLC provides comprehensive ceremony always.
 </Info>
+
+### Dynamic vs Pre-Planned Execution
+
+This is a fundamental difference in how the two flows handle execution:
+
+**FIRE (Dynamic)**: When you invoke the Builder agent, it scans all remaining intents and work items, analyzes their dependencies, and recommends which work items can run together next. You approve or adjust, then it executes. No execution plans are created ahead of time.
+
+**AI-DLC (Pre-Planned)**: During the Inception phase, you create "bolts"—pre-defined execution plans that bundle stories together with specific stages. Bolts are planned before construction begins.
+
+<Warning>
+  **Why this matters for changing requirements**: In AI-DLC, if you add new stories or modify units after bolt planning, you may need to re-plan your bolts. In FIRE, just update your specs—the Builder will see the changes and recommend accordingly on the next run.
+</Warning>
 
 ## When to Use FIRE
 
