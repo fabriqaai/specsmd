@@ -177,6 +177,18 @@ class AnalyticsTracker {
     public track(eventName: string, properties: EventProperties = {}): void {
         // CRITICAL: Never throw from this method
         try {
+            // In development mode, always log to console
+            if (this.developmentMode) {
+                const eventData = {
+                    ...this.baseProperties,
+                    ...properties,
+                };
+                console.log(`\n[specsmd analytics] EVENT: ${eventName}`);
+                console.log('Payload:', JSON.stringify(eventData, null, 2));
+                return; // Don't send to Mixpanel in development mode
+            }
+
+            // Production mode - send to Mixpanel
             if (!this.enabled || !this.mixpanel || !this.baseProperties) {
                 return;
             }
@@ -185,13 +197,6 @@ class AnalyticsTracker {
                 ...this.baseProperties,
                 ...properties,
             };
-
-            // Log event to console (always in dev mode, helps debugging)
-            if (this.developmentMode) {
-                console.log(`\n[specsmd analytics] EVENT: ${eventName}`);
-                console.log('Payload:', JSON.stringify(eventData, null, 2));
-                return; // Don't send to Mixpanel in development mode
-            }
 
             // Fire and forget - don't await, no callback handling
             this.mixpanel.track(eventName, eventData);
@@ -214,6 +219,18 @@ class AnalyticsTracker {
     public async trackWithDelivery(eventName: string, properties: EventProperties = {}): Promise<void> {
         // CRITICAL: Never throw from this method
         try {
+            // In development mode, always log to console
+            if (this.developmentMode) {
+                const eventData = {
+                    ...this.baseProperties,
+                    ...properties,
+                };
+                console.log(`\n[specsmd analytics] EVENT: ${eventName}`);
+                console.log('Payload:', JSON.stringify(eventData, null, 2));
+                return; // Don't send to Mixpanel in development mode
+            }
+
+            // Production mode - send to Mixpanel
             if (!this.enabled || !this.mixpanel || !this.baseProperties) {
                 return;
             }
@@ -222,13 +239,6 @@ class AnalyticsTracker {
                 ...this.baseProperties,
                 ...properties,
             };
-
-            // Log event to console (always in dev mode, helps debugging)
-            if (this.developmentMode) {
-                console.log(`\n[specsmd analytics] EVENT: ${eventName}`);
-                console.log('Payload:', JSON.stringify(eventData, null, 2));
-                return; // Don't send to Mixpanel in development mode
-            }
 
             await new Promise<void>((resolve) => {
                 try {
