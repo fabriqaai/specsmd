@@ -553,6 +553,45 @@ export class SpecsmdApp extends BaseElement {
                 color: var(--status-complete);
             }
 
+            /* ==================== OVERVIEW RESOURCES FOOTER ==================== */
+            .overview-resources-footer {
+                margin-top: 20px;
+                padding-top: 16px;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .overview-resources-links {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                margin-top: 8px;
+            }
+
+            .overview-resource-link {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 36px;
+                height: 36px;
+                border-radius: 8px;
+                background: var(--editor-background);
+                border: 1px solid var(--border-color);
+                cursor: pointer;
+                transition: all 0.15s ease;
+                color: var(--description-foreground);
+            }
+
+            .overview-resource-link:hover {
+                background: var(--vscode-list-hoverBackground);
+                border-color: var(--status-active);
+                color: var(--status-active);
+            }
+
+            .overview-resource-link svg {
+                width: 18px;
+                height: 18px;
+            }
+
             /* ==================== EMPTY STATE ==================== */
             .empty-state {
                 padding: 20px;
