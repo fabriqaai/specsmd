@@ -188,7 +188,8 @@ class AnalyticsTracker {
 
             // In development mode, log full event data to console
             if (this.developmentMode) {
-                console.log(`[specsmd analytics] ${eventName}`, JSON.stringify(eventData, null, 2));
+                console.log(`\n[specsmd analytics] EVENT: ${eventName}`);
+                console.log('Properties:', JSON.stringify(eventData, null, 2));
                 return; // Don't send to Mixpanel in development mode
             }
 
@@ -224,7 +225,8 @@ class AnalyticsTracker {
 
             // In development mode, log full event data to console
             if (this.developmentMode) {
-                console.log(`[specsmd analytics] ${eventName}`, JSON.stringify(eventData, null, 2));
+                console.log(`\n[specsmd analytics] EVENT: ${eventName}`);
+                console.log('Properties:', JSON.stringify(eventData, null, 2));
                 return; // Don't send to Mixpanel in development mode
             }
 
