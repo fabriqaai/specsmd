@@ -9,7 +9,7 @@ Analyze project state and route user to the appropriate agent.
 </objective>
 
 <triggers>
-  - User runs `/fire` on initialized project
+  - User runs `/specsmd-fire` on initialized project
   - After any agent completes its task
 </triggers>
 

@@ -10,7 +10,7 @@ Upgrade an existing FIRE project to the latest version, adding new features
 </objective>
 
 <triggers>
-  - User runs `/fire-migrate`
+  - User runs `/specsmd-fire-migrate`
   - Orchestrator detects outdated project version
 </triggers>
 
@@ -25,7 +25,7 @@ Upgrade an existing FIRE project to the latest version, adding new features
   <step n="1" title="Detect Current Version">
     <action>Check if .specs-fire/ exists</action>
     <check if="no .specs-fire/">
-      <output>Not a FIRE project. Use /fire to initialize.</output>
+      <output>Not a FIRE project. Use /specsmd-fire to initialize.</output>
       <exit/>
     </check>
 

@@ -9,7 +9,7 @@ Initialize a new FIRE project by detecting workspace type and setting up standar
 </objective>
 
 <triggers>
-  - User runs `/fire` on uninitialized project
+  - User runs `/specsmd-fire` on uninitialized project
   - No `.specs-fire/state.yaml` exists
 </triggers>
 

@@ -55,6 +55,13 @@ state:
       - title: "Intent title"
       - status: "pending | in_progress | completed"
       - work_items: "List of work items"
+    # Each work item in intents[] has:
+    #   - id: "Work item identifier"
+    #   - title: "Work item title"
+    #   - status: "pending | in_progress | completed | blocked"
+    #   - complexity: "low | medium | high"
+    #   - mode: "autopilot | confirm | validate (derived from complexity + autonomy_bias)"
+    #   - depends_on: "List of work item IDs this depends on (optional)"
     runs:
       - active: "List of currently active runs (supports multiple parallel runs)"
       - completed: "List of completed runs with id, work_item, intent, completed timestamp"
@@ -90,23 +97,31 @@ naming:
     example: "run-001/"
     note: "Sequential 3-digit number, folder per run"
     contents:
-      - "plan.md"         # Approved implementation plan (confirm/validate modes)
-      - "run.md"          # Run log
-      - "test-report.md"  # Test results and coverage
-      - "walkthrough.md"  # Implementation walkthrough
+      - "run.md"           # Run log (created by init-run.js)
+      - "plan.md"          # Implementation plan (ALL modes, created BEFORE implementation)
+      - "test-report.md"   # Test results and coverage (created AFTER tests pass)
+      - "review-report.md" # Code review findings (created by code-review skill)
+      - "walkthrough.md"   # Implementation walkthrough (created at run completion)
 
 # Schema Definition (Source of Truth for Agents)
 schema:
   state: ".specs-fire/state.yaml"
+  maintenance-log: ".specs-fire/maintenance-log.md"
+
+  # Intent Artifacts
   intents: ".specs-fire/intents/{intent-id}/"
   intent-brief: ".specs-fire/intents/{intent-id}/brief.md"
   work-items: ".specs-fire/intents/{intent-id}/work-items/"
   work-item: ".specs-fire/intents/{intent-id}/work-items/{work-item-id}.md"
+  design-doc: ".specs-fire/intents/{intent-id}/work-items/{work-item-id}-design.md"
+
+  # Run Artifacts
   runs: ".specs-fire/runs/"
   run-folder: ".specs-fire/runs/{run-id}/"
-  plan: ".specs-fire/runs/{run-id}/plan.md"
   run-log: ".specs-fire/runs/{run-id}/run.md"
+  plan: ".specs-fire/runs/{run-id}/plan.md"
   test-report: ".specs-fire/runs/{run-id}/test-report.md"
+  review-report: ".specs-fire/runs/{run-id}/review-report.md"
   walkthrough: ".specs-fire/runs/{run-id}/walkthrough.md"
 
   # Root Standards

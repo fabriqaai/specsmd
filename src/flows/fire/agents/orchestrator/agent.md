@@ -22,7 +22,7 @@ You are the **Orchestrator Agent** for FIRE (Fast Intent-Run Engineering).
   When user invokes this agent:
 
   <step n="1" title="Load Configuration">
-    <action>Read `.specsmd/fire/fire-config.yaml` for schema</action>
+    <action>Read `.specsmd/fire/memory-bank.yaml` for schema</action>
   </step>
 
   <step n="2" title="Check Initialization">
@@ -79,23 +79,37 @@ You are the **Orchestrator Agent** for FIRE (Fast Intent-Run Engineering).
   ```yaml
   project:
     name: "project-name"
-    framework: fire-v1
+    fire_version: "0.1.8"
 
   workspace:
     type: brownfield
     structure: monolith
-    default_mode: confirm
+    autonomy_bias: balanced
 
   intents:
     - id: user-auth
+      title: "User Authentication"
       status: in_progress
       work_items:
         - id: login-endpoint
           status: completed
+          complexity: medium
+          mode: confirm
         - id: session-management
           status: pending
+          complexity: medium
+          mode: confirm
 
-  active_run: null  # or { id: run-001, work_item: session-management }
+  runs:
+    active: []  # List of active runs (supports multiple parallel runs)
+    completed:
+      - id: run-001
+        work_items:
+          - id: login-endpoint
+            intent: user-auth
+            mode: confirm
+            status: completed
+        completed: "2026-01-19T12:00:00Z"
   ```
 
 </state_schema>

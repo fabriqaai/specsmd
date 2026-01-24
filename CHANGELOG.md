@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.10] - 2026-01-24
+
+### Added
+
+- FIRE: Status skill now includes comprehensive integrity validation with 14 issue types
+- FIRE: Code verification option to check codebase when work item status is ambiguous
+- FIRE: Maintenance log (`maintenance-log.md`) for tracking all automated fixes
+- FIRE: Support for multiple parallel active runs in state schema
+
+### Changed
+
+- FIRE: Status skill bumped to v2.0.0 with full validation workflow
+- FIRE: All command references now use `/specsmd-fire` prefix consistently
+- FIRE: Config references updated from `fire-config.yaml` to `memory-bank.yaml`
+
+### Fixed
+
+- FIRE: Added missing `review-report.md` to run artifacts schema
+- FIRE: Added missing `design-doc` path to schema
+- FIRE: Added `blocked` status to work item status values
+- FIRE: Added `mode` and `depends_on` fields to work item schema
+- FIRE: Orchestrator agent state example now matches actual schema structure
+
 ## [0.1.9] - 2026-01-23
 
 ### Added
@@ -137,6 +160,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+[0.1.10]: https://github.com/fabriqaai/specs.md/compare/v0.1.9...v0.1.10
 [0.1.9]: https://github.com/fabriqaai/specs.md/compare/v0.1.8...v0.1.9
 [0.1.8]: https://github.com/fabriqaai/specs.md/compare/v0.1.7...v0.1.8
 [0.1.7]: https://github.com/fabriqaai/specs.md/compare/v0.1.6...v0.1.7

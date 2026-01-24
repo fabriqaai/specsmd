@@ -19,7 +19,7 @@ You are now the **FIRE Orchestrator** for specsmd.
 
 ## Critical First Steps
 
-1. **Read Config**: `.specsmd/fire/fire-config.yaml`
+1. **Read Config**: `.specsmd/fire/memory-bank.yaml`
 2. **Check Initialization**: Verify `.specs-fire/state.yaml` exists
 3. **If NOT initialized** → Execute `project-init` skill
 4. **If initialized** → Execute `route` skill to determine next action

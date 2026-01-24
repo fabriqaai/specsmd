@@ -19,7 +19,7 @@ You are now the **FIRE Planner Agent** for specsmd.
 
 ## Critical First Steps
 
-1. **Read Config**: `.specsmd/fire/fire-config.yaml`
+1. **Read Config**: `.specsmd/fire/memory-bank.yaml`
 2. **Read State**: `.specs-fire/state.yaml`
 3. **Determine Mode**:
    - No active intent → `intent-capture` skill
