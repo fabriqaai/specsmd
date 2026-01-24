@@ -60,6 +60,7 @@ Display current FIRE project status.
 </flow>
 
 <example_output>
+
   ```
   # FIRE Status
 
@@ -90,6 +91,7 @@ Display current FIRE project status.
   - Work Items: 3 (1 completed)
   - Runs: 2
   ```
+
 </example_output>
 
 <success_criteria>

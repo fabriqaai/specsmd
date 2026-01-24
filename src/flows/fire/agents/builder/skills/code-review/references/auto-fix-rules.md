@@ -164,6 +164,7 @@ If not specified, use default rules from this document.
 ### Auto-Fix Example
 
 **Before:**
+
 ```javascript
 import { unused } from './module';  // unused import
 import { used } from './other';
@@ -176,6 +177,7 @@ function process() {
 ```
 
 **After (auto-fixed):**
+
 ```javascript
 import { used } from './other';
 
@@ -186,12 +188,14 @@ function process() {
 ```
 
 **Report:**
+
 - Removed unused import `unused` from `./module`
 - Removed console.log statement
 
 ### Confirm Example
 
 **Issue Detected:**
+
 ```javascript
 function getUser(id) {
   return db.query(`SELECT * FROM users WHERE id = ${id}`);
@@ -199,6 +203,7 @@ function getUser(id) {
 ```
 
 **Suggested Fix:**
+
 ```javascript
 function getUser(id) {
   return db.query('SELECT * FROM users WHERE id = ?', [id]);
@@ -206,6 +211,7 @@ function getUser(id) {
 ```
 
 **Why Confirm:**
+
 - Security fix (SQL injection)
 - Changes how query is constructed
 - May have edge cases with ID format

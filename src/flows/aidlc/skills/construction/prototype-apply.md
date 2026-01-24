@@ -11,6 +11,7 @@ Apply a vibe-coded prototype's design and components to the real implementation 
 ## When to Use
 
 Use this skill when:
+
 - A bolt references a prototype in its scope
 - You need to implement UI that matches a prototype screenshot
 - The design system from vibe-to-spec should be applied to code
@@ -88,6 +89,7 @@ const tokens = {
 ```
 
 ### Components to Implement
+
 | Component | Prototype Ref | Target File | Status |
 |-----------|---------------|-------------|--------|
 | {Sidebar} | screen-2.png | Sidebar.tsx | pending |
@@ -95,6 +97,7 @@ const tokens = {
 | {MessageBubble} | screen-3.png | MessageBubble.tsx | pending |
 
 ### Layout Structure
+
 ```
 {ASCII representation of layout from prototype}
 ┌─────────────────────────────────────────┐
@@ -107,6 +110,7 @@ const tokens = {
 │ Footer / Input Area                     │
 └─────────────────────────────────────────┘
 ```
+
 ```
 
 ---
@@ -250,6 +254,7 @@ Create a verification checklist comparing implementation to prototype:
 ### During DDD Construction Bolt
 
 In the **Implement** stage:
+
 1. Load prototype context for relevant screens
 2. Generate components matching prototype
 3. Apply design system tokens
@@ -258,6 +263,7 @@ In the **Implement** stage:
 ### During Simple Construction Bolt
 
 In the **Implement** stage:
+
 1. Reference prototype for UI components
 2. Use extracted design tokens
 3. Follow component catalog structure

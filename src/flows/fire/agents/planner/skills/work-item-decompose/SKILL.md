@@ -149,6 +149,7 @@ Break an intent into discrete, executable work items.
 </flow>
 
 <output_artifacts>
+
   | Artifact | Location | Template |
   |----------|----------|----------|
   | Work Item | `.specs-fire/intents/{intent-id}/work-items/{id}.md` | `./templates/work-item.md.hbs` |

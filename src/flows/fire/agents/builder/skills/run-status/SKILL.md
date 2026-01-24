@@ -56,6 +56,7 @@ Display current run status and progress.
 </flow>
 
 <example_output>
+
   ```
   ## Run Status: run-003
 
@@ -85,6 +86,7 @@ Display current run status and progress.
   - Created src/auth/session.test.ts
   - Modified src/auth/index.ts
   ```
+
 </example_output>
 
 <success_criteria>

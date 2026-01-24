@@ -23,6 +23,7 @@ Supports both single-item and multi-item (batch/wide) runs.
   | Package | Purpose | Install Command |
   |---------|---------|-----------------|
   | `yaml` | Parse/stringify state.yaml | `npm install yaml` |
+
 </prerequisites>
 
 <triggers>
@@ -72,9 +73,10 @@ Supports both single-item and multi-item (batch/wide) runs.
 
 <degrees_of_freedom>
   Varies by mode:
-  - **Autopilot**: LOW — Execute standard patterns decisively
-  - **Confirm**: MEDIUM — Present plan, adjust based on feedback
-  - **Validate**: LOW — Follow approved design precisely
+
+- **Autopilot**: LOW — Execute standard patterns decisively
+- **Confirm**: MEDIUM — Present plan, adjust based on feedback
+- **Validate**: LOW — Follow approved design precisely
 </degrees_of_freedom>
 
 <llm critical="true">
@@ -507,6 +509,7 @@ Supports both single-item and multi-item (batch/wide) runs.
 </scripts>
 
 <file_tracking_format>
+
   ```yaml
   files_created:
     - path: src/auth/login.ts
@@ -520,6 +523,7 @@ Supports both single-item and multi-item (batch/wide) runs.
     - decision: Use JWT for tokens
       rationale: Stateless, works with load balancer
   ```
+
 </file_tracking_format>
 
 <run_folder_structure>
@@ -543,11 +547,12 @@ Supports both single-item and multi-item (batch/wide) runs.
   </timeline>
 
   The run.md contains:
-  - All work items with their statuses
-  - Current item being executed
-  - Files created/modified (after completion)
-  - Decisions made (after completion)
-  - Summary (after completion)
+
+- All work items with their statuses
+- Current item being executed
+- Files created/modified (after completion)
+- Decisions made (after completion)
+- Summary (after completion)
 </run_folder_structure>
 
 <success_criteria>

@@ -103,6 +103,7 @@ Analyze project state and route user to the appropriate agent.
 </flow>
 
 <routing_decision_tree>
+
   ```
   state.yaml + file system scan
       │
@@ -114,10 +115,12 @@ Analyze project state and route user to the appropriate agent.
       │
       └── no active intents ────────> Planner (intent-capture)
   ```
+
 </routing_decision_tree>
 
 <context_passed_to_agents>
   **To Planner:**
+
   ```yaml
   context:
     action: intent-capture | work-item-decompose
@@ -125,12 +128,14 @@ Analyze project state and route user to the appropriate agent.
   ```
 
   **To Builder:**
+
   ```yaml
   context:
     action: run-plan | run-execute | resume
     pending_items: [{list of pending work items}]  # for run-plan
     run_id: {if resuming}
   ```
+
 </context_passed_to_agents>
 
 <success_criteria>

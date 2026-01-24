@@ -72,6 +72,7 @@ MD031: true
 MD032: true
 
 # MD033 - Inline HTML (allow for special cases)
+# Includes semantic XML elements used in FIRE flow SKILL.md files
 MD033:
   allowed_elements:
     - br
@@ -80,6 +81,99 @@ MD033:
     - kbd
     - sub
     - sup
+    # FIRE flow semantic elements
+    - action
+    - check
+    - clarification
+    - constraints
+    - exit
+    - goto
+    - handoff
+    - llm
+    - mode
+    - principles
+    - reference
+    - scope
+    - script
+    - step
+    - stop
+    - ask
+    - begin
+    - bias_table
+    - brownfield_rules
+    - check_constitution
+    - check_monorepo
+    - check_schema
+    - checkpoint
+    - code
+    - complete_item_output
+    - complete_run_output
+    - constraint
+    - context_passed_to_agents
+    - criterion
+    - critical_clarifications
+    - critical
+    - degrees_of_freedom
+    - description
+    - design_document_flow
+    - determine_resume_point
+    - error
+    - example_output
+    - example
+    - execution_modes
+    - file_discovery_logic
+    - file_tracking_format
+    - file_tracking
+    - flow
+    - generate_options
+    - grouping_algorithm
+    - grouping_rules
+    - guarantee
+    - guidelines
+    - handoff_format
+    - handoff_protocol
+    - history_entry
+    - input_context
+    - intent_capture_flow
+    - invoke_skill
+    - listen
+    - mandate
+    - monorepo_detection
+    - note
+    - objective
+    - on_activation
+    - output_artifact
+    - output_artifacts
+    - output_format
+    - output_template
+    - output
+    - prerequisites
+    - principle
+    - recommendation_logic
+    - references_index
+    - resolution_algorithm
+    - return_value
+    - return
+    - role
+    - route_to
+    - routing_decision_tree
+    - routing_logic
+    - rule
+    - run_folder_structure
+    - run_lifecycle
+    - safety_guarantees
+    - scope_types
+    - scripts
+    - set
+    - skills
+    - state_schema_updates
+    - state_schema
+    - substep
+    - success_criteria
+    - timeline
+    - triggers
+    - version_detection
+    - work_item_decomposition_flow
 
 # MD034 - Bare URL used
 MD034: true
@@ -104,8 +198,8 @@ MD039: true
 MD040: false
 
 # MD041 - First line should be a top-level heading
-MD041:
-  level: 1
+# Disabled: FIRE flow files intentionally start with semantic XML tags (<role>, <objective>)
+MD041: false
 
 # MD042 - No empty links
 MD042: true
@@ -121,8 +215,8 @@ MD044:
   html_elements: false
 
 # MD046 - Code block style
-MD046:
-  style: fenced
+# Disabled: FIRE flow files use indented code blocks for XML examples
+MD046: false
 
 # MD047 - Files should end with a single newline
 MD047: true
@@ -137,6 +231,12 @@ MD049:
 # MD050 - Strong style
 MD050:
   style: asterisk
+
+# MD055 - Table pipe style (disabled - linter confused by tables inside XML blocks)
+MD055: false
+
+# MD056 - Table column count (disabled - linter confused by tables inside XML blocks)
+MD056: false
 
 # MD060 - Table column style (disabled - cosmetic, doesn't affect rendering)
 MD060: false

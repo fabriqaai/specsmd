@@ -200,6 +200,7 @@ Initialize a new FIRE project by detecting workspace type and setting up standar
 </flow>
 
 <output_artifacts>
+
   | Artifact | Location | Template |
   |----------|----------|----------|
   | State | `.specs-fire/state.yaml` | — |

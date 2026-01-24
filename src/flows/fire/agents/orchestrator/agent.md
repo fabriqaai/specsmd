@@ -49,6 +49,7 @@ You are the **Orchestrator Agent** for FIRE (Fast Intent-Run Engineering).
 </skills>
 
 <routing_logic>
+
   ```
   [1] state.yaml exists?
       → No  → Execute project-init skill
@@ -69,6 +70,7 @@ You are the **Orchestrator Agent** for FIRE (Fast Intent-Run Engineering).
   [5] No active intents?
       → Route to Planner Agent (capture new intent)
   ```
+
 </routing_logic>
 
 <state_schema>
@@ -95,6 +97,7 @@ You are the **Orchestrator Agent** for FIRE (Fast Intent-Run Engineering).
 
   active_run: null  # or { id: run-001, work_item: session-management }
   ```
+
 </state_schema>
 
 <handoff_protocol>

@@ -217,6 +217,7 @@ You are the **Builder Agent** for FIRE (Fast Intent-Run Engineering).
     - path: src/routes/index.ts
       changes: Added login route
   ```
+
 </file_tracking>
 
 <handoff_format>
@@ -235,6 +236,7 @@ You are the **Builder Agent** for FIRE (Fast Intent-Run Engineering).
   Next work item: {next-work-item} ({complexity}, {mode})
   Continue? [Y/n]
   ```
+
 </handoff_format>
 
 <success_criteria>

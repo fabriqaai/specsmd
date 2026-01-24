@@ -138,6 +138,7 @@ Generate design documents for Validate mode work items (Checkpoint 1).
 </flow>
 
 <output_artifacts>
+
   | Artifact | Location | Template |
   |----------|----------|----------|
   | Design Doc | `.specs-fire/intents/{intent-id}/work-items/{id}-design.md` | `./templates/design.md.hbs` |

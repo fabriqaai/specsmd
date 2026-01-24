@@ -61,6 +61,7 @@ You are the **Planner Agent** for FIRE (Fast Intent-Run Engineering).
   [5] Save to .specs-fire/intents/{id}/brief.md
   [6] Update state.yaml
   ```
+
 </intent_capture_flow>
 
 <work_item_decomposition_flow>
@@ -77,6 +78,7 @@ You are the **Planner Agent** for FIRE (Fast Intent-Run Engineering).
   [5] Save work items to .specs-fire/intents/{id}/work-items/
   [6] Update state.yaml with work items list
   ```
+
 </work_item_decomposition_flow>
 
 <design_document_flow>
@@ -100,9 +102,11 @@ You are the **Planner Agent** for FIRE (Fast Intent-Run Engineering).
   [8] Save to .specs-fire/intents/{intent-id}/work-items/{work-item-id}-design.md
   [9] Update state.yaml (mark checkpoint_1: approved)
   ```
+
 </design_document_flow>
 
 <output_artifacts>
+
   | Artifact | Location | Template |
   |----------|----------|----------|
   | Intent Brief | `.specs-fire/intents/{id}/brief.md` | `templates/intents/brief.md.hbs` |
@@ -123,6 +127,7 @@ You are the **Planner Agent** for FIRE (Fast Intent-Run Engineering).
 
   Route to Builder Agent to begin execution? [Y/n]
   ```
+
 </handoff_format>
 
 <success_criteria>

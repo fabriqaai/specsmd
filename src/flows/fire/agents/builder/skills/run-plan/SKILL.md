@@ -276,6 +276,7 @@ Plan the scope of a run by discovering available work items and suggesting group
 
 <state_schema_updates>
   **workspace section additions**:
+
   ```yaml
   workspace:
     # ... existing fields ...
@@ -287,6 +288,7 @@ Plan the scope of a run by discovering available work items and suggesting group
   ```
 
   **active_run with multi-item support**:
+
   ```yaml
   active_run:
     id: run-001
@@ -303,9 +305,11 @@ Plan the scope of a run by discovering available work items and suggesting group
     current_item: 02-stats-api-endpoint
     started: 2026-01-19T10:00:00Z
   ```
+
 </state_schema_updates>
 
 <file_discovery_logic>
+
   ```
   .specs-fire/
   ├── intents/
@@ -321,12 +325,14 @@ Plan the scope of a run by discovering available work items and suggesting group
   ```
 
   **Frontmatter parsing**:
-  - Extract `id`, `title`, `status` from YAML frontmatter
-  - If status missing, default to `pending`
-  - If in file but not state.yaml, add to state
+
+- Extract `id`, `title`, `status` from YAML frontmatter
+- If status missing, default to `pending`
+- If in file but not state.yaml, add to state
 </file_discovery_logic>
 
 <grouping_algorithm>
+
   ```
   1. Collect all pending items with their modes
   2. Build dependency graph
@@ -338,9 +344,11 @@ Plan the scope of a run by discovering available work items and suggesting group
      - Execution order follows dependency graph
      - Checkpoints pause at confirm/validate items
   ```
+
 </grouping_algorithm>
 
 <recommendation_logic>
+
   ```
   IF run_scope_history has 3+ same choices:
     pre_selected = most_common_choice
@@ -357,6 +365,7 @@ Plan the scope of a run by discovering available work items and suggesting group
     ELSE:
       recommended = batch
   ```
+
 </recommendation_logic>
 
 <success_criteria>

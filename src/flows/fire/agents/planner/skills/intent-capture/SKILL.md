@@ -109,6 +109,7 @@ Capture user intent through guided conversation.
 </flow>
 
 <output_artifacts>
+
   | Artifact | Location | Template |
   |----------|----------|----------|
   | Intent Brief | `.specs-fire/intents/{id}/brief.md` | `./templates/brief.md.hbs` |

@@ -14,8 +14,9 @@ Review code written during a run, auto-fix no-brainer issues, and suggest improv
 </triggers>
 
 <degrees_of_freedom>
-  - **AUTO-FIX**: LOW — Only mechanical, non-semantic changes
-  - **SUGGESTIONS**: MEDIUM — Present options, let user decide
+
+- **AUTO-FIX**: LOW — Only mechanical, non-semantic changes
+- **SUGGESTIONS**: MEDIUM — Present options, let user decide
 </degrees_of_freedom>
 
 <llm critical="true">
@@ -44,6 +45,7 @@ Review code written during a run, auto-fix no-brainer issues, and suggest improv
   run_id: run-001
   intent_id: user-auth
   ```
+
 </input_context>
 
 <references_index>
@@ -239,10 +241,11 @@ Review code written during a run, auto-fix no-brainer issues, and suggest improv
 
 <output_artifact>
   Creates `.specs-fire/runs/{run-id}/review-report.md` with:
-  - Summary table (auto-fixed, suggested, skipped by category)
-  - Detailed list of auto-fixed issues with diffs
-  - Applied suggestions with approval timestamps
-  - Skipped suggestions with reasons
+
+- Summary table (auto-fixed, suggested, skipped by category)
+- Detailed list of auto-fixed issues with diffs
+- Applied suggestions with approval timestamps
+- Skipped suggestions with reasons
 </output_artifact>
 
 <success_criteria>

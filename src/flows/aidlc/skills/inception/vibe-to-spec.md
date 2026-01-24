@@ -41,6 +41,7 @@ Convert a vibe-coded prototype (screenshots, HTML exports, or design mockups) in
 - **Optional**: Existing design system to extend
 
 **Supported Prototype Formats**:
+
 - PNG/JPG screenshots
 - HTML exports (with associated CSS/JS in `_files` folders)
 - Figma exports
@@ -97,6 +98,7 @@ Is this complete? Are there screens I'm missing or misinterpreting?
 For each screen, extract:
 
 **Visual Analysis** (use image analysis capabilities):
+
 - Layout structure (sidebar, main content, header, footer)
 - Color palette (primary, secondary, accent, background)
 - Typography (headings, body text, labels)
@@ -104,11 +106,13 @@ For each screen, extract:
 - Interactive elements (forms, menus, modals)
 
 **HTML Analysis** (if available):
+
 - Component structure from markup
 - CSS classes and styling patterns
 - JavaScript interactions
 
 **Output per screen**:
+
 ```markdown
 ### Screen: {screen-name}
 **Source**: {filename}

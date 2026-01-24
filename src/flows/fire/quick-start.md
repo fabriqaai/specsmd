@@ -57,6 +57,7 @@ When initialized, FIRE creates:
 ### Orchestrator (`/specsmd-fire`)
 
 Routes users based on project state:
+
 - New project → Initialize
 - No intent → Capture intent
 - No work items → Decompose
@@ -65,6 +66,7 @@ Routes users based on project state:
 ### Planner (`/specsmd-fire-planner`)
 
 Handles planning:
+
 - **intent-capture** — Capture user intent through conversation
 - **work-item-decompose** — Break intent into executable work items
 - **design-doc-generate** — Create design docs for Validate mode
@@ -72,6 +74,7 @@ Handles planning:
 ### Builder (`/specsmd-fire-builder`)
 
 Handles execution:
+
 - **run-execute** — Execute work items with mode-appropriate checkpoints
 - **walkthrough-generate** — Generate implementation documentation
 - **run-status** — Show current run progress
@@ -124,6 +127,7 @@ src/flows/fire/
 ## Configuration
 
 See `memory-bank.yaml` for:
+
 - Artifact paths
 - Naming conventions
 - Execution modes
