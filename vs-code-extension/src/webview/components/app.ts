@@ -719,13 +719,16 @@ export class SpecsmdApp extends BaseElement {
             });
         });
 
-        // Website link
-        const websiteLink = overviewView.querySelector('#specsWebsiteLink') as HTMLElement | null;
-        if (websiteLink) {
-            websiteLink.addEventListener('click', () => {
-                vscode.postMessage({ type: 'openExternal', url: 'https://specs.md' });
+        // Resource links (website, discord, twitter)
+        overviewView.querySelectorAll('.overview-resource-link').forEach(link => {
+            const htmlLink = link as HTMLElement;
+            link.addEventListener('click', () => {
+                const url = htmlLink.dataset.url;
+                if (url) {
+                    vscode.postMessage({ type: 'openExternal', url });
+                }
             });
-        }
+        });
     }
 
     /**
@@ -831,6 +834,7 @@ export class SpecsmdApp extends BaseElement {
                 @open-file=${this._handleFireOpenFile}
                 @filter-change=${this._handleFireFilterChange}
                 @toggle-expand=${this._handleFireToggleExpand}
+                @open-external=${this._handleOpenExternal}
             ></fire-view>
         `;
     }
@@ -875,6 +879,10 @@ export class SpecsmdApp extends BaseElement {
 
     private _handleFireToggleExpand(e: CustomEvent<{ intentId: string; expanded: boolean }>): void {
         vscode.postMessage({ type: 'fireToggleExpand', intentId: e.detail.intentId, expanded: e.detail.expanded });
+    }
+
+    private _handleOpenExternal(e: CustomEvent<{ url: string }>): void {
+        vscode.postMessage({ type: 'openExternal', url: e.detail.url });
     }
 
     /**

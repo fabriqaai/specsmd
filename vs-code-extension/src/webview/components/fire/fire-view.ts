@@ -120,6 +120,7 @@ export class FireView extends BaseElement {
                     <fire-overview-view
                         .data=${this.data.overviewData}
                         @open-file=${this._forwardEvent}
+                        @open-external=${this._forwardEvent}
                     ></fire-overview-view>
                 `;
 
