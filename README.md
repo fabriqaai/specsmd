@@ -22,9 +22,13 @@ Choose the flow that matches your project needs: **Simple** for quick specs, **F
 
 Track your progress with our sidebar extension for VS Code and compatible IDEs.
 
+**AI-DLC Flow:**
+
 <p align="center">
-  <img src="vs-code-extension/resources/extension-preview.png" alt="VS Code Extension Preview" width="800" />
+  <img src="vs-code-extension/resources/extension-preview.png" alt="AI-DLC Flow Extension Preview" width="800" />
 </p>
+
+**FIRE Flow:**
 
 <p align="center">
   <img src="images/fire1.png" alt="FIRE Flow - Intents View" width="400" />
