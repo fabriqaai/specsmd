@@ -148,6 +148,7 @@
           {
             "group": "Resources",
             "pages": [
+              "learn",
               "changelog",
               "faq",
               "feedback",
