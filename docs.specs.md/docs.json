@@ -158,7 +158,14 @@
       },
       {
         "tab": "Video Tutorials",
-        "href": "/learn"
+        "groups": [
+          {
+            "group": "Videos",
+            "pages": [
+              "learn"
+            ]
+          }
+        ]
       }
     ]
   },
