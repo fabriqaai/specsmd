@@ -1,12 +1,41 @@
-# SpecsMD VS Code Extension
+# specsmd VS Code Extension
+
+**Visual project tracking for AI-native software development.**
+
+The specsmd VS Code extension provides a sidebar panel for tracking your development progress using FIRE Flow (Fast Intent-Run Engineering) - a streamlined approach to AI-driven development.
 
 [![VS Code Extension CI/Release](https://github.com/fabriqaai/specs.md/actions/workflows/vscode-publish.yml/badge.svg)](https://github.com/fabriqaai/specs.md/actions/workflows/vscode-publish.yml)
 
-A VS Code extension for managing AI-DLC (AI Development Life Cycle) artifacts including intents, units, stories, and bolts.
+**[Visit specs.md](https://specs.md)** | **[Full Documentation](https://docs.specs.md/getting-started/vscode-extension)**
 
-**[Visit specs.md](https://specs.md)** | **[Full Documentation](https://specs.md/getting-started/vscode-extension)**
+---
 
-![Extension Preview](https://raw.githubusercontent.com/fabriqaai/specs.md/main/vs-code-extension/resources/extension-preview.png)
+## Screenshots
+
+![FIRE Flow Extension - Sidebar Overview](https://mintcdn.com/fabriqa/mrOVK7s3Qgek_IVz/images/extension-gallery/fireflow-extension/1.png?w=2500&fit=max&auto=format&n=mrOVK7s3Qgek_IVz&q=85&s=bb74989dc12584ab85618d74c6dbe07a)
+
+![FIRE Flow Extension - Work Item Tracking](https://mintcdn.com/fabriqa/mrOVK7s3Qgek_IVz/images/extension-gallery/fireflow-extension/3.png?w=2500&fit=max&auto=format&n=mrOVK7s3Qgek_IVz&q=85&s=c8c3819e780ec0beb6a6a3db3940fa65)
+
+---
+
+## Features
+
+- **Real-time Progress Tracking** - See your intents, work items, and runs update as you work
+- **Three-Tab Interface** - Switch between Bolts, Specs, and Overview views
+- **Smart Suggestions** - AI-recommended next actions based on project state
+- **Dependency Visualization** - See what's blocked and what you can work on next
+- **Activity Timeline** - Track recent completions and progress
+
+---
+
+## Quick Start
+
+1. Install the extension from the VS Code Marketplace
+2. Initialize specsmd in your project: `npx specsmd install`
+3. Open the specsmd sidebar panel (look for the specsmd icon in the activity bar)
+4. Start tracking your AI-driven development progress
+
+---
 
 ## Sidebar Views
 
@@ -131,16 +160,6 @@ AI-recommended next steps based on current project state.
 | 4 | Create Bolt for Pending Work | Intent has pending stories but no active/draft bolts |
 | 1 | Celebrate! | All bolts complete AND all intents complete |
 
-**Selection Algorithm:**
-```
-1. Check for active bolt → suggest "Continue" (priority 1)
-2. Check for unblocked drafts without active bolt → suggest "Start" (priority 1)
-3. If active bolt has currentStage → suggest "Complete Stage" (priority 2)
-4. Find blocking bolt with max unblock impact → suggest "Unblock" (priority 3)
-5. Find intents with orphan stories → suggest "Create Bolt" (priority 4)
-6. If everything complete → suggest "Celebrate" (priority 1)
-```
-
 #### Current Intent Selection
 
 The "current intent" shown in the header uses a priority cascade:
@@ -194,5 +213,14 @@ Tabs persist across VS Code sessions. The extension saves your active tab choice
 
 For architecture details, development setup, and publishing instructions, see the [Developer Guide](./DEVGUIDE.md).
 
+---
 
+## License
 
+MIT License - see [LICENSE](LICENSE) for details.
+
+---
+
+<p align="center">
+  Built by the <a href="https://specs.md">specs.md</a> team.
+</p>
