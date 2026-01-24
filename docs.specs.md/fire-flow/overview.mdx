@@ -154,38 +154,56 @@ FIRE doesn't guess—it analyzes two inputs to decide the execution path:
 These combine to dynamically choose when to ask and when to burn through:
 
 ```mermaid
-graph TD
+graph LR
     subgraph "Autopilot (0 checkpoints)"
-        A1[AI Plans] --> A2[AI Executes] --> A3[Walkthrough]
-    end
-
-    subgraph "Confirm (1 checkpoint)"
-        C1[AI Plans] --> C2[Human Confirms] --> C3[AI Executes] --> C4[Walkthrough]
-    end
-
-    subgraph "Validate (2 checkpoints)"
-        V1[AI Plans] --> V2[Human Reviews Design] --> V3[Human Approves] --> V4[AI Executes] --> V5[Walkthrough]
+        A1[Plan] --> A2[Implement] --> A3[Test] --> A4[Review] --> A5[Walkthrough]
     end
 
     style A1 fill:#34D399,stroke:#10B981,color:#fff
     style A2 fill:#34D399,stroke:#10B981,color:#fff
     style A3 fill:#34D399,stroke:#10B981,color:#fff
+    style A4 fill:#34D399,stroke:#10B981,color:#fff
+    style A5 fill:#34D399,stroke:#10B981,color:#fff
+```
+*Zero stops. AI burns through.*
+
+```mermaid
+graph LR
+    subgraph "Confirm (1 checkpoint)"
+        C1[Plan] --> C2{{"✋ Approve Plan?"}} --> C3[Implement] --> C4[Test] --> C5[Review] --> C6[Walkthrough]
+    end
+
     style C1 fill:#818CF8,stroke:#6366F1,color:#fff
     style C2 fill:#F472B6,stroke:#EC4899,color:#fff
     style C3 fill:#818CF8,stroke:#6366F1,color:#fff
     style C4 fill:#818CF8,stroke:#6366F1,color:#fff
+    style C5 fill:#818CF8,stroke:#6366F1,color:#fff
+    style C6 fill:#818CF8,stroke:#6366F1,color:#fff
+```
+*One stop before coding.*
+
+```mermaid
+graph LR
+    subgraph "Validate (2 checkpoints)"
+        V1[Design] --> V2{{"✋ Approve Design?"}} --> V3[Plan] --> V4{{"✋ Approve Plan?"}} --> V5[Implement] --> V6[Test] --> V7[Review] --> V8[Walkthrough]
+    end
+
     style V1 fill:#8B5CF6,stroke:#7C3AED,color:#fff
     style V2 fill:#F472B6,stroke:#EC4899,color:#fff
-    style V3 fill:#F472B6,stroke:#EC4899,color:#fff
-    style V4 fill:#8B5CF6,stroke:#7C3AED,color:#fff
+    style V3 fill:#8B5CF6,stroke:#7C3AED,color:#fff
+    style V4 fill:#F472B6,stroke:#EC4899,color:#fff
     style V5 fill:#8B5CF6,stroke:#7C3AED,color:#fff
+    style V6 fill:#8B5CF6,stroke:#7C3AED,color:#fff
+    style V7 fill:#8B5CF6,stroke:#7C3AED,color:#fff
+    style V8 fill:#8B5CF6,stroke:#7C3AED,color:#fff
 ```
+*Two stops. Design review, then plan approval.*
 
 | Mode | Checkpoints | Use For |
 |------|-------------|---------|
 | **Autopilot** | 0 | Bug fixes, minor updates, well-defined changes |
-| **Confirm** | 1 | Standard features, moderate complexity |
-| **Validate** | 2 | Security, payments, core architecture |
+| **Confirm** | 1 (plan) | Standard features, moderate complexity |
+| **Validate** | 2 (design + plan) | Security, payments, core architecture |
 
 You configure your autonomy preference during project initialization:
 
