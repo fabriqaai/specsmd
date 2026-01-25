@@ -315,6 +315,9 @@ Supports both single-item and multi-item (batch/wide) runs.
   </step>
 
   <step n="5" title="Execute Implementation">
+    <action>Update phase to 'execute':</action>
+    <code>node scripts/update-phase.cjs {rootPath} {runId} execute</code>
+
     <action>For each planned change:</action>
     <substep n="5a">Implement the change</substep>
     <substep n="5b">Track file operation (create/modify)</substep>
@@ -345,6 +348,9 @@ Supports both single-item and multi-item (batch/wide) runs.
   </step>
 
   <step n="6" title="Run Tests">
+    <action>Update phase to 'test':</action>
+    <code>node scripts/update-phase.cjs {rootPath} {runId} test</code>
+
     <action>Load testing standards from .specs-fire/standards/testing-standards.md</action>
     <action>Write tests following testing standards:</action>
     <substep>Unit tests for new/modified functions</substep>
@@ -397,6 +403,9 @@ Supports both single-item and multi-item (batch/wide) runs.
   </step>
 
   <step n="6b" title="Code Review">
+    <action>Update phase to 'review':</action>
+    <code>node scripts/update-phase.cjs {rootPath} {runId} review</code>
+
     <critical>ALWAYS run code review after tests pass</critical>
     <output>Running code review...</output>
 
@@ -511,6 +520,7 @@ Supports both single-item and multi-item (batch/wide) runs.
   | Script | Purpose | Usage |
   |--------|---------|-------|
   | `scripts/init-run.cjs` | Initialize run record and folder | Creates run.md with all work items |
+  | `scripts/update-phase.cjs` | Update current work item's phase | `node scripts/update-phase.cjs {rootPath} {runId} {phase}` |
   | `scripts/complete-run.cjs` | Finalize run and update state | `--complete-item` or `--complete-run` |
 
   <script name="init-run.cjs">
