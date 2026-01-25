@@ -1159,10 +1159,8 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
                     if (this._useLitMode) {
                         // Lit mode: First refresh data, then send via postMessage
                         await this.refresh();
-                        this._sendDataToWebview(
-                            this._buildWebviewData(),
-                            this._store.getState().ui.activeTab
-                        );
+                        // Use _updateWebview which handles both FIRE and AI-DLC
+                        this._updateWebview();
                     } else {
                         // Legacy mode: Refresh will update HTML
                         await this.refresh();
@@ -1295,6 +1293,37 @@ export class SpecsmdWebviewProvider implements vscode.WebviewViewProvider {
                     (message as { intentId: string; expanded: boolean }).expanded
                 );
                 break;
+
+            case 'startRun':
+                await this._handleFireStartRun((message as { workItemIds: string[] }).workItemIds);
+                break;
+        }
+    }
+
+    /**
+     * Handle FIRE start run.
+     * Shows a popup with the command to start the run.
+     */
+    private async _handleFireStartRun(workItemIds: string[]): Promise<void> {
+        if (!workItemIds || workItemIds.length === 0) {
+            vscode.window.showWarningMessage('No work items selected for run.');
+            return;
+        }
+
+        // Build command: /specsmd-fire-builder work-item-id1 work-item-id2 ...
+        const workItemIdsStr = workItemIds.join(' ');
+        const command = `/specsmd-fire-builder ${workItemIdsStr}`;
+
+        const result = await vscode.window.showInformationMessage(
+            `Start FIRE run with ${workItemIds.length} work item${workItemIds.length > 1 ? 's' : ''}:\n\n${command}`,
+            { modal: true },
+            'Copy to Clipboard',
+            'Cancel'
+        );
+
+        if (result === 'Copy to Clipboard') {
+            await vscode.env.clipboard.writeText(command);
+            vscode.window.showInformationMessage('Command copied to clipboard!');
         }
     }
 

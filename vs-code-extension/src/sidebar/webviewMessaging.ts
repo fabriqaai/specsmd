@@ -28,7 +28,8 @@ export type WebviewToExtensionMessage =
     // FIRE flow specific messages
     | { type: 'fireTabChange'; tab: string }
     | { type: 'fireIntentsFilter'; filter: string }
-    | { type: 'fireToggleExpand'; intentId: string; expanded: boolean };
+    | { type: 'fireToggleExpand'; intentId: string; expanded: boolean }
+    | { type: 'startRun'; workItemIds: string[] };
 
 /**
  * Activity filter options.
