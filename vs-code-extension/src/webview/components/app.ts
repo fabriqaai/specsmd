@@ -16,6 +16,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { BaseElement } from './shared/base-element.js';
 import './tabs/view-tabs.js';
 import './bolts/bolts-view.js';
+import './shared/flow-switcher.js';
 // FIRE flow components
 import './fire/fire-view.js';
 import type { TabId, TabChangeDetail } from './tabs/view-tabs.js';
@@ -848,6 +849,12 @@ export class SpecsmdApp extends BaseElement {
      */
     private _renderAidlcApp() {
         return html`
+            <flow-switcher
+                .activeFlow=${this._activeFlow}
+                .availableFlows=${this._availableFlows}
+                @flow-switch=${this._handleFlowSwitch}
+            ></flow-switcher>
+
             <view-tabs
                 .activeTab=${this._activeTab}
                 @tab-change=${this._handleTabChange}
@@ -888,6 +895,12 @@ export class SpecsmdApp extends BaseElement {
     private _renderFireApp() {
         if (!this._fireData) {
             return html`
+                <flow-switcher
+                    .activeFlow=${this._activeFlow}
+                    .availableFlows=${this._availableFlows}
+                    @flow-switch=${this._handleFlowSwitch}
+                ></flow-switcher>
+
                 <div class="fire-app" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
                     <div class="fire-placeholder" style="flex: 1; display: flex; align-items: center; justify-content: center;">
                         <div style="text-align: center; padding: 24px;">
@@ -903,6 +916,12 @@ export class SpecsmdApp extends BaseElement {
         }
 
         return html`
+            <flow-switcher
+                .activeFlow=${this._activeFlow}
+                .availableFlows=${this._availableFlows}
+                @flow-switch=${this._handleFlowSwitch}
+            ></flow-switcher>
+
             <fire-view
                 .data=${this._fireData}
                 @tab-change=${this._handleFireTabChange}
@@ -964,6 +983,10 @@ export class SpecsmdApp extends BaseElement {
         vscode.postMessage({ type: 'openExternal', url: e.detail.url });
     }
 
+    private _handleFlowSwitch(e: CustomEvent): void {
+        vscode.postMessage({ type: 'switchFlow' });
+    }
+
     /**
      * Handle messages from the extension.
      */
@@ -997,6 +1020,12 @@ export class SpecsmdApp extends BaseElement {
                 if (message.activeFlowId !== undefined && this._availableFlows.length > 0) {
                     this._activeFlow = this._availableFlows.find(f => f.id === message.activeFlowId) || null;
                 }
+                // Default to FIRE if no active flow is set but flows are available
+                if (!this._activeFlow && this._availableFlows.length > 0) {
+                    this._activeFlow = this._availableFlows.find(f => f.id === 'fire')
+                        || this._availableFlows.find(f => f.id === 'aidlc')
+                        || this._availableFlows[0];
+                }
                 this._loaded = true;
                 break;
 
@@ -1019,6 +1048,12 @@ export class SpecsmdApp extends BaseElement {
                 }
                 if (message.activeFlowId !== undefined) {
                     this._activeFlow = this._availableFlows.find(f => f.id === message.activeFlowId) || null;
+                }
+                // Default to FIRE if no active flow is set
+                if (!this._activeFlow && this._availableFlows.length > 0) {
+                    this._activeFlow = this._availableFlows.find(f => f.id === 'fire')
+                        || this._availableFlows.find(f => f.id === 'aidlc')
+                        || this._availableFlows[0];
                 }
                 // Reset view data when switching flows
                 if (message.boltsData !== undefined) {
@@ -1045,6 +1080,12 @@ export class SpecsmdApp extends BaseElement {
                 }
                 if (message.activeFlowId !== undefined) {
                     this._activeFlow = this._availableFlows.find(f => f.id === message.activeFlowId) || null;
+                }
+                // Default to FIRE if no active flow is set
+                if (!this._activeFlow && this._availableFlows.length > 0) {
+                    this._activeFlow = this._availableFlows.find(f => f.id === 'fire')
+                        || this._availableFlows.find(f => f.id === 'aidlc')
+                        || this._availableFlows[0];
                 }
                 break;
         }

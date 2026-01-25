@@ -167,8 +167,27 @@ export class FireUIProvider implements FlowUIProvider {
      * Transform state to runs data format expected by Lit components.
      */
     private _transformRunsData(state: FireWebviewSnapshot) {
+        // Extract pending work items from all intents
+        const pendingItems = state.intents.flatMap(intent =>
+            intent.workItems
+                .filter(w => w.status === 'pending')
+                .map(w => ({
+                    id: w.id,
+                    intentId: intent.id,
+                    intentTitle: intent.title,
+                    intentFilePath: intent.filePath,
+                    title: w.title,
+                    status: w.status,
+                    mode: w.mode,
+                    complexity: w.complexity,
+                    filePath: w.filePath,
+                    dependencies: w.dependencies
+                }))
+        );
+
         return {
             activeRuns: state.activeRuns.map(r => this._transformRun(r)),
+            pendingItems,
             completedRuns: state.completedRuns.map(r => this._transformRun(r)),
             stats: state.stats,
             ui: state.ui
@@ -247,14 +266,15 @@ export class FireUIProvider implements FlowUIProvider {
             return;
         }
 
-        // Build command: /specsmd-fire-builder item1.md item2.md ...
-        const workItemFiles = msg.workItemIds.map(id => `${id}.md`).join(' ');
-        const command = `/specsmd-fire-builder ${workItemFiles}`;
+        // Build command: /specsmd-fire-builder work-item-id1 work-item-id2 ...
+        const workItemIds = msg.workItemIds.join(' ');
+        const command = `/specsmd-fire-builder ${workItemIds}`;
 
         const result = await vscode.window.showInformationMessage(
-            `Run this command to start the run:\n\n${command}`,
+            `Start FIRE run with ${msg.workItemIds.length} work item${msg.workItemIds.length > 1 ? 's' : ''}:\n\n${command}`,
             { modal: true },
-            'Copy to Clipboard'
+            'Copy to Clipboard',
+            'Cancel'
         );
 
         if (result === 'Copy to Clipboard') {

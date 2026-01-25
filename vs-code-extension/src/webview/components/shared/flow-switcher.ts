@@ -87,6 +87,14 @@ export class FlowSwitcher extends LitElement {
             background: var(--vscode-list-activeSelectionBackground, #094771);
         }
 
+        .switcher-button:disabled {
+            cursor: default;
+        }
+
+        .switcher-button:disabled:hover {
+            background: transparent;
+        }
+
         .flow-icon {
             font-size: 14px;
             flex-shrink: 0;
@@ -127,26 +135,24 @@ export class FlowSwitcher extends LitElement {
     `;
 
     render() {
-        // Don't render if only one or no flows
-        if (this.availableFlows.length <= 1) {
-            return html``;
-        }
-
         const activeFlow = this.activeFlow || this.availableFlows[0];
+        const flowCount = this.availableFlows.length;
+        const hasMultipleFlows = flowCount > 1;
 
         return html`
             <div class="switcher-container">
                 <button
                     class="switcher-button"
                     @click=${this._handleClick}
-                    title="Click to switch flow (Ctrl+Cmd+F)"
+                    title="${hasMultipleFlows ? 'Click to switch flow (Ctrl+Cmd+F)' : 'Current flow'}"
+                    ?disabled=${!hasMultipleFlows}
                 >
-                    <span class="flow-icon">${activeFlow?.icon || '📄'}</span>
+                    <span class="flow-icon">${activeFlow?.icon || '🔥'}</span>
                     <span class="flow-info">
-                        <span class="flow-name">${activeFlow?.displayName || 'No Flow'}</span>
-                        <span class="flow-hint">${this.availableFlows.length} flows available</span>
+                        <span class="flow-name">${activeFlow?.displayName || 'FIRE'}</span>
+                        <span class="flow-hint">${flowCount > 0 ? `${flowCount} flow${flowCount > 1 ? 's' : ''} available` : 'No flow detected'}</span>
                     </span>
-                    <span class="switch-indicator">Switch</span>
+                    ${hasMultipleFlows ? html`<span class="switch-indicator">Switch</span>` : ''}
                 </button>
             </div>
         `;
