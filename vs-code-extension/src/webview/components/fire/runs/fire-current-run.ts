@@ -99,6 +99,7 @@ export class FireCurrentRun extends BaseElement {
                         <fire-run-card
                             .run=${run}
                             ?isActive=${true}
+                            @open-file=${this._forwardOpenFile}
                         ></fire-run-card>
                     `)}
                 ` : html`
@@ -110,6 +111,15 @@ export class FireCurrentRun extends BaseElement {
                 `}
             </div>
         `;
+    }
+
+    private _forwardOpenFile(e: CustomEvent): void {
+        e.stopPropagation();
+        this.dispatchEvent(new CustomEvent('open-file', {
+            detail: e.detail,
+            bubbles: true,
+            composed: true
+        }));
     }
 }
 

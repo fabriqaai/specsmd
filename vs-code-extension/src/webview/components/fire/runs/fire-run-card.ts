@@ -221,6 +221,7 @@ export class FireRunCard extends BaseElement {
                                 <fire-work-item
                                     .item=${item}
                                     ?isCurrent=${item.id === this.run.currentItem}
+                                    @open-file=${this._forwardOpenFile}
                                 ></fire-work-item>
                             `)}
                         </div>
@@ -271,6 +272,15 @@ export class FireRunCard extends BaseElement {
     private _handleFileClick(file: RunFileData): void {
         this.dispatchEvent(new CustomEvent('open-file', {
             detail: { path: file.path },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    private _forwardOpenFile(e: CustomEvent): void {
+        e.stopPropagation();
+        this.dispatchEvent(new CustomEvent('open-file', {
+            detail: e.detail,
             bubbles: true,
             composed: true
         }));
