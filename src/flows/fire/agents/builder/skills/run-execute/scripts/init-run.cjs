@@ -339,12 +339,13 @@ function initRun(rootPath, workItems, scope) {
   const startTime = new Date().toISOString();
   createRunLog(runPath, runId, workItems, detectedScope, startTime);
 
-  // Prepare work items for state with status tracking
+  // Prepare work items for state with status and phase tracking
   const stateWorkItems = workItems.map((item, index) => ({
     id: item.id,
     intent: item.intent,
     mode: item.mode,
     status: index === 0 ? 'in_progress' : 'pending',
+    current_phase: index === 0 ? 'plan' : null,
   }));
 
   // Add to active runs list (supports multiple parallel runs)

@@ -528,6 +528,21 @@ export class FireParser implements FlowParser<FireArtifacts> {
     }
 
     /**
+     * Normalize phase.
+     */
+    private _normalizePhase(phase: unknown): 'plan' | 'execute' | 'test' | 'review' | undefined {
+        if (typeof phase !== 'string') return undefined;
+        const normalized = phase.toLowerCase();
+        const phaseMap: Record<string, 'plan' | 'execute' | 'test' | 'review'> = {
+            'plan': 'plan',
+            'execute': 'execute',
+            'test': 'test',
+            'review': 'review'
+        };
+        return phaseMap[normalized];
+    }
+
+    /**
      * Determine intent status from state or work items.
      */
     private _determineIntentStatus(stateStatus: FireStatus | undefined, workItems: FireWorkItem[]): FireStatus {
@@ -558,7 +573,8 @@ export class FireParser implements FlowParser<FireArtifacts> {
                 id: w.id,
                 intentId: w.intent || w.intentId || '',
                 mode: this._normalizeMode(w.mode) || 'confirm',
-                status: (w.status as 'pending' | 'in_progress' | 'completed' | 'failed') || 'pending'
+                status: (w.status as 'pending' | 'in_progress' | 'completed' | 'failed') || 'pending',
+                currentPhase: (w.current_phase || w.currentPhase) as string | undefined
             })),
             currentItem: ar.current_item || ar.currentItem || '',
             started: ar.started || ''
@@ -656,8 +672,8 @@ interface RawFireState {
 interface RawActiveRun {
     id: string;
     scope: RunScope;
-    work_items?: Array<{ id: string; intent?: string; intentId?: string; mode?: string; status?: string }>;
-    workItems?: Array<{ id: string; intent?: string; intentId?: string; mode?: string; status?: string }>;
+    work_items?: Array<{ id: string; intent?: string; intentId?: string; mode?: string; status?: string; current_phase?: string; currentPhase?: string }>;
+    workItems?: Array<{ id: string; intent?: string; intentId?: string; mode?: string; status?: string; current_phase?: string; currentPhase?: string }>;
     current_item?: string;
     currentItem?: string;
     started?: string;

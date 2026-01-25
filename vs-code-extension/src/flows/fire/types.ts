@@ -136,6 +136,8 @@ export interface RunWorkItem {
     mode: ExecutionMode;
     /** Status within the run */
     status: 'pending' | 'in_progress' | 'completed' | 'failed';
+    /** Current phase (plan, execute, test, review, or custom) */
+    currentPhase?: string;
 }
 
 /**

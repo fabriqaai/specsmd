@@ -445,6 +445,7 @@ function completeCurrentItem(rootPath, runId, params = {}) {
   for (let i = currentItemIndex + 1; i < workItems.length; i++) {
     if (workItems[i].status === 'pending') {
       workItems[i].status = 'in_progress';
+      workItems[i].current_phase = 'plan';
       nextItem = workItems[i];
       break;
     }

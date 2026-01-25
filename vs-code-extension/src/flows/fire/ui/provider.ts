@@ -228,6 +228,7 @@ export class FireUIProvider implements FlowUIProvider {
                     intentId: w.intentId,
                     mode: w.mode,
                     status: w.status,
+                    currentPhase: w.currentPhase,
                     title: details?.title,
                     filePath: details?.filePath,
                     intentFilePath: details?.intentFilePath

@@ -177,6 +177,9 @@ export class FireWorkItem extends BaseElement {
                 border-color: var(--status-active);
                 color: white;
                 box-shadow: 0 0 4px rgba(249, 115, 22, 0.4);
+                width: 22px;
+                height: 22px;
+                font-size: 10px;
             }
 
             .phase-node.skipped {
@@ -229,10 +232,12 @@ export class FireWorkItem extends BaseElement {
             return this.item.phases;
         }
 
-        // Otherwise compute from currentPhase or default to pending
+        // Standard phase order
         const phaseOrder: FirePhase[] = ['plan', 'execute', 'test', 'review'];
-        const currentPhase = this.item.currentPhase || 'plan';
-        const currentIdx = phaseOrder.indexOf(currentPhase);
+        const currentPhase = this.item.currentPhase as FirePhase | undefined;
+
+        // Find current phase index (-1 if unknown/custom phase)
+        const currentIdx = currentPhase ? phaseOrder.indexOf(currentPhase) : -1;
 
         // If item is completed, all phases are complete
         if (this.item.status === 'completed') {
@@ -251,23 +256,20 @@ export class FireWorkItem extends BaseElement {
         }
 
         // Item is in_progress or failed - show based on currentPhase
+        // If currentPhase is unknown or not set, default to first phase (plan)
+        const effectiveIdx = currentIdx >= 0 ? currentIdx : 0;
+
         return phaseOrder.map((phase, idx) => ({
             phase,
-            status: idx < currentIdx ? 'complete' as PhaseStatus :
-                    idx === currentIdx ? 'active' as PhaseStatus :
+            status: idx < effectiveIdx ? 'complete' as PhaseStatus :
+                    idx === effectiveIdx ? 'active' as PhaseStatus :
                     'pending' as PhaseStatus
         }));
     }
 
     private _renderPhasesRow(phases: WorkItemPhaseData[]) {
-        // Only show phases row for completed items or items with explicit phase data
-        // Don't show for in_progress items without phase tracking (misleading)
+        // Only show phases row for items that have started (not pending)
         if (this.item.status === 'pending') {
-            return nothing;
-        }
-
-        // Only show phases if item is completed OR has explicit phase data
-        if (this.item.status === 'in_progress' && !this.item.currentPhase && !this.item.phases) {
             return nothing;
         }
 
