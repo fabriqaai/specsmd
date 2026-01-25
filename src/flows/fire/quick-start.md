@@ -31,6 +31,18 @@ Unlike traditional methodologies with 10-26 checkpoints, FIRE uses adaptive chec
 | **Confirm** | 1 | Medium | Standard features |
 | **Validate** | 2 | High | Security, payments, architecture |
 
+## Run Scope
+
+Run scope determines how many work items execute in a single run:
+
+| Scope | Description | Grouping |
+|-------|-------------|----------|
+| **Single** | One work item per run, most controlled | Each item in its own run |
+| **Batch** | Group items by mode, respect dependencies | Autopilot together, confirm together |
+| **Wide** | Maximum items per run, minimal interruption | All compatible items together |
+
+The system learns your preference from run history and stores it in `workspace.run_scope_preference`.
+
 ## Project Structure
 
 When initialized, FIRE creates:

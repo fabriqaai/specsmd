@@ -1,6 +1,6 @@
 ---
 title: Execution Modes
-description: Adaptive checkpoints - Autopilot, Confirm, and Validate modes
+description: Adaptive checkpoints (Autopilot, Confirm, Validate) and run scope (Single, Batch, Wide)
 ---
 
 ## Adaptive Checkpoints
@@ -288,4 +288,60 @@ This prevents:
   </Accordion>
 </AccordionGroup>
 
+## Run Scope
+
+Run scope determines how many work items execute in a single run. This is separate from execution mode—you can batch multiple Autopilot items together, or run Validate items one at a time.
+
+### Scope Options
+
+<CardGroup cols={3}>
+  <Card title="Single" icon="circle-1">
+    **One work item per run**
+
+    Most controlled. Each item gets its own run with dedicated walkthrough.
+
+    Best for: Learning the codebase, high-stakes changes, detailed review needs
+  </Card>
+  <Card title="Batch" icon="layer-group">
+    **Group by execution mode**
+
+    Respects dependencies. Groups Autopilot items together, Confirm items together, etc.
+
+    Best for: Balanced workflow, mixed complexity work
+  </Card>
+  <Card title="Wide" icon="arrows-maximize">
+    **Maximum items per run**
+
+    Minimal interruption. All compatible items execute together.
+
+    Best for: Experienced users, rapid iteration, well-understood changes
+  </Card>
+</CardGroup>
+
+### Scope Comparison
+
+| Scope | Items per Run | Grouping Strategy | Interruptions |
+|-------|---------------|-------------------|---------------|
+| **Single** | 1 | Each item isolated | Per item |
+| **Batch** | By mode | Autopilot, Confirm, Validate grouped | Per mode group |
+| **Wide** | All compatible | Maximum batching | Minimal |
+
+### How FIRE Learns Your Preference
+
+FIRE tracks your scope choices and suggests your preferred pattern:
+
+```yaml
+# In state.yaml
+workspace:
+  run_scope_preference: batch  # Learned from history
+  run_scope_history:
+    - choice: batch
+      items_count: 3
+      timestamp: 2024-01-15T10:30:00Z
+    - choice: single
+      items_count: 1
+      timestamp: 2024-01-14T15:45:00Z
+```
+
+You can always override the suggestion for any individual run.
 
