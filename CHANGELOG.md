@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+You can also view this changelog at [specs.md/changelog](https://specs.md/changelog).
+
 ## [0.1.11] - 2026-01-25
+
+### Per-Work-Item Phase Tracking
+
+The VS Code extension now shows real-time phase progress for each work item in FIRE runs. Track exactly where your AI agent is in the Plan → Execute → Test → Review pipeline.
+
+![Work item showing Test phase in progress](docs.specs.md/images/fire-phase-tracking/work-item-in-progress.png)
+
+**First work item in Test phase** - completed Plan and Execute, now running tests.
+
+![Multiple work items with phase tracking](docs.specs.md/images/fire-phase-tracking/work-item-completed.png)
+
+**Progress through multiple work items** - first item completed all phases, second item now in Test phase.
 
 ### Added
 

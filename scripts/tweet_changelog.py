@@ -119,7 +119,7 @@ def format_tweet(version, highlights):
     else:
         highlights_text = ""
 
-    url = f"https://github.com/fabriqaai/specs.md/releases/tag/v{version}"
+    url = "https://specs.md/changelog"
 
     # Build tweet
     if highlights_text:
