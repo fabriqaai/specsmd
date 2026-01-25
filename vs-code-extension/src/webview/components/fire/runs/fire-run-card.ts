@@ -5,10 +5,8 @@
 import { html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { BaseElement } from '../../shared/base-element.js';
-import './fire-phase-pipeline.js';
 import './fire-work-item.js';
 import '../shared/fire-scope-badge.js';
-import type { PhaseData, FirePhase } from './fire-phase-pipeline.js';
 import type { RunWorkItemData } from './fire-work-item.js';
 import type { RunScope } from '../shared/fire-scope-badge.js';
 import type { RunFileData } from './fire-completed-runs.js';
@@ -33,7 +31,6 @@ export interface FireRunData {
 /**
  * Run card component showing run details and work items.
  *
- * @fires continue-run - When continue button is clicked
  * @fires view-artifact - When artifact button is clicked
  * @fires open-file - When work item is clicked
  *
@@ -106,11 +103,6 @@ export class FireRunCard extends BaseElement {
                 color: var(--description-foreground);
             }
 
-            .phases-section {
-                padding: 8px 12px;
-                border-bottom: 1px solid var(--border-color);
-            }
-
             .work-items-section {
                 padding: 8px;
             }
@@ -143,49 +135,6 @@ export class FireRunCard extends BaseElement {
 
             .work-items-list {
                 margin-top: 4px;
-            }
-
-            .actions {
-                display: flex;
-                gap: 8px;
-                padding: 12px;
-                border-top: 1px solid var(--border-color);
-            }
-
-            .action-btn {
-                display: inline-flex;
-                align-items: center;
-                gap: 4px;
-                padding: 6px 12px;
-                font-size: 11px;
-                font-weight: 500;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: all 0.15s ease;
-            }
-
-            .action-btn.primary {
-                background: var(--status-active);
-                color: white;
-            }
-
-            .action-btn.primary:hover {
-                background: #ea580c;
-            }
-
-            .action-btn.secondary {
-                background: var(--editor-background);
-                color: var(--foreground);
-                border: 1px solid var(--border-color);
-            }
-
-            .action-btn.secondary:hover {
-                background: var(--background);
-            }
-
-            .action-btn:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
             }
 
             .files-section {
@@ -249,7 +198,6 @@ export class FireRunCard extends BaseElement {
     render() {
         if (!this.run) return nothing;
 
-        const phases = this._computePhases();
         const completedCount = this.run.workItems.filter(w => w.status === 'completed').length;
 
         return html`
@@ -260,10 +208,6 @@ export class FireRunCard extends BaseElement {
                         <fire-scope-badge scope=${this.run.scope}></fire-scope-badge>
                     </div>
                     <span class="item-count">${completedCount}/${this.run.workItems.length} items</span>
-                </div>
-
-                <div class="phases-section">
-                    <fire-phase-pipeline .phases=${phases}></fire-phase-pipeline>
                 </div>
 
                 <div class="work-items-section">
@@ -284,44 +228,8 @@ export class FireRunCard extends BaseElement {
                 </div>
 
                 ${this._renderFilesSection()}
-
-                ${this.isActive ? html`
-                    <div class="actions">
-                        <button class="action-btn primary" @click=${this._handleContinue}>
-                            Continue Run
-                        </button>
-                    </div>
-                ` : nothing}
             </div>
         `;
-    }
-
-    private _computePhases(): PhaseData[] {
-        // Determine current phase based on artifacts and progress
-        let currentPhase: FirePhase = 'plan';
-
-        if (this.run.hasPlan) {
-            currentPhase = 'execute';
-        }
-        if (this.run.hasTestReport) {
-            currentPhase = 'test';
-        }
-        if (this.run.hasWalkthrough) {
-            currentPhase = 'review';
-        }
-        if (this.run.completedAt) {
-            currentPhase = 'review';
-        }
-
-        const phaseOrder: FirePhase[] = ['plan', 'execute', 'test', 'review'];
-        const currentIdx = phaseOrder.indexOf(currentPhase);
-
-        return phaseOrder.map((phase, idx) => ({
-            phase,
-            status: idx < currentIdx ? 'complete' :
-                    idx === currentIdx ? 'active' :
-                    'pending'
-        }));
     }
 
     private _toggleExpanded(): void {
@@ -363,14 +271,6 @@ export class FireRunCard extends BaseElement {
     private _handleFileClick(file: RunFileData): void {
         this.dispatchEvent(new CustomEvent('open-file', {
             detail: { path: file.path },
-            bubbles: true,
-            composed: true
-        }));
-    }
-
-    private _handleContinue(): void {
-        this.dispatchEvent(new CustomEvent('continue-run', {
-            detail: { runId: this.run.id },
             bubbles: true,
             composed: true
         }));

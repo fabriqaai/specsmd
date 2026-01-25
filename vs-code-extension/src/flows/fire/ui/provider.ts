@@ -167,6 +167,23 @@ export class FireUIProvider implements FlowUIProvider {
      * Transform state to runs data format expected by Lit components.
      */
     private _transformRunsData(state: FireWebviewSnapshot) {
+        // Build a lookup map for work item details from intents
+        const workItemLookup = new Map<string, {
+            title?: string;
+            filePath?: string;
+            intentFilePath?: string;
+        }>();
+
+        for (const intent of state.intents) {
+            for (const workItem of intent.workItems) {
+                workItemLookup.set(workItem.id, {
+                    title: workItem.title,
+                    filePath: workItem.filePath,
+                    intentFilePath: intent.filePath
+                });
+            }
+        }
+
         // Extract pending work items from all intents
         const pendingItems = state.intents.flatMap(intent =>
             intent.workItems
@@ -186,9 +203,9 @@ export class FireUIProvider implements FlowUIProvider {
         );
 
         return {
-            activeRuns: state.activeRuns.map(r => this._transformRun(r)),
+            activeRuns: state.activeRuns.map(r => this._transformRun(r, workItemLookup)),
             pendingItems,
-            completedRuns: state.completedRuns.map(r => this._transformRun(r)),
+            completedRuns: state.completedRuns.map(r => this._transformRun(r, workItemLookup)),
             stats: state.stats,
             ui: state.ui
         };
@@ -197,16 +214,25 @@ export class FireUIProvider implements FlowUIProvider {
     /**
      * Transform a run to the UI data format.
      */
-    private _transformRun(run: FireWebviewSnapshot['activeRuns'][0]) {
+    private _transformRun(
+        run: FireWebviewSnapshot['activeRuns'][0],
+        workItemLookup: Map<string, { title?: string; filePath?: string; intentFilePath?: string }>
+    ) {
         return {
             id: run.id,
             scope: run.scope,
-            workItems: run.workItems.map(w => ({
-                id: w.id,
-                intentId: w.intentId,
-                mode: w.mode,
-                status: w.status
-            })),
+            workItems: run.workItems.map(w => {
+                const details = workItemLookup.get(w.id);
+                return {
+                    id: w.id,
+                    intentId: w.intentId,
+                    mode: w.mode,
+                    status: w.status,
+                    title: details?.title,
+                    filePath: details?.filePath,
+                    intentFilePath: details?.intentFilePath
+                };
+            }),
             currentItem: run.currentItem,
             folderPath: run.folderPath,
             startedAt: run.startedAt,
